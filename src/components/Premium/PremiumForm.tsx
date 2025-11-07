@@ -172,7 +172,23 @@ export function PremiumForm({ onCalculate }: Props) {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-4">
+              <p className="text-sm text-gray-600 mb-1">Arrobas na Compra</p>
+              <p className="text-2xl font-bold text-slate-700">{results.arrobas_at_purchase.toFixed(2)} @</p>
+              <p className="text-xs text-gray-500 mt-1">
+                {formData.purchase_weight_kg} kg ÷ 30
+              </p>
+            </div>
+
+            <div className="bg-teal-50 border border-teal-200 rounded-lg p-4">
+              <p className="text-sm text-gray-600 mb-1">Custo por Kg Vivo</p>
+              <p className="text-2xl font-bold text-teal-700">{formatCurrency(results.cost_per_kg)}</p>
+              <p className="text-xs text-gray-500 mt-1">
+                R$ {formData.animal_paid_value.toFixed(2)} ÷ {formData.purchase_weight_kg} kg
+              </p>
+            </div>
+
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm text-gray-600 mb-1">Preço Pago por Arroba</p>
               <p className="text-2xl font-bold text-blue-700">{formatCurrency(results.paid_price_per_arroba)}</p>
@@ -204,20 +220,22 @@ export function PremiumForm({ onCalculate }: Props) {
             </div>
 
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-              <p className="text-sm text-gray-600 mb-1">Total de Ágio/Deságio por Animal</p>
+              <p className="text-sm text-gray-600 mb-1">Total de Ágio/Deságio</p>
               <p className="text-2xl font-bold text-amber-700">
                 {formatCurrency(Math.abs(results.total_premium_discount_per_animal))}
               </p>
-              <p className="text-xs text-gray-500 mt-1">Impacto financeiro total</p>
+              <p className="text-xs text-gray-500 mt-1">
+                {Math.abs(results.premium_discount_per_arroba).toFixed(2)} × {results.arrobas_at_purchase.toFixed(2)} @
+              </p>
             </div>
 
             <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-              <p className="text-sm text-gray-600 mb-1">Peso Adicional Necessário</p>
+              <p className="text-sm text-gray-600 mb-1">Ágio Diário a Diluir</p>
               <p className="text-2xl font-bold text-purple-700">
-                {results.additional_weight_needed_kg.toFixed(2)} kg
+                {formatCurrency(results.daily_premium_to_dilute)}
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                {(results.additional_weight_needed_kg * 1000 / formData.rearing_period_days).toFixed(0)} g/dia
+                R$ {Math.abs(results.total_premium_discount_per_animal).toFixed(2)} ÷ {formData.rearing_period_days} dias
               </p>
             </div>
 
@@ -232,7 +250,7 @@ export function PremiumForm({ onCalculate }: Props) {
             </div>
 
             <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
-              <p className="text-sm text-gray-600 mb-1">Tempo para Diluir</p>
+              <p className="text-sm text-gray-600 mb-1">Período de Recria</p>
               <p className="text-2xl font-bold text-indigo-700">
                 {results.months_to_dilute.toFixed(1)} meses
               </p>
