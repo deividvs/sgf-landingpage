@@ -5,10 +5,14 @@ import { SimulationInputs, SimulationResults } from '../../lib/calculations';
 import { SimulationWizard } from '../Simulation/SimulationWizard';
 import { SimulationList } from './SimulationList';
 import { SimulationDetails } from './SimulationDetails';
-import { LogOut, Plus, List } from 'lucide-react';
+import { PremiumCalculator } from '../Premium/PremiumCalculator';
+import { LogOut, Plus, List, Calculator, TrendingUp } from 'lucide-react';
+
+type AppSection = 'simulations' | 'premium';
 
 export function Dashboard() {
   const { user, signOut } = useAuth();
+  const [activeSection, setActiveSection] = useState<AppSection>('simulations');
   const [view, setView] = useState<'list' | 'create' | 'details'>('list');
   const [simulations, setSimulations] = useState<Simulation[]>([]);
   const [selectedSimulation, setSelectedSimulation] = useState<Simulation | null>(null);
@@ -98,7 +102,7 @@ export function Dashboard() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              {view === 'list' && (
+              {activeSection === 'simulations' && view === 'list' && (
                 <button
                   onClick={() => setView('create')}
                   className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
@@ -107,7 +111,7 @@ export function Dashboard() {
                   Nova Simulação
                 </button>
               )}
-              {view === 'create' && (
+              {activeSection === 'simulations' && view === 'create' && (
                 <button
                   onClick={() => setView('list')}
                   className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
@@ -128,22 +132,60 @@ export function Dashboard() {
         </div>
       </nav>
 
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex gap-1">
+            <button
+              onClick={() => {
+                setActiveSection('simulations');
+                setView('list');
+              }}
+              className={`flex items-center gap-2 px-6 py-3 font-medium border-b-2 transition-colors ${
+                activeSection === 'simulations'
+                  ? 'border-green-600 text-green-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <TrendingUp className="w-5 h-5" />
+              Simulador de Resultados
+            </button>
+            <button
+              onClick={() => setActiveSection('premium')}
+              className={`flex items-center gap-2 px-6 py-3 font-medium border-b-2 transition-colors ${
+                activeSection === 'premium'
+                  ? 'border-blue-600 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              <Calculator className="w-5 h-5" />
+              Diluir Ágio
+            </button>
+          </div>
+        </div>
+      </div>
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {view === 'list' ? (
-          <SimulationList
-            simulations={simulations}
-            loading={loading}
-            onDelete={handleDeleteSimulation}
-            onCreate={() => setView('create')}
-            onView={handleViewSimulation}
-          />
-        ) : view === 'create' ? (
-          <SimulationWizard onSave={handleSaveSimulation} />
-        ) : view === 'details' && selectedSimulation ? (
-          <SimulationDetails
-            simulation={selectedSimulation}
-            onBack={() => setView('list')}
-          />
+        {activeSection === 'simulations' ? (
+          <>
+            {view === 'list' ? (
+              <SimulationList
+                simulations={simulations}
+                loading={loading}
+                onDelete={handleDeleteSimulation}
+                onCreate={() => setView('create')}
+                onView={handleViewSimulation}
+              />
+            ) : view === 'create' ? (
+              <SimulationWizard onSave={handleSaveSimulation} />
+            ) : view === 'details' && selectedSimulation ? (
+              <SimulationDetails
+                simulation={selectedSimulation}
+                onBack={() => setView('list')}
+              />
+            ) : null}
+          </>
+        ) : activeSection === 'premium' ? (
+          <PremiumCalculator />
         ) : null}
       </main>
     </div>
