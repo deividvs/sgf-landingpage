@@ -14,44 +14,36 @@ export function PremiumCalculator() {
     setCurrentResults(results);
   };
 
-  const handleSave = async () => {
-    if (!currentInputs || !currentResults || !user) return;
+  const handleSave = async (inputs: PremiumInputs, results: PremiumResults) => {
+    if (!user) return;
 
     const { error } = await supabase.from('premium_simulations').insert({
       user_id: user.id,
-      current_arroba_value: currentInputs.current_arroba_value,
-      animal_paid_value: currentInputs.animal_paid_value,
-      purchase_weight_kg: currentInputs.purchase_weight_kg,
-      rearing_period_days: currentInputs.rearing_period_days,
-      arrobas_at_purchase: currentResults.arrobas_at_purchase,
-      cost_per_kg: currentResults.cost_per_kg,
-      paid_price_per_arroba: currentResults.paid_price_per_arroba,
-      premium_discount_per_arroba: currentResults.premium_discount_per_arroba,
-      premium_discount_percentage: currentResults.premium_discount_percentage,
-      total_premium_discount_per_animal: currentResults.total_premium_discount_per_animal,
-      daily_premium_to_dilute: currentResults.daily_premium_to_dilute,
-      daily_gain_needed_kg: currentResults.daily_gain_needed_kg,
-      situation: currentResults.situation,
+      current_arroba_value: inputs.current_arroba_value,
+      animal_paid_value: inputs.animal_paid_value,
+      purchase_weight_kg: inputs.purchase_weight_kg,
+      rearing_period_days: inputs.rearing_period_days,
+      arrobas_at_purchase: results.arrobas_at_purchase,
+      cost_per_kg: results.cost_per_kg,
+      paid_price_per_arroba: results.paid_price_per_arroba,
+      premium_discount_per_arroba: results.premium_discount_per_arroba,
+      premium_discount_percentage: results.premium_discount_percentage,
+      total_premium_discount_per_animal: results.total_premium_discount_per_animal,
+      daily_premium_to_dilute: results.daily_premium_to_dilute,
+      daily_gain_needed_kg: results.daily_gain_needed_kg,
+      situation: results.situation,
     });
 
     if (!error) {
       alert('Simulação salva com sucesso!');
+    } else {
+      alert('Erro ao salvar simulação. Tente novamente.');
     }
   };
 
   return (
     <div>
-      <PremiumForm onCalculate={handleCalculate} />
-      {currentResults && (
-        <div className="max-w-4xl mx-auto mt-6">
-          <button
-            onClick={handleSave}
-            className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
-          >
-            Salvar Simulação
-          </button>
-        </div>
-      )}
+      <PremiumForm onCalculate={handleCalculate} onSave={handleSave} />
     </div>
   );
 }

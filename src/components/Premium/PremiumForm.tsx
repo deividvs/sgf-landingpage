@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { PremiumInputs, calculatePremium, PremiumResults } from '../../lib/premium-calculator';
-import { Calculator, TrendingUp, TrendingDown, Minus } from 'lucide-react';
+import { generatePremiumPDF } from '../../lib/premium-pdf-generator';
+import { Calculator, TrendingUp, TrendingDown, Minus, Download, Save } from 'lucide-react';
 
 type Props = {
   onCalculate: (inputs: PremiumInputs, results: PremiumResults) => void;
+  onSave: (inputs: PremiumInputs, results: PremiumResults) => Promise<void>;
 };
 
-export function PremiumForm({ onCalculate }: Props) {
+export function PremiumForm({ onCalculate, onSave }: Props) {
   const [formData, setFormData] = useState<PremiumInputs>({
     current_arroba_value: 0,
     animal_paid_value: 0,
@@ -15,6 +17,7 @@ export function PremiumForm({ onCalculate }: Props) {
   });
 
   const [results, setResults] = useState<PremiumResults | null>(null);
+  const [saving, setSaving] = useState(false);
 
   const updateFormData = (field: keyof PremiumInputs, value: number) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -256,6 +259,28 @@ export function PremiumForm({ onCalculate }: Props) {
               </p>
               <p className="text-xs text-gray-500 mt-1">{formData.rearing_period_days} dias</p>
             </div>
+          </div>
+
+          <div className="mt-6 flex gap-3">
+            <button
+              onClick={async () => {
+                setSaving(true);
+                await onSave(formData, results);
+                setSaving(false);
+              }}
+              disabled={saving}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+            >
+              <Save className="w-5 h-5" />
+              {saving ? 'Salvando...' : 'Salvar Simulação'}
+            </button>
+            <button
+              onClick={() => generatePremiumPDF(formData, results)}
+              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+            >
+              <Download className="w-5 h-5" />
+              Exportar PDF
+            </button>
           </div>
         </div>
       )}
