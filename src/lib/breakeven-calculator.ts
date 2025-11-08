@@ -23,9 +23,11 @@ export interface BreakevenCalculations {
 }
 
 export function calculateBreakeven(inputs: BreakevenInputs): BreakevenCalculations {
-  const total_arrobas = inputs.final_weight_kg / 30;
+  const ARROBA_KG = 30;
 
-  const total_revenue = (inputs.final_weight_kg / 15) * inputs.current_arroba_price;
+  const total_arrobas = inputs.final_weight_kg / ARROBA_KG;
+
+  const total_revenue = total_arrobas * inputs.current_arroba_price;
 
   const total_expenses = (inputs.daily_cost * inputs.days_in_cycle) + inputs.acquisition_value;
 
