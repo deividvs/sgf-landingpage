@@ -9,9 +9,10 @@ import { PremiumCalculator } from '../Premium/PremiumCalculator';
 import { SupplementationCalculator } from '../Supplementation/SupplementationCalculator';
 import { StockingRateCalculator } from '../StockingRate/StockingRateCalculator';
 import { DailyCostCalculator } from '../DailyCost/DailyCostCalculator';
-import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Filter, Star, Grid3x3 } from 'lucide-react';
+import { AnnualResultsCalculator } from '../AnnualResults/AnnualResultsCalculator';
+import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Filter, Star, Grid3x3, FileBarChart } from 'lucide-react';
 
-type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost';
+type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results';
 type FilterType = 'all' | 'favorites' | 'recent';
 
 export function Dashboard() {
@@ -210,6 +211,17 @@ export function Dashboard() {
             >
               <DollarSign className="w-5 h-5" />
             </button>
+            <button
+              onClick={() => setActiveSection('annual_results')}
+              title="Apuração de Resultados Anuais"
+              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
+                activeSection === 'annual_results'
+                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/50'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+              }`}
+            >
+              <FileBarChart className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>
@@ -358,6 +370,23 @@ export function Dashboard() {
                   <span className="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded">Popular</span>
                 </div>
               </div>
+
+              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                   onClick={() => setActiveSection('annual_results')}>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                    <FileBarChart className="w-6 h-6 text-purple-600" />
+                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Apuração de Resultados Anuais</h3>
+                <p className="text-sm text-gray-600 mb-4">Consolide receitas, custos e despesas anuais com análise de rentabilidade</p>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded">Novo</span>
+                </div>
+              </div>
             </div>
           </div>
         ) : activeSection === 'simulations' ? (
@@ -387,6 +416,8 @@ export function Dashboard() {
           <StockingRateCalculator />
         ) : activeSection === 'daily_cost' ? (
           <DailyCostCalculator />
+        ) : activeSection === 'annual_results' ? (
+          <AnnualResultsCalculator />
         ) : null}
       </main>
     </div>
