@@ -160,19 +160,25 @@ export function generateAnnualResultsPDF(
   yPos += 10;
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
-  doc.text('Distribuicao sobre Receita Total:', 14 + 5, yPos);
+  doc.text('Distribuicao sobre Receita Total (por cabeca):', 14 + 5, yPos);
 
   yPos += 6;
-  doc.setFontSize(11);
+  doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.text(`Custos: ${formatNumber(calculations.cost_percentage, 2)}%`, 14 + 5, yPos);
 
-  yPos += 6;
-  doc.text(`Despesas: ${formatNumber(calculations.expense_percentage, 2)}%`, 14 + 5, yPos);
+  const distributionData = [
+    ['Receitas:', formatCurrency(calculations.revenue_per_head), '100,00%'],
+    ['Custos:', formatCurrency(calculations.cost_per_head), `${formatNumber(calculations.cost_percentage, 2)}%`],
+    ['Despesas:', formatCurrency(calculations.expense_per_head), `${formatNumber(calculations.expense_percentage, 2)}%`],
+    ['Lucro:', formatCurrency(calculations.profit_per_head), `${formatNumber(calculations.profit_percentage, 2)}%`]
+  ];
 
-  yPos += 6;
-  doc.setTextColor(...(calculations.profit_percentage >= 0 ? [22, 163, 74] : [220, 38, 38]));
-  doc.text(`Lucro: ${formatNumber(calculations.profit_percentage, 2)}%`, 14 + 5, yPos);
+  distributionData.forEach(([label, value, percentage]) => {
+    doc.text(label, 14 + 5, yPos);
+    doc.text(value, 80, yPos);
+    doc.text(percentage, 140, yPos);
+    yPos += 5;
+  });
 
   doc.setTextColor(0, 0, 0);
 

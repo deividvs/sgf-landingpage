@@ -411,22 +411,38 @@ export function AnnualResultsCalculator() {
 
           <div className="pt-6 border-t border-gray-700">
             <h4 className="text-lg font-bold mb-4">Distribuicao sobre a Receita Total</h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div>
+                <p className="text-gray-400 text-sm mb-2">Receitas</p>
+                <p className="text-xl font-bold text-blue-400 mb-1">
+                  {formatCurrency(currentCalculations.revenue_per_head)}
+                </p>
+                <p className="text-sm text-gray-400">100,00%</p>
+              </div>
               <div>
                 <p className="text-gray-400 text-sm mb-2">Custos</p>
-                <p className="text-2xl font-bold text-orange-400">
+                <p className="text-xl font-bold text-orange-400 mb-1">
+                  {formatCurrency(currentCalculations.cost_per_head)}
+                </p>
+                <p className="text-sm text-orange-400">
                   {formatNumber(currentCalculations.cost_percentage, 2)}%
                 </p>
               </div>
               <div>
                 <p className="text-gray-400 text-sm mb-2">Despesas</p>
-                <p className="text-2xl font-bold text-red-400">
+                <p className="text-xl font-bold text-red-400 mb-1">
+                  {formatCurrency(currentCalculations.expense_per_head)}
+                </p>
+                <p className="text-sm text-red-400">
                   {formatNumber(currentCalculations.expense_percentage, 2)}%
                 </p>
               </div>
               <div>
                 <p className="text-gray-400 text-sm mb-2">Lucro</p>
-                <p className={`text-2xl font-bold ${currentCalculations.profit_percentage >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                <p className={`text-xl font-bold mb-1 ${currentCalculations.profit_percentage >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {formatCurrency(currentCalculations.profit_per_head)}
+                </p>
+                <p className={`text-sm ${currentCalculations.profit_percentage >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                   {formatNumber(currentCalculations.profit_percentage, 2)}%
                 </p>
               </div>
