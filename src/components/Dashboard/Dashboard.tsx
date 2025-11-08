@@ -12,9 +12,10 @@ import { DailyCostCalculator } from '../DailyCost/DailyCostCalculator';
 import { AnnualResultsCalculator } from '../AnnualResults/AnnualResultsCalculator';
 import { BreakevenCalculator } from '../Breakeven/BreakevenCalculator';
 import { SupplementationCochoCalculator } from '../SupplementationCocho/SupplementationCochoCalculator';
-import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Filter, Star, Grid3x3, FileBarChart, Scale, PackageOpen } from 'lucide-react';
+import { ProductionCostCalculator } from '../ProductionCost/ProductionCostCalculator';
+import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Filter, Star, Grid3x3, FileBarChart, Scale, PackageOpen, Target } from 'lucide-react';
 
-type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results' | 'breakeven' | 'supplementation_cocho';
+type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results' | 'breakeven' | 'supplementation_cocho' | 'production_cost';
 type FilterType = 'all' | 'favorites' | 'recent';
 
 export function Dashboard() {
@@ -246,6 +247,17 @@ export function Dashboard() {
             >
               <PackageOpen className="w-5 h-5" />
             </button>
+            <button
+              onClick={() => setActiveSection('production_cost')}
+              title="Custo de Produção PRO"
+              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
+                activeSection === 'production_cost'
+                  ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+              }`}
+            >
+              <Target className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>
@@ -445,6 +457,23 @@ export function Dashboard() {
                   <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded">Novo</span>
                 </div>
               </div>
+
+              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                   onClick={() => setActiveSection('production_cost')}>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors">
+                    <Target className="w-6 h-6 text-red-600" />
+                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Custo de Produção PRO</h3>
+                <p className="text-sm text-gray-600 mb-4">Descubra quanto custa produzir uma arroba com base em custos mensais e GMD</p>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded">Novo</span>
+                </div>
+              </div>
             </div>
           </div>
         ) : activeSection === 'simulations' ? (
@@ -480,6 +509,8 @@ export function Dashboard() {
           <BreakevenCalculator />
         ) : activeSection === 'supplementation_cocho' ? (
           <SupplementationCochoCalculator />
+        ) : activeSection === 'production_cost' ? (
+          <ProductionCostCalculator />
         ) : null}
       </main>
     </div>
