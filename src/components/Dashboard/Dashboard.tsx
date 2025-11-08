@@ -6,17 +6,23 @@ import { SimulationWizard } from '../Simulation/SimulationWizard';
 import { SimulationList } from './SimulationList';
 import { SimulationDetails } from './SimulationDetails';
 import { PremiumCalculator } from '../Premium/PremiumCalculator';
-import { LogOut, Plus, List, Calculator, TrendingUp } from 'lucide-react';
+import { SupplementationCalculator } from '../Supplementation/SupplementationCalculator';
+import { StockingRateCalculator } from '../StockingRate/StockingRateCalculator';
+import { DailyCostCalculator } from '../DailyCost/DailyCostCalculator';
+import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Filter, Star, Grid3x3 } from 'lucide-react';
 
-type AppSection = 'simulations' | 'premium';
+type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost';
+type FilterType = 'all' | 'favorites' | 'recent';
 
 export function Dashboard() {
   const { user, signOut } = useAuth();
-  const [activeSection, setActiveSection] = useState<AppSection>('simulations');
+  const [activeSection, setActiveSection] = useState<AppSection>('home');
   const [view, setView] = useState<'list' | 'create' | 'details'>('list');
   const [simulations, setSimulations] = useState<Simulation[]>([]);
   const [selectedSimulation, setSelectedSimulation] = useState<Simulation | null>(null);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeFilter, setActiveFilter] = useState<FilterType>('all');
 
   useEffect(() => {
     loadSimulations();
@@ -132,40 +138,229 @@ export function Dashboard() {
         </div>
       </nav>
 
-      <div className="bg-white border-b border-gray-200">
+      <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-1">
+          <div className="flex gap-2 overflow-x-auto py-4">
+            <button
+              onClick={() => setActiveSection('home')}
+              title="Ferramentas"
+              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
+                activeSection === 'home'
+                  ? 'bg-green-600 text-white shadow-lg shadow-green-600/50'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+              }`}
+            >
+              <Grid3x3 className="w-5 h-5" />
+            </button>
             <button
               onClick={() => {
                 setActiveSection('simulations');
                 setView('list');
               }}
-              className={`flex items-center gap-2 px-6 py-3 font-medium border-b-2 transition-colors ${
+              title="Simulador de Resultados"
+              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
                 activeSection === 'simulations'
-                  ? 'border-green-600 text-green-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  ? 'bg-green-600 text-white shadow-lg shadow-green-600/50'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
               }`}
             >
               <TrendingUp className="w-5 h-5" />
-              Simulador de Resultados
             </button>
             <button
               onClick={() => setActiveSection('premium')}
-              className={`flex items-center gap-2 px-6 py-3 font-medium border-b-2 transition-colors ${
+              title="Diluir Ágio"
+              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
                 activeSection === 'premium'
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
               }`}
             >
               <Calculator className="w-5 h-5" />
-              Diluir Ágio
+            </button>
+            <button
+              onClick={() => setActiveSection('supplementation')}
+              title="Suplementação"
+              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
+                activeSection === 'supplementation'
+                  ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/50'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+              }`}
+            >
+              <Package className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setActiveSection('stocking_rate')}
+              title="Taxa de Lotação"
+              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
+                activeSection === 'stocking_rate'
+                  ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/50'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+              }`}
+            >
+              <MapPin className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setActiveSection('daily_cost')}
+              title="Cálculo da Diária"
+              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
+                activeSection === 'daily_cost'
+                  ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/50'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+              }`}
+            >
+              <DollarSign className="w-5 h-5" />
             </button>
           </div>
         </div>
       </div>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeSection === 'simulations' ? (
+        {activeSection === 'home' ? (
+          <div>
+            <div className="flex items-center justify-between mb-8">
+              <h1 className="text-3xl font-bold text-gray-900">Ferramentas</h1>
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Buscar ferramentas..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10 pr-4 py-2 w-80 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  />
+                </div>
+                <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                  <Filter className="w-5 h-5" />
+                  Filtros
+                </button>
+              </div>
+            </div>
+
+            <div className="flex gap-4 mb-6">
+              <button
+                onClick={() => setActiveFilter('all')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  activeFilter === 'all'
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                Todas
+              </button>
+              <button
+                onClick={() => setActiveFilter('favorites')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  activeFilter === 'favorites'
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                Favoritas
+              </button>
+              <button
+                onClick={() => setActiveFilter('recent')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  activeFilter === 'recent'
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                Recentes
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                   onClick={() => {
+                     setActiveSection('simulations');
+                     setView('list');
+                   }}>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
+                    <TrendingUp className="w-6 h-6 text-green-600" />
+                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Simulador de Resultados</h3>
+                <p className="text-sm text-gray-600 mb-4">Simule resultados financeiros da sua operação pecuária com base em custos e receitas</p>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">Popular</span>
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                   onClick={() => setActiveSection('premium')}>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                    <Calculator className="w-6 h-6 text-blue-600" />
+                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Diluir Ágio</h3>
+                <p className="text-sm text-gray-600 mb-4">Calcule quantos dias são necessários para diluir o ágio pago na compra de animais</p>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">v1.0</span>
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                   onClick={() => setActiveSection('supplementation')}>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-200 transition-colors">
+                    <Package className="w-6 h-6 text-amber-600" />
+                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Cálculo de Suplementação</h3>
+                <p className="text-sm text-gray-600 mb-4">Determine a quantidade exata de suplemento necessária para seu rebanho diáriamente</p>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded">Novo</span>
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                   onClick={() => setActiveSection('stocking_rate')}>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center group-hover:bg-teal-200 transition-colors">
+                    <MapPin className="w-6 h-6 text-teal-600" />
+                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Taxa de Lotação</h3>
+                <p className="text-sm text-gray-600 mb-4">Calcule a taxa de lotação e otimize o uso da sua pastagem</p>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-1 bg-teal-100 text-teal-700 text-xs font-medium rounded">v1.0</span>
+                </div>
+              </div>
+
+              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                   onClick={() => setActiveSection('daily_cost')}>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                    <DollarSign className="w-6 h-6 text-emerald-600" />
+                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Cálculo da Diária</h3>
+                <p className="text-sm text-gray-600 mb-4">Calcule custos operacionais mensais e margem de lucro por arroba produzida</p>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded">Popular</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : activeSection === 'simulations' ? (
           <>
             {view === 'list' ? (
               <SimulationList
@@ -186,6 +381,12 @@ export function Dashboard() {
           </>
         ) : activeSection === 'premium' ? (
           <PremiumCalculator />
+        ) : activeSection === 'supplementation' ? (
+          <SupplementationCalculator />
+        ) : activeSection === 'stocking_rate' ? (
+          <StockingRateCalculator />
+        ) : activeSection === 'daily_cost' ? (
+          <DailyCostCalculator />
         ) : null}
       </main>
     </div>
