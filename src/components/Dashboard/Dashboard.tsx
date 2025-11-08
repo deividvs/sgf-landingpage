@@ -10,9 +10,10 @@ import { SupplementationCalculator } from '../Supplementation/SupplementationCal
 import { StockingRateCalculator } from '../StockingRate/StockingRateCalculator';
 import { DailyCostCalculator } from '../DailyCost/DailyCostCalculator';
 import { AnnualResultsCalculator } from '../AnnualResults/AnnualResultsCalculator';
-import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Filter, Star, Grid3x3, FileBarChart } from 'lucide-react';
+import { BreakevenCalculator } from '../Breakeven/BreakevenCalculator';
+import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Filter, Star, Grid3x3, FileBarChart, Scale } from 'lucide-react';
 
-type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results';
+type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results' | 'breakeven';
 type FilterType = 'all' | 'favorites' | 'recent';
 
 export function Dashboard() {
@@ -222,6 +223,17 @@ export function Dashboard() {
             >
               <FileBarChart className="w-5 h-5" />
             </button>
+            <button
+              onClick={() => setActiveSection('breakeven')}
+              title="Ponto de Equilíbrio da Arroba"
+              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
+                activeSection === 'breakeven'
+                  ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/50'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+              }`}
+            >
+              <Scale className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>
@@ -387,6 +399,23 @@ export function Dashboard() {
                   <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded">Novo</span>
                 </div>
               </div>
+
+              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                   onClick={() => setActiveSection('breakeven')}>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-sky-100 rounded-lg flex items-center justify-center group-hover:bg-sky-200 transition-colors">
+                    <Scale className="w-6 h-6 text-sky-600" />
+                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Ponto de Equilíbrio</h3>
+                <p className="text-sm text-gray-600 mb-4">Calcule o preço mínimo da arroba para não ter prejuízo</p>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-1 bg-sky-100 text-sky-700 text-xs font-medium rounded">Novo</span>
+                </div>
+              </div>
             </div>
           </div>
         ) : activeSection === 'simulations' ? (
@@ -418,6 +447,8 @@ export function Dashboard() {
           <DailyCostCalculator />
         ) : activeSection === 'annual_results' ? (
           <AnnualResultsCalculator />
+        ) : activeSection === 'breakeven' ? (
+          <BreakevenCalculator />
         ) : null}
       </main>
     </div>
