@@ -253,30 +253,30 @@ export function Dashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeSection === 'home' ? (
           <div>
-            <div className="flex items-center justify-between mb-8">
-              <h1 className="text-3xl font-bold text-gray-900">Ferramentas</h1>
-              <div className="flex items-center gap-3">
-                <div className="relative">
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 mb-4">Ferramentas</h1>
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <input
                     type="text"
                     placeholder="Buscar ferramentas..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2 w-80 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                   />
                 </div>
-                <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                <button className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
                   <Filter className="w-5 h-5" />
-                  Filtros
+                  <span className="sm:inline">Filtros</span>
                 </button>
               </div>
             </div>
 
-            <div className="flex gap-4 mb-6">
+            <div className="flex flex-wrap gap-2 sm:gap-4 mb-6">
               <button
                 onClick={() => setActiveFilter('all')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
                   activeFilter === 'all'
                     ? 'bg-green-100 text-green-700'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -286,7 +286,7 @@ export function Dashboard() {
               </button>
               <button
                 onClick={() => setActiveFilter('favorites')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
                   activeFilter === 'favorites'
                     ? 'bg-green-100 text-green-700'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -296,7 +296,7 @@ export function Dashboard() {
               </button>
               <button
                 onClick={() => setActiveFilter('recent')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
                   activeFilter === 'recent'
                     ? 'bg-green-100 text-green-700'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
