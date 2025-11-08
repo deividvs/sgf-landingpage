@@ -79,8 +79,12 @@ export function AnnualResultsCalculator() {
       revenue_per_head: currentCalculations.revenue_per_head,
       cost_per_head: currentCalculations.cost_per_head,
       expense_per_head: currentCalculations.expense_per_head,
+      profit_per_head: currentCalculations.profit_per_head,
       profit_margin_percentage: currentCalculations.profit_margin_percentage,
-      final_result: currentCalculations.final_result
+      final_result: currentCalculations.final_result,
+      cost_percentage: currentCalculations.cost_percentage,
+      expense_percentage: currentCalculations.expense_percentage,
+      profit_percentage: currentCalculations.profit_percentage
     });
 
     if (!error) {
@@ -353,23 +357,36 @@ export function AnnualResultsCalculator() {
           </div>
         </div>
 
+        <div className="bg-white rounded-xl p-6 border border-gray-200 mb-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-6">Indicadores por Cabeca</h3>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div>
+              <p className="text-gray-600 text-sm mb-2">Receita Media</p>
+              <p className="text-2xl font-bold text-gray-900">{formatCurrency(currentCalculations.revenue_per_head)}</p>
+            </div>
+            <div>
+              <p className="text-gray-600 text-sm mb-2">Custo por Cabeca</p>
+              <p className="text-2xl font-bold text-gray-900">{formatCurrency(currentCalculations.cost_per_head)}</p>
+            </div>
+            <div>
+              <p className="text-gray-600 text-sm mb-2">Despesa por Cabeca</p>
+              <p className="text-2xl font-bold text-gray-900">{formatCurrency(currentCalculations.expense_per_head)}</p>
+            </div>
+            <div>
+              <p className="text-gray-600 text-sm mb-2">Lucro por Cabeca</p>
+              <p className={`text-2xl font-bold ${currentCalculations.profit_per_head >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                {formatCurrency(currentCalculations.profit_per_head)}
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-8 mb-8 text-white">
           <h3 className="text-2xl font-bold mb-6">Resultado Final</h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <p className="text-gray-400 text-sm mb-2">Custo por Cabeca</p>
-              <p className="text-2xl font-bold">{formatCurrency(currentCalculations.cost_per_head)}</p>
-            </div>
-            <div>
-              <p className="text-gray-400 text-sm mb-2">Despesa por Cabeca</p>
-              <p className="text-2xl font-bold">{formatCurrency(currentCalculations.expense_per_head)}</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-gray-700">
-            <div>
-              <p className="text-gray-400 text-sm mb-2">Margem de Lucro</p>
+              <p className="text-gray-400 text-sm mb-2">Margem de Lucro Global</p>
               <p
                 className={`text-3xl font-bold ${
                   currentCalculations.profit_margin_percentage >= 0 ? 'text-green-400' : 'text-red-400'
@@ -380,7 +397,7 @@ export function AnnualResultsCalculator() {
             </div>
             <div>
               <p className="text-gray-400 text-sm mb-2">
-                {currentCalculations.final_result >= 0 ? 'Lucro' : 'Prejuizo'}
+                {currentCalculations.final_result >= 0 ? 'Lucro Total' : 'Prejuizo Total'}
               </p>
               <p
                 className={`text-3xl font-bold ${
@@ -389,6 +406,30 @@ export function AnnualResultsCalculator() {
               >
                 {formatCurrency(Math.abs(currentCalculations.final_result))}
               </p>
+            </div>
+          </div>
+
+          <div className="pt-6 border-t border-gray-700">
+            <h4 className="text-lg font-bold mb-4">Distribuicao sobre a Receita Total</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <p className="text-gray-400 text-sm mb-2">Custos</p>
+                <p className="text-2xl font-bold text-orange-400">
+                  {formatNumber(currentCalculations.cost_percentage, 2)}%
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-2">Despesas</p>
+                <p className="text-2xl font-bold text-red-400">
+                  {formatNumber(currentCalculations.expense_percentage, 2)}%
+                </p>
+              </div>
+              <div>
+                <p className="text-gray-400 text-sm mb-2">Lucro</p>
+                <p className={`text-2xl font-bold ${currentCalculations.profit_percentage >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {formatNumber(currentCalculations.profit_percentage, 2)}%
+                </p>
+              </div>
             </div>
           </div>
         </div>

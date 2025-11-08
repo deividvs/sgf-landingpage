@@ -20,9 +20,13 @@ export interface AnnualResultsCalculations {
   revenue_per_head: number;
   cost_per_head: number;
   expense_per_head: number;
+  profit_per_head: number;
   profit_margin_percentage: number;
   final_result: number;
   cost_plus_expense_per_head: number;
+  cost_percentage: number;
+  expense_percentage: number;
+  profit_percentage: number;
   interpretation: {
     status: 'excellent' | 'good' | 'adequate' | 'concerning' | 'loss';
     message: string;
@@ -56,8 +60,16 @@ export function calculateAnnualResults(inputs: AnnualResultsInputs): AnnualResul
 
   const final_result = inputs.total_revenue - total_expenses_all;
 
+  const profit_per_head = revenue_per_head - cost_plus_expense_per_head;
+
   const profit_margin_percentage =
     (final_result / inputs.total_revenue) * 100;
+
+  const cost_percentage = (total_cost / inputs.total_revenue) * 100;
+
+  const expense_percentage = (total_operational_expenses / inputs.total_revenue) * 100;
+
+  const profit_percentage = (final_result / inputs.total_revenue) * 100;
 
   let interpretation: AnnualResultsCalculations['interpretation'];
 
@@ -99,9 +111,13 @@ export function calculateAnnualResults(inputs: AnnualResultsInputs): AnnualResul
     revenue_per_head,
     cost_per_head,
     expense_per_head,
+    profit_per_head,
     profit_margin_percentage,
     final_result,
     cost_plus_expense_per_head,
+    cost_percentage,
+    expense_percentage,
+    profit_percentage,
     interpretation
   };
 }
