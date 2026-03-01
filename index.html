@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minhas Tarefas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header-content">
+        <h1 class="title">
+          <span class="title-icon">✓</span>
+          Minhas Tarefas
+        </h1>
+        <p class="subtitle" id="subtitle">Você está em dia! 🎉</p>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="card">
+        <!-- Input -->
+        <div class="input-wrapper">
+          <input
+            type="text"
+            id="taskInput"
+            class="task-input"
+            placeholder="Adicionar nova tarefa..."
+            maxlength="120"
+            autocomplete="off"
+          />
+          <button id="addBtn" class="add-btn" aria-label="Adicionar tarefa">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+          <button class="filter-btn active" data-filter="all">Todas</button>
+          <button class="filter-btn" data-filter="active">Ativas</button>
+          <button class="filter-btn" data-filter="completed">Concluídas</button>
+        </div>
+
+        <!-- Task list -->
+        <ul class="task-list" id="taskList">
+          <!-- Tasks rendered by JS -->
+        </ul>
+
+        <!-- Empty state -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">📝</div>
+          <p class="empty-text">Nenhuma tarefa aqui</p>
+          <p class="empty-hint">Adicione uma tarefa acima para começar!</p>
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer" id="cardFooter">
+          <span class="count" id="taskCount">0 tarefas pendentes</span>
+          <button class="clear-btn" id="clearBtn">Limpar concluídas</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

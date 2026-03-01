@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx --version)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(lsof -i :3000)",
+      "Bash(gh auth status)",
+      "Bash(git --version)",
+      "Bash(git -C /Users/deividvs/Desktop/claude_code config user.name)",
+      "Bash(git -C /Users/deividvs/Desktop/claude_code config user.email)",
+      "Bash(gh --version)",
+      "Bash(git init)",
+      "Bash(git add index.html script.js style.css server.js .claude/)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
