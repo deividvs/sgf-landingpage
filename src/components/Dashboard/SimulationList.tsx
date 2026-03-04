@@ -1,5 +1,8 @@
 import { Simulation } from '../../lib/supabase';
 import { Calendar, TrendingUp, TrendingDown, Trash2, Plus, Eye } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 type Props = {
   simulations: Simulation[];
@@ -28,7 +31,7 @@ export function SimulationList({ simulations, loading, onDelete, onCreate, onVie
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -36,93 +39,91 @@ export function SimulationList({ simulations, loading, onDelete, onCreate, onVie
   if (simulations.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <Plus className="w-12 h-12 text-gray-400" />
+        <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+          <Plus className="w-12 h-12 text-muted-foreground" />
         </div>
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">Nenhuma simulação ainda</h3>
-        <p className="text-gray-600 mb-6">Crie sua primeira simulação para começar</p>
-        <button
-          onClick={onCreate}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium"
-        >
-          <Plus className="w-5 h-5" />
+        <h3 className="text-xl font-semibold mb-2">Nenhuma simulação ainda</h3>
+        <p className="text-muted-foreground mb-6">Crie sua primeira simulação para começar</p>
+        <Button onClick={onCreate}>
+          <Plus className="w-4 h-4 mr-2" />
           Nova Simulação
-        </button>
+        </Button>
       </div>
     );
   }
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Minhas Simulações</h2>
+      <h2 className="text-2xl font-bold mb-6">Minhas Simulações</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {simulations.map((simulation) => {
           const isProfit = simulation.result_per_animal > 0;
           const totalResult = simulation.result_per_animal * simulation.quantity;
 
           return (
-            <div
-              key={simulation.id}
-              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6"
-            >
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-800">{simulation.title}</h3>
-                  <p className="text-sm text-gray-500">{simulation.quantity} animais</p>
+            <Card key={simulation.id} className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <CardTitle className="text-lg">{simulation.title}</CardTitle>
+                    <CardDescription>{simulation.quantity} animais</CardDescription>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      if (window.confirm('Deseja realmente excluir esta simulação?')) {
+                        onDelete(simulation.id);
+                      }
+                    }}
+                    className="text-muted-foreground hover:text-destructive"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </div>
-                <button
-                  onClick={() => {
-                    if (window.confirm('Deseja realmente excluir esta simulação?')) {
-                      onDelete(simulation.id);
-                    }
-                  }}
-                  className="text-gray-400 hover:text-red-600 transition-colors"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </button>
-              </div>
-
-              <div className="space-y-3 mb-4">
-                <div className={`p-3 rounded-lg ${isProfit ? 'bg-green-50' : 'bg-red-50'}`}>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className={`p-3 rounded-lg ${isProfit ? 'bg-primary/10' : 'bg-destructive/10'}`}>
                   <div className="flex items-center gap-2 mb-1">
                     {isProfit ? (
-                      <TrendingUp className="w-5 h-5 text-green-600" />
+                      <TrendingUp className="w-5 h-5 text-primary" />
                     ) : (
-                      <TrendingDown className="w-5 h-5 text-red-600" />
+                      <TrendingDown className="w-5 h-5 text-destructive" />
                     )}
-                    <span className="text-xs text-gray-600">Resultado Total</span>
+                    <span className="text-xs text-muted-foreground">Resultado Total</span>
                   </div>
-                  <p className={`text-xl font-bold ${isProfit ? 'text-green-600' : 'text-red-600'}`}>
+                  <p className={`text-xl font-bold ${isProfit ? 'text-primary' : 'text-destructive'}`}>
                     {formatCurrency(totalResult)}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>
-                    <p className="text-gray-600">Por Animal</p>
+                    <p className="text-muted-foreground">Por Animal</p>
                     <p className="font-semibold">{formatCurrency(simulation.result_per_animal)}</p>
                   </div>
                   <div>
-                    <p className="text-gray-600">Margem</p>
+                    <p className="text-muted-foreground">Margem</p>
                     <p className="font-semibold">{simulation.profit_margin_percentage.toFixed(1)}%</p>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-gray-200">
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <Calendar className="w-4 h-4" />
-                  {formatDate(simulation.created_at)}
+                <div className="flex items-center justify-between pt-3 border-t">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <Calendar className="w-4 h-4" />
+                    {formatDate(simulation.created_at)}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onView(simulation)}
+                  >
+                    <Eye className="w-4 h-4 mr-1" />
+                    Ver Detalhes
+                  </Button>
                 </div>
-                <button
-                  onClick={() => onView(simulation)}
-                  className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  <Eye className="w-4 h-4" />
-                  Ver Detalhes
-                </button>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           );
         })}
       </div>

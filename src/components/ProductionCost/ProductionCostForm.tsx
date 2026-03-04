@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import type { ProductionCostInputs } from '../../lib/production-cost-calculator';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 interface ProductionCostFormProps {
   onCalculate: (inputs: ProductionCostInputs) => void;
@@ -29,118 +33,121 @@ export function ProductionCostForm({ onCalculate }: ProductionCostFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Dados do Rebanho</h3>
+      <Card>
+        <CardHeader>
+          <CardTitle>Dados do Rebanho</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="quantity_animals">
+                Quantidade de Animais (cabeças)
+              </Label>
+              <Input
+                id="quantity_animals"
+                type="number"
+                value={formData.quantity_animals}
+                onChange={(e) => handleChange('quantity_animals', e.target.value)}
+                min="1"
+                step="1"
+                required
+              />
+            </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Quantidade de Animais (cabeças)
-            </label>
-            <input
-              type="number"
-              value={formData.quantity_animals}
-              onChange={(e) => handleChange('quantity_animals', e.target.value)}
-              min="1"
-              step="1"
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-            />
+            <div className="space-y-2">
+              <Label htmlFor="gmd_kg">
+                GMD - Ganho Médio Diário (kg/dia)
+              </Label>
+              <Input
+                id="gmd_kg"
+                type="number"
+                value={formData.gmd_kg}
+                onChange={(e) => handleChange('gmd_kg', e.target.value)}
+                min="0.1"
+                max="3"
+                step="0.001"
+                required
+              />
+            </div>
           </div>
+        </CardContent>
+      </Card>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              GMD - Ganho Médio Diário (kg/dia)
-            </label>
-            <input
-              type="number"
-              value={formData.gmd_kg}
-              onChange={(e) => handleChange('gmd_kg', e.target.value)}
-              min="0.1"
-              max="3"
-              step="0.001"
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-            />
+      <Card>
+        <CardHeader>
+          <CardTitle>Custos Mensais</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Label htmlFor="lease_monthly">
+                Arrendamento Mensal (R$)
+              </Label>
+              <Input
+                id="lease_monthly"
+                type="number"
+                value={formData.lease_monthly}
+                onChange={(e) => handleChange('lease_monthly', e.target.value)}
+                min="0"
+                step="0.01"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="supplementation_monthly">
+                Suplementação Mensal (R$)
+              </Label>
+              <Input
+                id="supplementation_monthly"
+                type="number"
+                value={formData.supplementation_monthly}
+                onChange={(e) => handleChange('supplementation_monthly', e.target.value)}
+                min="0"
+                step="0.01"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="labor_monthly">
+                Mão de Obra Mensal (R$)
+              </Label>
+              <Input
+                id="labor_monthly"
+                type="number"
+                value={formData.labor_monthly}
+                onChange={(e) => handleChange('labor_monthly', e.target.value)}
+                min="0"
+                step="0.01"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="variable_costs_monthly">
+                Custos Variáveis Mensais (R$)
+              </Label>
+              <Input
+                id="variable_costs_monthly"
+                type="number"
+                value={formData.variable_costs_monthly}
+                onChange={(e) => handleChange('variable_costs_monthly', e.target.value)}
+                min="0"
+                step="0.01"
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                Combustível, energia, medicamentos, etc.
+              </p>
+            </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Custos Mensais</h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Arrendamento Mensal (R$)
-            </label>
-            <input
-              type="number"
-              value={formData.lease_monthly}
-              onChange={(e) => handleChange('lease_monthly', e.target.value)}
-              min="0"
-              step="0.01"
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Suplementação Mensal (R$)
-            </label>
-            <input
-              type="number"
-              value={formData.supplementation_monthly}
-              onChange={(e) => handleChange('supplementation_monthly', e.target.value)}
-              min="0"
-              step="0.01"
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Mão de Obra Mensal (R$)
-            </label>
-            <input
-              type="number"
-              value={formData.labor_monthly}
-              onChange={(e) => handleChange('labor_monthly', e.target.value)}
-              min="0"
-              step="0.01"
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Custos Variáveis Mensais (R$)
-            </label>
-            <input
-              type="number"
-              value={formData.variable_costs_monthly}
-              onChange={(e) => handleChange('variable_costs_monthly', e.target.value)}
-              min="0"
-              step="0.01"
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-            />
-            <p className="text-xs text-gray-500 mt-1">
-              Combustível, energia, medicamentos, etc.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <button
-        type="submit"
-        className="w-full bg-red-600 text-white py-3 px-6 rounded-lg hover:bg-red-700 transition-colors font-medium shadow-lg shadow-red-600/30"
-      >
+      <Button type="submit" className="w-full" size="lg">
         Calcular Custo de Produção
-      </button>
+      </Button>
     </form>
   );
 }

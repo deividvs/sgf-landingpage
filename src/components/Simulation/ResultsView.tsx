@@ -4,6 +4,9 @@ import { Download, RefreshCw, Save, TrendingUp, TrendingDown, DollarSign, PieCha
 import { CostBreakdownChart } from './charts/CostBreakdownChart';
 import { RevenueExpenseChart } from './charts/RevenueExpenseChart';
 import { generatePDF } from '../../lib/pdf-generator';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 type Props = {
   inputs: SimulationInputs;
@@ -41,95 +44,104 @@ export function ResultsView({ inputs, results, onNewSimulation, onSave, showSave
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
-      <div className="bg-white rounded-lg shadow-lg p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-3xl font-bold text-gray-800">Resultados da Simulação</h2>
-            <p className="text-gray-600 mt-1">{inputs.herd_description} - {inputs.quantity} animais</p>
-          </div>
-          <div className="flex gap-3">
-            {showSaveButton && (
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-              >
-                <Save className="w-5 h-5" />
-                {saving ? 'Salvando...' : 'Salvar'}
-              </button>
-            )}
-            <button
-              onClick={handleExportPDF}
-              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
-              <Download className="w-5 h-5" />
-              Exportar PDF
-            </button>
-            <button
-              onClick={onNewSimulation}
-              className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-            >
-              <RefreshCw className="w-5 h-5" />
-              Nova Simulação
-            </button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className={`p-6 rounded-lg ${isProfit ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
-            <div className="flex items-center gap-3 mb-2">
-              {isProfit ? (
-                <TrendingUp className="w-8 h-8 text-green-600" />
-              ) : (
-                <TrendingDown className="w-8 h-8 text-red-600" />
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-3xl">Resultados da Simulação</CardTitle>
+              <CardDescription className="mt-1">{inputs.herd_description} - {inputs.quantity} animais</CardDescription>
+            </div>
+            <div className="flex gap-3">
+              {showSaveButton && (
+                <Button
+                  variant="outline"
+                  onClick={handleSave}
+                  disabled={saving}
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  {saving ? 'Salvando...' : 'Salvar'}
+                </Button>
               )}
-              <div>
-                <p className="text-sm text-gray-600">Resultado Total</p>
-                <p className={`text-2xl font-bold ${isProfit ? 'text-green-600' : 'text-red-600'}`}>
-                  {formatCurrency(results.result_per_animal * inputs.quantity)}
-                </p>
-              </div>
+              <Button
+                variant="secondary"
+                onClick={handleExportPDF}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Exportar PDF
+              </Button>
+              <Button
+                onClick={onNewSimulation}
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Nova Simulação
+              </Button>
             </div>
           </div>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Card className={isProfit ? 'bg-primary/10 border-primary/20' : 'bg-destructive/10 border-destructive/20'}>
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3">
+                  {isProfit ? (
+                    <TrendingUp className="w-8 h-8 text-primary" />
+                  ) : (
+                    <TrendingDown className="w-8 h-8 text-destructive" />
+                  )}
+                  <div>
+                    <p className="text-sm text-muted-foreground">Resultado Total</p>
+                    <p className={`text-2xl font-bold ${isProfit ? 'text-primary' : 'text-destructive'}`}>
+                      {formatCurrency(results.result_per_animal * inputs.quantity)}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
-          <div className="p-6 rounded-lg bg-blue-50 border border-blue-200">
-            <div className="flex items-center gap-3 mb-2">
-              <Percent className="w-8 h-8 text-blue-600" />
-              <div>
-                <p className="text-sm text-gray-600">Margem de Lucro</p>
-                <p className="text-2xl font-bold text-blue-600">
-                  {formatNumber(results.profit_margin_percentage)}%
-                </p>
-              </div>
-            </div>
+            <Card className="bg-blue-50 border-blue-200">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3">
+                  <Percent className="w-8 h-8 text-blue-600" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Margem de Lucro</p>
+                    <p className="text-2xl font-bold text-blue-600">
+                      {formatNumber(results.profit_margin_percentage)}%
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-amber-50 border-amber-200">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3">
+                  <PieChartIcon className="w-8 h-8 text-amber-600" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Resultado/Animal</p>
+                    <p className="text-2xl font-bold text-amber-600">
+                      {formatCurrency(results.result_per_animal)}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-secondary">
+              <CardContent className="pt-6">
+                <div className="flex items-center gap-3">
+                  <Calendar className="w-8 h-8" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Período</p>
+                    <p className="text-2xl font-bold">
+                      {formatNumber(results.months_to_sell)} meses
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
-          <div className="p-6 rounded-lg bg-amber-50 border border-amber-200">
-            <div className="flex items-center gap-3 mb-2">
-              <PieChartIcon className="w-8 h-8 text-amber-600" />
-              <div>
-                <p className="text-sm text-gray-600">Resultado/Animal</p>
-                <p className="text-2xl font-bold text-amber-600">
-                  {formatCurrency(results.result_per_animal)}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-6 rounded-lg bg-purple-50 border border-purple-200">
-            <div className="flex items-center gap-3 mb-2">
-              <Calendar className="w-8 h-8 text-purple-600" />
-              <div>
-                <p className="text-sm text-gray-600">Período</p>
-                <p className="text-2xl font-bold text-purple-600">
-                  {formatNumber(results.months_to_sell)} meses
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6">
             <div className="flex items-center gap-2 mb-4">
               <DollarSign className="w-6 h-6 text-green-600" />
@@ -238,12 +250,13 @@ export function ResultsView({ inputs, results, onNewSimulation, onSave, showSave
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <CostBreakdownChart results={results} />
-        <RevenueExpenseChart results={results} />
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CostBreakdownChart results={results} />
+          <RevenueExpenseChart results={results} />
+        </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
