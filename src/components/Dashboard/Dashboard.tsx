@@ -112,7 +112,7 @@ export function Dashboard() {
                 <span className="text-white font-bold text-xl">P</span>
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-800">Pecuária Simulador Pro</h1>
+                <h1 className="text-xl font-bold text-gray-800">Sistema Gestão de Fazenda</h1>
                 <p className="text-xs text-gray-500">{user?.email}</p>
               </div>
             </div>
