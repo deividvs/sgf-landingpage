@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Download, Save, Award, List, Calendar, Trash2 } from 'lucide-react';
+import { ArrowLeft, Download, Save, Award, List, Calendar, Trash2, Star } from 'lucide-react';
 import PurchaseForm from './PurchaseForm';
 import {
   calculatePurchaseSimulation,
@@ -16,14 +16,18 @@ interface SavedSimulation {
   id: string;
   title: string;
   created_at: string;
+  last_accessed_at: string;
+  is_favorite: boolean;
   suppliers: any[];
   best_supplier_index: number;
 }
 
 type ViewMode = 'form' | 'results' | 'saved';
+type SavedViewFilter = 'recent' | 'favorites';
 
 export default function PurchaseCalculator({ onBack }: PurchaseCalculatorProps) {
   const [viewMode, setViewMode] = useState<ViewMode>('form');
+  const [savedViewFilter, setSavedViewFilter] = useState<SavedViewFilter>('recent');
   const [results, setResults] = useState<PurchaseSimulationResults | null>(null);
   const [title, setTitle] = useState('');
   const [isSaving, setIsSaving] = useState(false);
@@ -34,7 +38,7 @@ export default function PurchaseCalculator({ onBack }: PurchaseCalculatorProps) 
     if (viewMode === 'saved') {
       loadSavedSimulations();
     }
-  }, [viewMode]);
+  }, [viewMode, savedViewFilter]);
 
   const loadSavedSimulations = async () => {
     setLoadingSaved(true);
@@ -42,11 +46,18 @@ export default function PurchaseCalculator({ onBack }: PurchaseCalculatorProps) 
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
+      let query = supabase
         .from('purchase_simulations')
         .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
+        .eq('user_id', user.id);
+
+      if (savedViewFilter === 'favorites') {
+        query = query.eq('is_favorite', true);
+      }
+
+      query = query.order('last_accessed_at', { ascending: false });
+
+      const { data, error } = await query;
 
       if (error) throw error;
       setSavedSimulations(data || []);
@@ -94,13 +105,33 @@ export default function PurchaseCalculator({ onBack }: PurchaseCalculatorProps) 
     }
   };
 
-  const handleViewSaved = (simulation: SavedSimulation) => {
+  const handleViewSaved = async (simulation: SavedSimulation) => {
+    await supabase
+      .from('purchase_simulations')
+      .update({ last_accessed_at: new Date().toISOString() })
+      .eq('id', simulation.id);
+
     setResults({
       suppliers: simulation.suppliers,
       best_supplier_index: simulation.best_supplier_index,
     });
     setTitle(simulation.title);
     setViewMode('results');
+  };
+
+  const handleToggleFavorite = async (id: string, currentFavorite: boolean) => {
+    try {
+      const { error } = await supabase
+        .from('purchase_simulations')
+        .update({ is_favorite: !currentFavorite })
+        .eq('id', id);
+
+      if (error) throw error;
+      await loadSavedSimulations();
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+      alert('Erro ao atualizar favorito.');
+    }
   };
 
   const handleDeleteSaved = async (id: string) => {
@@ -179,14 +210,43 @@ export default function PurchaseCalculator({ onBack }: PurchaseCalculatorProps) 
 
           {viewMode === 'saved' ? (
             <div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Simulações Salvas</h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-800">Simulações Salvas</h2>
+                <div className="flex gap-2 bg-gray-100 p-1 rounded-lg">
+                  <button
+                    onClick={() => setSavedViewFilter('recent')}
+                    className={`px-4 py-2 rounded-md transition-colors ${
+                      savedViewFilter === 'recent'
+                        ? 'bg-white text-gray-800 shadow-sm font-semibold'
+                        : 'text-gray-600 hover:text-gray-800'
+                    }`}
+                  >
+                    Recentes
+                  </button>
+                  <button
+                    onClick={() => setSavedViewFilter('favorites')}
+                    className={`px-4 py-2 rounded-md transition-colors flex items-center gap-2 ${
+                      savedViewFilter === 'favorites'
+                        ? 'bg-white text-gray-800 shadow-sm font-semibold'
+                        : 'text-gray-600 hover:text-gray-800'
+                    }`}
+                  >
+                    <Star size={16} />
+                    Favoritas
+                  </button>
+                </div>
+              </div>
               {loadingSaved ? (
                 <div className="text-center py-8">
                   <p className="text-gray-500">Carregando...</p>
                 </div>
               ) : savedSimulations.length === 0 ? (
                 <div className="text-center py-8">
-                  <p className="text-gray-500 mb-4">Nenhuma simulação salva ainda</p>
+                  <p className="text-gray-500 mb-4">
+                    {savedViewFilter === 'favorites'
+                      ? 'Nenhuma simulação favorita ainda'
+                      : 'Nenhuma simulação salva ainda'}
+                  </p>
                   <button
                     onClick={() => setViewMode('form')}
                     className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
@@ -202,25 +262,46 @@ export default function PurchaseCalculator({ onBack }: PurchaseCalculatorProps) 
                       className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
                     >
                       <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <h3 className="text-lg font-bold text-gray-800 mb-1">
-                            {simulation.title}
-                          </h3>
-                          <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
-                            <span className="flex items-center gap-1">
-                              <Calendar size={16} />
-                              {new Date(simulation.created_at).toLocaleDateString('pt-BR', {
-                                day: '2-digit',
-                                month: '2-digit',
-                                year: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                              })}
-                            </span>
-                            <span>{simulation.suppliers.length} fornecedores</span>
-                          </div>
-                          <div className="text-sm text-green-700 font-semibold">
-                            Melhor opção: {simulation.suppliers[simulation.best_supplier_index]?.name}
+                        <div className="flex items-start gap-3 flex-1">
+                          <button
+                            onClick={() => handleToggleFavorite(simulation.id, simulation.is_favorite)}
+                            className="mt-1 text-gray-400 hover:text-yellow-500 transition-colors"
+                          >
+                            <Star
+                              size={24}
+                              fill={simulation.is_favorite ? '#EAB308' : 'none'}
+                              stroke={simulation.is_favorite ? '#EAB308' : 'currentColor'}
+                            />
+                          </button>
+                          <div className="flex-1">
+                            <h3 className="text-lg font-bold text-gray-800 mb-1">
+                              {simulation.title}
+                            </h3>
+                            <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
+                              <span className="flex items-center gap-1">
+                                <Calendar size={16} />
+                                {savedViewFilter === 'recent'
+                                  ? `Acessado em ${new Date(simulation.last_accessed_at).toLocaleDateString('pt-BR', {
+                                      day: '2-digit',
+                                      month: '2-digit',
+                                      year: 'numeric',
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    })}`
+                                  : `Criado em ${new Date(simulation.created_at).toLocaleDateString('pt-BR', {
+                                      day: '2-digit',
+                                      month: '2-digit',
+                                      year: 'numeric',
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    })}`
+                                }
+                              </span>
+                              <span>{simulation.suppliers.length} fornecedores</span>
+                            </div>
+                            <div className="text-sm text-green-700 font-semibold">
+                              Melhor opção: {simulation.suppliers[simulation.best_supplier_index]?.name}
+                            </div>
                           </div>
                         </div>
                         <div className="flex gap-2">
