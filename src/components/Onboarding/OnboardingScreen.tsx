@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { ChevronRight, CheckCircle, AlertCircle, Beef } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 
 type Props = {
   onComplete: () => void;
@@ -38,46 +40,45 @@ export function OnboardingScreen({ onComplete }: Props) {
   const Icon = step.icon;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
-        <div className="bg-white rounded-lg shadow-2xl p-8 md:p-12">
-          <div className="flex justify-center mb-8">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center">
-              <Icon className="w-10 h-10 text-green-600" />
+        <Card>
+          <CardContent className="p-8 md:p-12">
+            <div className="flex justify-center mb-8">
+              <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
+                <Icon className="w-10 h-10 text-primary" />
+              </div>
             </div>
-          </div>
 
-          <h2 className="text-3xl font-bold text-gray-800 text-center mb-4">
-            {step.title}
-          </h2>
+            <h2 className="text-3xl font-bold text-center mb-4">
+              {step.title}
+            </h2>
 
-          <p className="text-lg text-gray-600 text-center mb-8">
-            {step.description}
-          </p>
+            <p className="text-lg text-muted-foreground text-center mb-8">
+              {step.description}
+            </p>
 
-          <div className="flex justify-center gap-2 mb-8">
-            {steps.map((_, index) => (
-              <div
-                key={index}
-                className={`h-2 rounded-full transition-all ${
-                  index === currentStep
-                    ? 'w-8 bg-green-600'
-                    : index < currentStep
-                    ? 'w-2 bg-green-400'
-                    : 'w-2 bg-gray-300'
-                }`}
-              />
-            ))}
-          </div>
+            <div className="flex justify-center gap-2 mb-8">
+              {steps.map((_, index) => (
+                <div
+                  key={index}
+                  className={`h-2 rounded-full transition-all ${
+                    index === currentStep
+                      ? 'w-8 bg-primary'
+                      : index < currentStep
+                      ? 'w-2 bg-primary/60'
+                      : 'w-2 bg-muted'
+                  }`}
+                />
+              ))}
+            </div>
 
-          <button
-            onClick={handleNext}
-            className="w-full flex items-center justify-center gap-2 bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition-colors"
-          >
-            {currentStep < steps.length - 1 ? 'Próximo' : 'Começar'}
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+            <Button onClick={handleNext} className="w-full">
+              {currentStep < steps.length - 1 ? 'Próximo' : 'Começar'}
+              <ChevronRight className="w-4 h-4 ml-2" />
+            </Button>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
