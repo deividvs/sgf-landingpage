@@ -52,8 +52,8 @@ export function calculatePurchaseSimulation(
 
     const icms_value = (price_per_head * supplier.icms_percentage) / 100;
 
-    const freight_per_head =
-      supplier.distance_km * supplier.freight_per_km + supplier.toll_value;
+    const total_freight = supplier.distance_km * supplier.freight_per_km;
+    const freight_per_head = total_freight / supplier.quantity + supplier.toll_value;
 
     const final_price_per_head =
       price_per_head + commission_value + icms_value + freight_per_head;
