@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ArrowLeft, Download, Save, Award } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ArrowLeft, Download, Save, Award, List, Calendar, Trash2 } from 'lucide-react';
 import PurchaseForm from './PurchaseForm';
 import {
   calculatePurchaseSimulation,
@@ -12,14 +12,55 @@ interface PurchaseCalculatorProps {
   onBack: () => void;
 }
 
+interface SavedSimulation {
+  id: string;
+  title: string;
+  created_at: string;
+  suppliers: any[];
+  best_supplier_index: number;
+}
+
+type ViewMode = 'form' | 'results' | 'saved';
+
 export default function PurchaseCalculator({ onBack }: PurchaseCalculatorProps) {
+  const [viewMode, setViewMode] = useState<ViewMode>('form');
   const [results, setResults] = useState<PurchaseSimulationResults | null>(null);
   const [title, setTitle] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [savedSimulations, setSavedSimulations] = useState<SavedSimulation[]>([]);
+  const [loadingSaved, setLoadingSaved] = useState(false);
+
+  useEffect(() => {
+    if (viewMode === 'saved') {
+      loadSavedSimulations();
+    }
+  }, [viewMode]);
+
+  const loadSavedSimulations = async () => {
+    setLoadingSaved(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('purchase_simulations')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setSavedSimulations(data || []);
+    } catch (error) {
+      console.error('Error loading simulations:', error);
+    } finally {
+      setLoadingSaved(false);
+    }
+  };
 
   const handleCalculate = (suppliers: any[]) => {
     const calculatedResults = calculatePurchaseSimulation({ suppliers });
     setResults(calculatedResults);
+    setViewMode('results');
   };
 
   const handleSave = async () => {
@@ -53,6 +94,32 @@ export default function PurchaseCalculator({ onBack }: PurchaseCalculatorProps) 
     }
   };
 
+  const handleViewSaved = (simulation: SavedSimulation) => {
+    setResults({
+      suppliers: simulation.suppliers,
+      best_supplier_index: simulation.best_supplier_index,
+    });
+    setTitle(simulation.title);
+    setViewMode('results');
+  };
+
+  const handleDeleteSaved = async (id: string) => {
+    if (!confirm('Tem certeza que deseja excluir esta simulação?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('purchase_simulations')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      await loadSavedSimulations();
+    } catch (error) {
+      console.error('Error deleting simulation:', error);
+      alert('Erro ao excluir simulação.');
+    }
+  };
+
   const handleDownloadPDF = () => {
     if (!results) return;
     generatePurchasePDF(
@@ -64,13 +131,43 @@ export default function PurchaseCalculator({ onBack }: PurchaseCalculatorProps) 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 p-6">
       <div className="max-w-6xl mx-auto">
-        <button
-          onClick={onBack}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors"
-        >
-          <ArrowLeft size={20} />
-          Voltar
-        </button>
+        <div className="flex items-center justify-between mb-6">
+          <button
+            onClick={onBack}
+            className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
+          >
+            <ArrowLeft size={20} />
+            Voltar
+          </button>
+
+          <div className="flex gap-3">
+            <button
+              onClick={() => {
+                setViewMode('form');
+                setResults(null);
+              }}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                viewMode === 'form'
+                  ? 'bg-green-600 text-white'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              <ArrowLeft size={20} />
+              Nova Simulação
+            </button>
+            <button
+              onClick={() => setViewMode('saved')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
+                viewMode === 'saved'
+                  ? 'bg-green-600 text-white'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              <List size={20} />
+              Ver Salvas
+            </button>
+          </div>
+        </div>
 
         <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
@@ -80,7 +177,73 @@ export default function PurchaseCalculator({ onBack }: PurchaseCalculatorProps) 
             Compare fornecedores e encontre a melhor opção de compra
           </p>
 
-          {!results ? (
+          {viewMode === 'saved' ? (
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Simulações Salvas</h2>
+              {loadingSaved ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">Carregando...</p>
+                </div>
+              ) : savedSimulations.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500 mb-4">Nenhuma simulação salva ainda</p>
+                  <button
+                    onClick={() => setViewMode('form')}
+                    className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    Criar Nova Simulação
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {savedSimulations.map((simulation) => (
+                    <div
+                      key={simulation.id}
+                      className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h3 className="text-lg font-bold text-gray-800 mb-1">
+                            {simulation.title}
+                          </h3>
+                          <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
+                            <span className="flex items-center gap-1">
+                              <Calendar size={16} />
+                              {new Date(simulation.created_at).toLocaleDateString('pt-BR', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </span>
+                            <span>{simulation.suppliers.length} fornecedores</span>
+                          </div>
+                          <div className="text-sm text-green-700 font-semibold">
+                            Melhor opção: {simulation.suppliers[simulation.best_supplier_index]?.name}
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleViewSaved(simulation)}
+                            className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                          >
+                            Ver Detalhes
+                          </button>
+                          <button
+                            onClick={() => handleDeleteSaved(simulation.id)}
+                            className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                          >
+                            <Trash2 size={20} />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : viewMode === 'form' ? (
             <PurchaseForm onSubmit={handleCalculate} />
           ) : (
             <div className="space-y-6">
@@ -249,7 +412,10 @@ export default function PurchaseCalculator({ onBack }: PurchaseCalculatorProps) 
               </div>
 
               <button
-                onClick={() => setResults(null)}
+                onClick={() => {
+                  setResults(null);
+                  setViewMode('form');
+                }}
                 className="w-full bg-gray-600 text-white py-3 rounded-lg hover:bg-gray-700 transition-colors font-semibold"
               >
                 Nova Simulação
