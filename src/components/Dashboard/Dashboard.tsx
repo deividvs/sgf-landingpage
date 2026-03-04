@@ -14,44 +14,14 @@ import { BreakevenCalculator } from '../Breakeven/BreakevenCalculator';
 import { SupplementationCochoCalculator } from '../SupplementationCocho/SupplementationCochoCalculator';
 import { ProductionCostCalculator } from '../ProductionCost/ProductionCostCalculator';
 import PurchaseCalculator from '../Purchase/PurchaseCalculator';
-import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Filter, Star, Grid3x3, FileBarChart, Scale, PackageOpen, Target, ShoppingCart, Info } from 'lucide-react';
+import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Filter, Star, Grid3x3, FileBarChart, Scale, PackageOpen, Target, ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-
 type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results' | 'breakeven' | 'supplementation_cocho' | 'production_cost' | 'purchase';
 type FilterType = 'all' | 'favorites' | 'recent';
-
-interface TooltipProps {
-  content: string;
-  children: React.ReactNode;
-}
-
-function Tooltip({ content, children }: TooltipProps) {
-  const [isVisible, setIsVisible] = useState(false);
-
-  return (
-    <div className="relative inline-block">
-      <div
-        onMouseEnter={() => setIsVisible(true)}
-        onMouseLeave={() => setIsVisible(false)}
-      >
-        {children}
-      </div>
-      {isVisible && (
-        <div className="absolute z-50 w-72 px-3 py-2 text-sm text-white bg-gray-900 rounded-lg shadow-lg -top-2 left-full ml-2 transform -translate-y-1/2">
-          <div className="relative">
-            {content}
-            <div className="absolute w-2 h-2 bg-gray-900 transform rotate-45 -left-4 top-1/2 -translate-y-1/2"></div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
 
 export function Dashboard() {
   const { user, signOut } = useAuth();
@@ -374,16 +344,9 @@ export function Dashboard() {
                   <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
                     <TrendingUp className="w-6 h-6 text-green-600" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Tooltip content="Use quando quiser projetar o resultado financeiro completo de um lote, incluindo receitas, custos operacionais, margem de lucro e tempo até a venda.">
-                      <button className="text-gray-400 hover:text-blue-500 transition-colors" onClick={(e) => e.stopPropagation()}>
-                        <Info className="w-5 h-5" />
-                      </button>
-                    </Tooltip>
-                    <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                      <Star className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Simulador de Resultados</h3>
                 <p className="text-sm text-gray-600 mb-4">Simule resultados financeiros da sua operação pecuária com base em custos e receitas</p>
@@ -398,16 +361,9 @@ export function Dashboard() {
                   <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
                     <Calculator className="w-6 h-6 text-blue-600" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Tooltip content="Use quando comprar animais pagando um preço acima do mercado (ágio) e quiser saber quanto tempo levará para diluir esse custo extra com o ganho de peso.">
-                      <button className="text-gray-400 hover:text-blue-500 transition-colors" onClick={(e) => e.stopPropagation()}>
-                        <Info className="w-5 h-5" />
-                      </button>
-                    </Tooltip>
-                    <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                      <Star className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Diluir Ágio</h3>
                 <p className="text-sm text-gray-600 mb-4">Calcule quantos dias são necessários para diluir o ágio pago na compra de animais</p>
@@ -422,16 +378,9 @@ export function Dashboard() {
                   <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-200 transition-colors">
                     <Package className="w-6 h-6 text-amber-600" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Tooltip content="Use quando precisar calcular a quantidade exata de suplemento mineral ou proteico necessária diariamente para seu rebanho, baseado no peso dos animais e percentual de fornecimento.">
-                      <button className="text-gray-400 hover:text-blue-500 transition-colors" onClick={(e) => e.stopPropagation()}>
-                        <Info className="w-5 h-5" />
-                      </button>
-                    </Tooltip>
-                    <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                      <Star className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Cálculo de Suplementação</h3>
                 <p className="text-sm text-gray-600 mb-4">Determine a quantidade exata de suplemento necessária para seu rebanho diáriamente</p>
@@ -446,16 +395,9 @@ export function Dashboard() {
                   <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center group-hover:bg-teal-200 transition-colors">
                     <MapPin className="w-6 h-6 text-teal-600" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Tooltip content="Use quando quiser calcular quantas cabeças de gado sua propriedade suporta ou qual a taxa de ocupação atual (UA/ha), considerando área disponível e peso dos animais.">
-                      <button className="text-gray-400 hover:text-blue-500 transition-colors" onClick={(e) => e.stopPropagation()}>
-                        <Info className="w-5 h-5" />
-                      </button>
-                    </Tooltip>
-                    <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                      <Star className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Taxa de Lotação</h3>
                 <p className="text-sm text-gray-600 mb-4">Calcule a taxa de lotação e otimize o uso da sua pastagem</p>
@@ -470,16 +412,9 @@ export function Dashboard() {
                   <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
                     <DollarSign className="w-6 h-6 text-emerald-600" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Tooltip content="Use quando quiser saber o custo diário por cabeça e por arroba produzida, considerando todos os gastos operacionais mensais divididos pelo ganho de peso.">
-                      <button className="text-gray-400 hover:text-blue-500 transition-colors" onClick={(e) => e.stopPropagation()}>
-                        <Info className="w-5 h-5" />
-                      </button>
-                    </Tooltip>
-                    <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                      <Star className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Cálculo da Diária</h3>
                 <p className="text-sm text-gray-600 mb-4">Calcule custos operacionais mensais e margem de lucro por arroba produzida</p>
@@ -494,16 +429,9 @@ export function Dashboard() {
                   <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition-colors">
                     <FileBarChart className="w-6 h-6 text-purple-600" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Tooltip content="Use para fazer o fechamento anual da propriedade, consolidando todas as vendas, compras, nascimentos, mortes e custos operacionais para análise de rentabilidade do negócio.">
-                      <button className="text-gray-400 hover:text-blue-500 transition-colors" onClick={(e) => e.stopPropagation()}>
-                        <Info className="w-5 h-5" />
-                      </button>
-                    </Tooltip>
-                    <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                      <Star className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Apuração de Resultados Anuais</h3>
                 <p className="text-sm text-gray-600 mb-4">Consolide receitas, custos e despesas anuais com análise de rentabilidade</p>
@@ -518,16 +446,9 @@ export function Dashboard() {
                   <div className="w-12 h-12 bg-sky-100 rounded-lg flex items-center justify-center group-hover:bg-sky-200 transition-colors">
                     <Scale className="w-6 h-6 text-sky-600" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Tooltip content="Use quando quiser descobrir qual o preço mínimo da arroba que você precisa vender para cobrir todos os custos e não ter prejuízo na operação.">
-                      <button className="text-gray-400 hover:text-blue-500 transition-colors" onClick={(e) => e.stopPropagation()}>
-                        <Info className="w-5 h-5" />
-                      </button>
-                    </Tooltip>
-                    <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                      <Star className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Ponto de Equilíbrio</h3>
                 <p className="text-sm text-gray-600 mb-4">Calcule o preço mínimo da arroba para não ter prejuízo</p>
@@ -542,16 +463,9 @@ export function Dashboard() {
                   <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition-colors">
                     <PackageOpen className="w-6 h-6 text-orange-600" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Tooltip content="Use para calcular a quantidade de ração ou suplemento concentrado fornecido no cocho, com base no consumo diário em kg por cabeça e quantidade de animais.">
-                      <button className="text-gray-400 hover:text-blue-500 transition-colors" onClick={(e) => e.stopPropagation()}>
-                        <Info className="w-5 h-5" />
-                      </button>
-                    </Tooltip>
-                    <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                      <Star className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Suplementação no Cocho</h3>
                 <p className="text-sm text-gray-600 mb-4">Calcule a quantidade exata de suplemento diário necessário</p>
@@ -566,16 +480,9 @@ export function Dashboard() {
                   <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors">
                     <Target className="w-6 h-6 text-red-600" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Tooltip content="Use quando quiser saber quanto custa produzir cada arroba de carne na sua propriedade, dividindo os custos mensais totais pelo ganho de peso esperado.">
-                      <button className="text-gray-400 hover:text-blue-500 transition-colors" onClick={(e) => e.stopPropagation()}>
-                        <Info className="w-5 h-5" />
-                      </button>
-                    </Tooltip>
-                    <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                      <Star className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Custo de Produção PRO</h3>
                 <p className="text-sm text-gray-600 mb-4">Descubra quanto custa produzir uma arroba com base em custos mensais e GMD</p>
@@ -590,16 +497,9 @@ export function Dashboard() {
                   <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center group-hover:bg-indigo-200 transition-colors">
                     <ShoppingCart className="w-6 h-6 text-indigo-600" />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Tooltip content="Use quando estiver comparando ofertas de diferentes fornecedores de gado, para calcular e comparar o preço real por arroba considerando peso e valor total.">
-                      <button className="text-gray-400 hover:text-blue-500 transition-colors" onClick={(e) => e.stopPropagation()}>
-                        <Info className="w-5 h-5" />
-                      </button>
-                    </Tooltip>
-                    <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                      <Star className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
                 </div>
                 <h3 className="text-lg font-bold text-gray-900 mb-2">Simulação de Compra</h3>
                 <p className="text-sm text-gray-600 mb-4">Compare fornecedores e encontre a melhor opção de compra de gado</p>
