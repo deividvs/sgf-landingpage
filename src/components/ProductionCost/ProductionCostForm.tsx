@@ -17,9 +17,6 @@ export function ProductionCostForm({ onCalculate }: ProductionCostFormProps) {
     labor_monthly: 5000,
     variable_costs_monthly: 3500,
     gmd_kg: 0.478,
-    carcass_yield_percentage: 52,
-    final_weight_kg: 600,
-    arroba_price: 320,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -41,7 +38,7 @@ export function ProductionCostForm({ onCalculate }: ProductionCostFormProps) {
           <CardTitle>Dados do Rebanho</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <Label htmlFor="quantity_animals">
                 Quantidade de Animais (cabeças)
@@ -71,73 +68,6 @@ export function ProductionCostForm({ onCalculate }: ProductionCostFormProps) {
                 step="0.001"
                 required
               />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="carcass_yield_percentage">
-                Rendimento de Carcaça (%)
-              </Label>
-              <Input
-                id="carcass_yield_percentage"
-                type="number"
-                value={formData.carcass_yield_percentage}
-                onChange={(e) => handleChange('carcass_yield_percentage', e.target.value)}
-                min="0"
-                max="100"
-                step="0.1"
-                required
-              />
-              <p className="text-xs text-muted-foreground">
-                Tipicamente entre 50% e 55%
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Dados de Venda (Opcional)</CardTitle>
-          <CardDescription>
-            Preencha para calcular a receita estimada da venda
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-2">
-              <Label htmlFor="final_weight_kg">
-                Peso Final Estimado (kg)
-              </Label>
-              <Input
-                id="final_weight_kg"
-                type="number"
-                value={formData.final_weight_kg || ''}
-                onChange={(e) => handleChange('final_weight_kg', e.target.value)}
-                min="0"
-                step="1"
-                placeholder="Ex: 600"
-              />
-              <p className="text-xs text-muted-foreground">
-                Peso vivo do animal na venda
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="arroba_price">
-                Preço da Arroba (R$/@)
-              </Label>
-              <Input
-                id="arroba_price"
-                type="number"
-                value={formData.arroba_price || ''}
-                onChange={(e) => handleChange('arroba_price', e.target.value)}
-                min="0"
-                step="0.01"
-                placeholder="Ex: 320"
-              />
-              <p className="text-xs text-muted-foreground">
-                Preço da arroba na sua região
-              </p>
             </div>
           </div>
         </CardContent>

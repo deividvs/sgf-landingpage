@@ -39,15 +39,7 @@ export function generateProductionCostPDF(
     ['Mão de Obra Mensal:', `R$ ${inputs.labor_monthly.toFixed(2)}`],
     ['Custos Variáveis Mensais:', `R$ ${inputs.variable_costs_monthly.toFixed(2)}`],
     ['GMD (Ganho Médio Diário):', `${inputs.gmd_kg.toFixed(3)} kg/dia`],
-    ['Rendimento de Carcaça:', `${inputs.carcass_yield_percentage.toFixed(1)}%`],
   ];
-
-  if (inputs.final_weight_kg) {
-    entryData.push(['Peso Final Estimado:', `${inputs.final_weight_kg} kg`]);
-  }
-  if (inputs.arroba_price) {
-    entryData.push(['Preço da Arroba:', `R$ ${inputs.arroba_price.toFixed(2)}/@`]);
-  }
 
   entryData.forEach(([label, value]) => {
     pdf.text(label, 20, yPos);
@@ -77,30 +69,6 @@ export function generateProductionCostPDF(
     pdf.text(value, 120, yPos);
     yPos += 6;
   });
-
-  if (results.total_revenue && results.carcass_weight_kg && results.total_arrobas) {
-    yPos += 5;
-    pdf.setFontSize(12);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Cálculo de Receita de Venda', 20, yPos);
-
-    yPos += 8;
-    pdf.setFontSize(10);
-    pdf.setFont('helvetica', 'normal');
-
-    const revenueData = [
-      ['Peso Vivo:', `${inputs.final_weight_kg} kg`],
-      ['Peso Carcaça:', `${results.carcass_weight_kg.toFixed(1)} kg (${inputs.carcass_yield_percentage}%)`],
-      ['Total de Arrobas:', `${results.total_arrobas.toFixed(2)} @`],
-      ['Receita Total:', `R$ ${results.total_revenue.toFixed(2)}`],
-    ];
-
-    revenueData.forEach(([label, value]) => {
-      pdf.text(label, 20, yPos);
-      pdf.text(value, 120, yPos);
-      yPos += 6;
-    });
-  }
 
   yPos += 10;
   pdf.setFontSize(11);
