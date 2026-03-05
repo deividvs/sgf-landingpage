@@ -14,13 +14,14 @@ import { BreakevenCalculator } from '../Breakeven/BreakevenCalculator';
 import { SupplementationCochoCalculator } from '../SupplementationCocho/SupplementationCochoCalculator';
 import { ProductionCostCalculator } from '../ProductionCost/ProductionCostCalculator';
 import PurchaseCalculator from '../Purchase/PurchaseCalculator';
-import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Filter, Star, Grid3x3, FileBarChart, Scale, PackageOpen, Target, ShoppingCart } from 'lucide-react';
+import { CarcassYieldCalculator } from '../CarcassYield/CarcassYieldCalculator';
+import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Filter, Star, Grid3x3, FileBarChart, Scale, PackageOpen, Target, ShoppingCart, Beef } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results' | 'breakeven' | 'supplementation_cocho' | 'production_cost' | 'purchase';
+type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results' | 'breakeven' | 'supplementation_cocho' | 'production_cost' | 'purchase' | 'carcass_yield';
 type FilterType = 'all' | 'favorites' | 'recent';
 
 export function Dashboard() {
@@ -274,6 +275,17 @@ export function Dashboard() {
             >
               <ShoppingCart className="w-5 h-5" />
             </button>
+            <button
+              onClick={() => setActiveSection('carcass_yield')}
+              title="Rendimento de Carcaça"
+              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
+                activeSection === 'carcass_yield'
+                  ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/50'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
+              }`}
+            >
+              <Beef className="w-5 h-5" />
+            </button>
           </div>
         </div>
       </div>
@@ -507,6 +519,23 @@ export function Dashboard() {
                   <span className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded">Novo</span>
                 </div>
               </div>
+
+              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                   onClick={() => setActiveSection('carcass_yield')}>
+                <div className="flex items-start justify-between mb-4">
+                  <div className="w-12 h-12 bg-rose-100 rounded-lg flex items-center justify-center group-hover:bg-rose-200 transition-colors">
+                    <Beef className="w-6 h-6 text-rose-600" />
+                  </div>
+                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
+                    <Star className="w-5 h-5" />
+                  </button>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Rendimento de Carcaça</h3>
+                <p className="text-sm text-gray-600 mb-4">Calcule o rendimento de carcaça e receita estimada da venda de animais</p>
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-1 bg-rose-100 text-rose-700 text-xs font-medium rounded">Novo</span>
+                </div>
+              </div>
             </div>
           </div>
         ) : activeSection === 'simulations' ? (
@@ -546,6 +575,8 @@ export function Dashboard() {
           <ProductionCostCalculator />
         ) : activeSection === 'purchase' ? (
           <PurchaseCalculator onBack={() => setActiveSection('home')} />
+        ) : activeSection === 'carcass_yield' ? (
+          <CarcassYieldCalculator />
         ) : null}
       </main>
     </div>
