@@ -24,6 +24,94 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results' | 'breakeven' | 'supplementation_cocho' | 'production_cost' | 'purchase' | 'carcass_yield';
 type FilterType = 'all' | 'favorites' | 'recent';
 
+interface Tool {
+  id: string;
+  name: string;
+  description: string;
+  section: AppSection;
+  badge?: { text: string; color: string };
+}
+
+const ALL_TOOLS: Tool[] = [
+  {
+    id: 'simulations',
+    name: 'Simulador de Resultados',
+    description: 'Simule resultados financeiros da sua operação pecuária com base em custos e receitas',
+    section: 'simulations',
+    badge: { text: 'Popular', color: 'green' }
+  },
+  {
+    id: 'premium',
+    name: 'Diluir Ágio',
+    description: 'Calcule quantos dias são necessários para diluir o ágio pago na compra de animais',
+    section: 'premium',
+    badge: { text: 'v1.0', color: 'gray' }
+  },
+  {
+    id: 'supplementation',
+    name: 'Cálculo de Suplementação',
+    description: 'Determine a quantidade exata de suplemento necessária para seu rebanho diáriamente',
+    section: 'supplementation',
+    badge: { text: 'Novo', color: 'amber' }
+  },
+  {
+    id: 'stocking_rate',
+    name: 'Taxa de Lotação',
+    description: 'Calcule a taxa de lotação e otimize o uso da sua pastagem',
+    section: 'stocking_rate',
+    badge: { text: 'v1.0', color: 'teal' }
+  },
+  {
+    id: 'daily_cost',
+    name: 'Cálculo da Diária',
+    description: 'Calcule custos operacionais mensais e margem de lucro por arroba produzida',
+    section: 'daily_cost',
+    badge: { text: 'Popular', color: 'emerald' }
+  },
+  {
+    id: 'annual_results',
+    name: 'Apuração de Resultados Anuais',
+    description: 'Consolide receitas, custos e despesas anuais com análise de rentabilidade',
+    section: 'annual_results',
+    badge: { text: 'Novo', color: 'purple' }
+  },
+  {
+    id: 'breakeven',
+    name: 'Ponto de Equilíbrio',
+    description: 'Calcule o preço mínimo da arroba para não ter prejuízo',
+    section: 'breakeven',
+    badge: { text: 'Novo', color: 'sky' }
+  },
+  {
+    id: 'supplementation_cocho',
+    name: 'Suplementação no Cocho',
+    description: 'Calcule a quantidade exata de suplemento diário necessário',
+    section: 'supplementation_cocho',
+    badge: { text: 'Novo', color: 'orange' }
+  },
+  {
+    id: 'production_cost',
+    name: 'Custo de Produção PRO',
+    description: 'Descubra quanto custa produzir uma arroba com base em custos mensais e GMD',
+    section: 'production_cost',
+    badge: { text: 'Novo', color: 'red' }
+  },
+  {
+    id: 'purchase',
+    name: 'Simulação de Compra',
+    description: 'Compare fornecedores e encontre a melhor opção de compra de gado',
+    section: 'purchase',
+    badge: { text: 'Novo', color: 'indigo' }
+  },
+  {
+    id: 'carcass_yield',
+    name: 'Rendimento de Carcaça',
+    description: 'Calcule o rendimento de carcaça e receita estimada da venda de animais',
+    section: 'carcass_yield',
+    badge: { text: 'Novo', color: 'rose' }
+  }
+];
+
 export function Dashboard() {
   const { user, signOut } = useAuth();
   const [activeSection, setActiveSection] = useState<AppSection>('home');
@@ -33,9 +121,12 @@ export function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
+  const [favoritedTools, setFavoritedTools] = useState<Set<string>>(new Set());
+  const [loadingFavorites, setLoadingFavorites] = useState(false);
 
   useEffect(() => {
     loadSimulations();
+    loadFavoriteTools();
   }, []);
 
   const loadSimulations = async () => {
@@ -101,6 +192,135 @@ export function Dashboard() {
     if (!error) {
       await loadSimulations();
     }
+  };
+
+  const loadFavoriteTools = async () => {
+    if (!user) return;
+
+    setLoadingFavorites(true);
+    try {
+      const { data, error } = await supabase
+        .from('user_tool_favorites')
+        .select('tool_id')
+        .eq('user_id', user.id);
+
+      if (!error && data) {
+        setFavoritedTools(new Set(data.map(item => item.tool_id)));
+      }
+    } catch (error) {
+      console.error('Error loading favorites:', error);
+    } finally {
+      setLoadingFavorites(false);
+    }
+  };
+
+  const toggleFavorite = async (toolId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!user) return;
+
+    const isFavorited = favoritedTools.has(toolId);
+
+    try {
+      if (isFavorited) {
+        const { error } = await supabase
+          .from('user_tool_favorites')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('tool_id', toolId);
+
+        if (!error) {
+          setFavoritedTools(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(toolId);
+            return newSet;
+          });
+        }
+      } else {
+        const { error } = await supabase
+          .from('user_tool_favorites')
+          .insert({
+            user_id: user.id,
+            tool_id: toolId
+          });
+
+        if (!error) {
+          setFavoritedTools(prev => new Set(prev).add(toolId));
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling favorite:', error);
+    }
+  };
+
+  const getFilteredTools = (): Tool[] => {
+    let filtered = ALL_TOOLS;
+
+    if (activeFilter === 'favorites') {
+      filtered = filtered.filter(tool => favoritedTools.has(tool.id));
+    }
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(tool =>
+        tool.name.toLowerCase().includes(query) ||
+        tool.description.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
+  };
+
+  const getToolIcon = (toolId: string) => {
+    const iconProps = { className: "w-6 h-6" };
+    const icons: Record<string, JSX.Element> = {
+      simulations: <TrendingUp {...iconProps} />,
+      premium: <Calculator {...iconProps} />,
+      supplementation: <Package {...iconProps} />,
+      stocking_rate: <MapPin {...iconProps} />,
+      daily_cost: <DollarSign {...iconProps} />,
+      annual_results: <FileBarChart {...iconProps} />,
+      breakeven: <Scale {...iconProps} />,
+      supplementation_cocho: <PackageOpen {...iconProps} />,
+      production_cost: <Target {...iconProps} />,
+      purchase: <ShoppingCart {...iconProps} />,
+      carcass_yield: <Beef {...iconProps} />
+    };
+    return icons[toolId] || <Grid3x3 {...iconProps} />;
+  };
+
+  const getToolColors = (toolId: string) => {
+    const colors: Record<string, { bg: string; hover: string; icon: string }> = {
+      simulations: { bg: 'bg-green-100', hover: 'group-hover:bg-green-200', icon: 'text-green-600' },
+      premium: { bg: 'bg-blue-100', hover: 'group-hover:bg-blue-200', icon: 'text-blue-600' },
+      supplementation: { bg: 'bg-amber-100', hover: 'group-hover:bg-amber-200', icon: 'text-amber-600' },
+      stocking_rate: { bg: 'bg-teal-100', hover: 'group-hover:bg-teal-200', icon: 'text-teal-600' },
+      daily_cost: { bg: 'bg-emerald-100', hover: 'group-hover:bg-emerald-200', icon: 'text-emerald-600' },
+      annual_results: { bg: 'bg-purple-100', hover: 'group-hover:bg-purple-200', icon: 'text-purple-600' },
+      breakeven: { bg: 'bg-sky-100', hover: 'group-hover:bg-sky-200', icon: 'text-sky-600' },
+      supplementation_cocho: { bg: 'bg-orange-100', hover: 'group-hover:bg-orange-200', icon: 'text-orange-600' },
+      production_cost: { bg: 'bg-red-100', hover: 'group-hover:bg-red-200', icon: 'text-red-600' },
+      purchase: { bg: 'bg-indigo-100', hover: 'group-hover:bg-indigo-200', icon: 'text-indigo-600' },
+      carcass_yield: { bg: 'bg-rose-100', hover: 'group-hover:bg-rose-200', icon: 'text-rose-600' }
+    };
+    return colors[toolId] || { bg: 'bg-gray-100', hover: 'group-hover:bg-gray-200', icon: 'text-gray-600' };
+  };
+
+  const getBadgeColors = (color: string) => {
+    const badgeColors: Record<string, string> = {
+      green: 'bg-green-100 text-green-700',
+      gray: 'bg-gray-100 text-gray-700',
+      amber: 'bg-amber-100 text-amber-700',
+      teal: 'bg-teal-100 text-teal-700',
+      emerald: 'bg-emerald-100 text-emerald-700',
+      purple: 'bg-purple-100 text-purple-700',
+      sky: 'bg-sky-100 text-sky-700',
+      orange: 'bg-orange-100 text-orange-700',
+      red: 'bg-red-100 text-red-700',
+      indigo: 'bg-indigo-100 text-indigo-700',
+      rose: 'bg-rose-100 text-rose-700'
+    };
+    return badgeColors[color] || 'bg-gray-100 text-gray-700';
   };
 
   return (
@@ -346,197 +566,60 @@ export function Dashboard() {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-                   onClick={() => {
-                     setActiveSection('simulations');
-                     setView('list');
-                   }}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
-                    <TrendingUp className="w-6 h-6 text-green-600" />
-                  </div>
-                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                    <Star className="w-5 h-5" />
-                  </button>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Simulador de Resultados</h3>
-                <p className="text-sm text-gray-600 mb-4">Simule resultados financeiros da sua operação pecuária com base em custos e receitas</p>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded">Popular</span>
-                </div>
+            {getFilteredTools().length === 0 ? (
+              <div className="text-center py-16">
+                <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-gray-700 mb-2">
+                  {activeFilter === 'favorites' ? 'Nenhuma ferramenta favoritada' : 'Nenhuma ferramenta encontrada'}
+                </h3>
+                <p className="text-gray-500">
+                  {activeFilter === 'favorites'
+                    ? 'Clique na estrela das ferramentas para adicioná-las aos favoritos'
+                    : 'Tente ajustar sua busca ou filtros'}
+                </p>
               </div>
-
-              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-                   onClick={() => setActiveSection('premium')}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                    <Calculator className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                    <Star className="w-5 h-5" />
-                  </button>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Diluir Ágio</h3>
-                <p className="text-sm text-gray-600 mb-4">Calcule quantos dias são necessários para diluir o ágio pago na compra de animais</p>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded">v1.0</span>
-                </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {getFilteredTools().map((tool) => {
+                  const colors = getToolColors(tool.id);
+                  return (
+                    <div
+                      key={tool.id}
+                      className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                      onClick={() => {
+                        setActiveSection(tool.section);
+                        if (tool.section === 'simulations') {
+                          setView('list');
+                        }
+                      }}
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div className={`w-12 h-12 ${colors.bg} rounded-lg flex items-center justify-center ${colors.hover} transition-colors`}>
+                          <div className={colors.icon}>
+                            {getToolIcon(tool.id)}
+                          </div>
+                        </div>
+                        <button
+                          onClick={(e) => toggleFavorite(tool.id, e)}
+                          className={`transition-colors ${favoritedTools.has(tool.id) ? 'text-yellow-500' : 'text-gray-400 hover:text-yellow-500'}`}
+                        >
+                          <Star className="w-5 h-5" fill={favoritedTools.has(tool.id) ? 'currentColor' : 'none'} />
+                        </button>
+                      </div>
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">{tool.name}</h3>
+                      <p className="text-sm text-gray-600 mb-4">{tool.description}</p>
+                      {tool.badge && (
+                        <div className="flex items-center gap-2">
+                          <span className={`px-2 py-1 ${getBadgeColors(tool.badge.color)} text-xs font-medium rounded`}>
+                            {tool.badge.text}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
-
-              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-                   onClick={() => setActiveSection('supplementation')}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-200 transition-colors">
-                    <Package className="w-6 h-6 text-amber-600" />
-                  </div>
-                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                    <Star className="w-5 h-5" />
-                  </button>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Cálculo de Suplementação</h3>
-                <p className="text-sm text-gray-600 mb-4">Determine a quantidade exata de suplemento necessária para seu rebanho diáriamente</p>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-medium rounded">Novo</span>
-                </div>
-              </div>
-
-              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-                   onClick={() => setActiveSection('stocking_rate')}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-teal-100 rounded-lg flex items-center justify-center group-hover:bg-teal-200 transition-colors">
-                    <MapPin className="w-6 h-6 text-teal-600" />
-                  </div>
-                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                    <Star className="w-5 h-5" />
-                  </button>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Taxa de Lotação</h3>
-                <p className="text-sm text-gray-600 mb-4">Calcule a taxa de lotação e otimize o uso da sua pastagem</p>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-teal-100 text-teal-700 text-xs font-medium rounded">v1.0</span>
-                </div>
-              </div>
-
-              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-                   onClick={() => setActiveSection('daily_cost')}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
-                    <DollarSign className="w-6 h-6 text-emerald-600" />
-                  </div>
-                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                    <Star className="w-5 h-5" />
-                  </button>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Cálculo da Diária</h3>
-                <p className="text-sm text-gray-600 mb-4">Calcule custos operacionais mensais e margem de lucro por arroba produzida</p>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded">Popular</span>
-                </div>
-              </div>
-
-              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-                   onClick={() => setActiveSection('annual_results')}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                    <FileBarChart className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                    <Star className="w-5 h-5" />
-                  </button>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Apuração de Resultados Anuais</h3>
-                <p className="text-sm text-gray-600 mb-4">Consolide receitas, custos e despesas anuais com análise de rentabilidade</p>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded">Novo</span>
-                </div>
-              </div>
-
-              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-                   onClick={() => setActiveSection('breakeven')}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-sky-100 rounded-lg flex items-center justify-center group-hover:bg-sky-200 transition-colors">
-                    <Scale className="w-6 h-6 text-sky-600" />
-                  </div>
-                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                    <Star className="w-5 h-5" />
-                  </button>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Ponto de Equilíbrio</h3>
-                <p className="text-sm text-gray-600 mb-4">Calcule o preço mínimo da arroba para não ter prejuízo</p>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-sky-100 text-sky-700 text-xs font-medium rounded">Novo</span>
-                </div>
-              </div>
-
-              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-                   onClick={() => setActiveSection('supplementation_cocho')}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center group-hover:bg-orange-200 transition-colors">
-                    <PackageOpen className="w-6 h-6 text-orange-600" />
-                  </div>
-                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                    <Star className="w-5 h-5" />
-                  </button>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Suplementação no Cocho</h3>
-                <p className="text-sm text-gray-600 mb-4">Calcule a quantidade exata de suplemento diário necessário</p>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-orange-100 text-orange-700 text-xs font-medium rounded">Novo</span>
-                </div>
-              </div>
-
-              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-                   onClick={() => setActiveSection('production_cost')}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center group-hover:bg-red-200 transition-colors">
-                    <Target className="w-6 h-6 text-red-600" />
-                  </div>
-                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                    <Star className="w-5 h-5" />
-                  </button>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Custo de Produção PRO</h3>
-                <p className="text-sm text-gray-600 mb-4">Descubra quanto custa produzir uma arroba com base em custos mensais e GMD</p>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded">Novo</span>
-                </div>
-              </div>
-
-              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-                   onClick={() => setActiveSection('purchase')}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center group-hover:bg-indigo-200 transition-colors">
-                    <ShoppingCart className="w-6 h-6 text-indigo-600" />
-                  </div>
-                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                    <Star className="w-5 h-5" />
-                  </button>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Simulação de Compra</h3>
-                <p className="text-sm text-gray-600 mb-4">Compare fornecedores e encontre a melhor opção de compra de gado</p>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-indigo-100 text-indigo-700 text-xs font-medium rounded">Novo</span>
-                </div>
-              </div>
-
-              <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
-                   onClick={() => setActiveSection('carcass_yield')}>
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-rose-100 rounded-lg flex items-center justify-center group-hover:bg-rose-200 transition-colors">
-                    <Beef className="w-6 h-6 text-rose-600" />
-                  </div>
-                  <button className="text-gray-400 hover:text-yellow-500 transition-colors">
-                    <Star className="w-5 h-5" />
-                  </button>
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">Rendimento de Carcaça</h3>
-                <p className="text-sm text-gray-600 mb-4">Calcule o rendimento de carcaça e receita estimada da venda de animais</p>
-                <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-rose-100 text-rose-700 text-xs font-medium rounded">Novo</span>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         ) : activeSection === 'simulations' ? (
           <>
