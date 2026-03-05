@@ -481,15 +481,15 @@ export function Dashboard() {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollArea className="w-full">
-            <div className="flex gap-2 py-3 min-w-max">
+            <div className="flex gap-2 py-3">
               <Button
                 onClick={() => setActiveSection('home')}
                 variant={activeSection === 'home' ? 'default' : 'ghost'}
-                size="sm"
+                size="icon"
                 className="hidden md:flex"
+                title="Todas as Ferramentas"
               >
-                <Grid3x3 className="w-4 h-4 mr-2" />
-                Todas
+                <Grid3x3 className="w-4 h-4" />
               </Button>
               <Button
                 onClick={() => {
@@ -497,47 +497,101 @@ export function Dashboard() {
                   setView('list');
                 }}
                 variant={activeSection === 'simulations' ? 'default' : 'ghost'}
-                size="sm"
+                size="icon"
                 className="hidden md:flex"
+                title="Simulador de Resultados"
               >
-                <TrendingUp className="w-4 h-4 mr-2" />
-                Simulações
+                <TrendingUp className="w-4 h-4" />
               </Button>
               <Button
                 onClick={() => setActiveSection('premium')}
                 variant={activeSection === 'premium' ? 'default' : 'ghost'}
-                size="sm"
+                size="icon"
                 className="hidden md:flex"
+                title="Diluir Ágio"
               >
-                <Calculator className="w-4 h-4 mr-2" />
-                Ágio
+                <Calculator className="w-4 h-4" />
               </Button>
               <Button
                 onClick={() => setActiveSection('supplementation')}
                 variant={activeSection === 'supplementation' ? 'default' : 'ghost'}
-                size="sm"
+                size="icon"
                 className="hidden md:flex"
+                title="Cálculo de Suplementação"
               >
-                <Package className="w-4 h-4 mr-2" />
-                Suplementação
+                <Package className="w-4 h-4" />
               </Button>
               <Button
                 onClick={() => setActiveSection('stocking_rate')}
                 variant={activeSection === 'stocking_rate' ? 'default' : 'ghost'}
-                size="sm"
+                size="icon"
                 className="hidden md:flex"
+                title="Taxa de Lotação"
               >
-                <MapPin className="w-4 h-4 mr-2" />
-                Taxa Lotação
+                <MapPin className="w-4 h-4" />
               </Button>
               <Button
                 onClick={() => setActiveSection('daily_cost')}
                 variant={activeSection === 'daily_cost' ? 'default' : 'ghost'}
-                size="sm"
+                size="icon"
                 className="hidden md:flex"
+                title="Cálculo da Diária"
               >
-                <DollarSign className="w-4 h-4 mr-2" />
-                Diária
+                <DollarSign className="w-4 h-4" />
+              </Button>
+              <Button
+                onClick={() => setActiveSection('annual_results')}
+                variant={activeSection === 'annual_results' ? 'default' : 'ghost'}
+                size="icon"
+                className="hidden md:flex"
+                title="Apuração de Resultados Anuais"
+              >
+                <FileBarChart className="w-4 h-4" />
+              </Button>
+              <Button
+                onClick={() => setActiveSection('breakeven')}
+                variant={activeSection === 'breakeven' ? 'default' : 'ghost'}
+                size="icon"
+                className="hidden md:flex"
+                title="Ponto de Equilíbrio"
+              >
+                <Scale className="w-4 h-4" />
+              </Button>
+              <Button
+                onClick={() => setActiveSection('supplementation_cocho')}
+                variant={activeSection === 'supplementation_cocho' ? 'default' : 'ghost'}
+                size="icon"
+                className="hidden md:flex"
+                title="Suplementação no Cocho"
+              >
+                <PackageOpen className="w-4 h-4" />
+              </Button>
+              <Button
+                onClick={() => setActiveSection('production_cost')}
+                variant={activeSection === 'production_cost' ? 'default' : 'ghost'}
+                size="icon"
+                className="hidden md:flex"
+                title="Custo de Produção PRO"
+              >
+                <Target className="w-4 h-4" />
+              </Button>
+              <Button
+                onClick={() => setActiveSection('purchase')}
+                variant={activeSection === 'purchase' ? 'default' : 'ghost'}
+                size="icon"
+                className="hidden md:flex"
+                title="Simulação de Compra"
+              >
+                <ShoppingCart className="w-4 h-4" />
+              </Button>
+              <Button
+                onClick={() => setActiveSection('carcass_yield')}
+                variant={activeSection === 'carcass_yield' ? 'default' : 'ghost'}
+                size="icon"
+                className="hidden md:flex"
+                title="Rendimento de Carcaça"
+              >
+                <Beef className="w-4 h-4" />
               </Button>
             </div>
           </ScrollArea>
