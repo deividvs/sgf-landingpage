@@ -2,7 +2,9 @@ export interface AnnualResultsInputs {
   year: number;
   title: string;
   total_heads: number;
-  total_revenue: number;
+  final_average_weight_kg: number;
+  carcass_yield_percentage: number;
+  arroba_price: number;
   cattle_purchase_cost: number;
   freight_cost: number;
   commission_cost: number;
@@ -15,6 +17,10 @@ export interface AnnualResultsInputs {
 }
 
 export interface AnnualResultsCalculations {
+  carcass_weight_kg: number;
+  arrobas_per_head: number;
+  total_arrobas: number;
+  total_revenue: number;
   total_cost: number;
   total_operational_expenses: number;
   revenue_per_head: number;
@@ -35,6 +41,18 @@ export interface AnnualResultsCalculations {
 }
 
 export function calculateAnnualResults(inputs: AnnualResultsInputs): AnnualResultsCalculations {
+  // Calcular peso de carcaça: peso vivo × rendimento de carcaça
+  const carcass_weight_kg = inputs.final_average_weight_kg * (inputs.carcass_yield_percentage / 100);
+
+  // Calcular arrobas por cabeça: peso de carcaça ÷ 15kg
+  const arrobas_per_head = carcass_weight_kg / 15;
+
+  // Calcular total de arrobas
+  const total_arrobas = arrobas_per_head * inputs.total_heads;
+
+  // Calcular receita total: total de arrobas × preço da arroba
+  const total_revenue = total_arrobas * inputs.arroba_price;
+
   const total_cost =
     inputs.cattle_purchase_cost +
     inputs.freight_cost +
@@ -48,7 +66,7 @@ export function calculateAnnualResults(inputs: AnnualResultsInputs): AnnualResul
     inputs.infrastructure_maintenance_cost +
     inputs.other_expenses_cost;
 
-  const revenue_per_head = inputs.total_revenue / inputs.total_heads;
+  const revenue_per_head = total_revenue / inputs.total_heads;
 
   const cost_per_head = total_cost / inputs.total_heads;
 
@@ -58,18 +76,18 @@ export function calculateAnnualResults(inputs: AnnualResultsInputs): AnnualResul
 
   const total_expenses_all = total_cost + total_operational_expenses;
 
-  const final_result = inputs.total_revenue - total_expenses_all;
+  const final_result = total_revenue - total_expenses_all;
 
   const profit_per_head = revenue_per_head - cost_plus_expense_per_head;
 
   const profit_margin_percentage =
-    (final_result / inputs.total_revenue) * 100;
+    total_revenue > 0 ? (final_result / total_revenue) * 100 : 0;
 
-  const cost_percentage = (total_cost / inputs.total_revenue) * 100;
+  const cost_percentage = total_revenue > 0 ? (total_cost / total_revenue) * 100 : 0;
 
-  const expense_percentage = (total_operational_expenses / inputs.total_revenue) * 100;
+  const expense_percentage = total_revenue > 0 ? (total_operational_expenses / total_revenue) * 100 : 0;
 
-  const profit_percentage = (final_result / inputs.total_revenue) * 100;
+  const profit_percentage = total_revenue > 0 ? (final_result / total_revenue) * 100 : 0;
 
   let interpretation: AnnualResultsCalculations['interpretation'];
 
@@ -106,6 +124,10 @@ export function calculateAnnualResults(inputs: AnnualResultsInputs): AnnualResul
   }
 
   return {
+    carcass_weight_kg,
+    arrobas_per_head,
+    total_arrobas,
+    total_revenue,
     total_cost,
     total_operational_expenses,
     revenue_per_head,

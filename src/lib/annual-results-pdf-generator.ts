@@ -26,18 +26,27 @@ export function generateAnnualResultsPDF(
   yPos += 15;
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('Dados da Operacao', 14, yPos);
+  doc.text('Calculo de Receita', 14, yPos);
 
   yPos += 8;
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
 
-  const operationData = [
+  const revenueData = [
     ['Total de Cabecas:', inputs.total_heads.toLocaleString('pt-BR')],
-    ['Receita Total:', formatCurrency(inputs.total_revenue)]
+    ['Peso Final Medio:', `${formatNumber(inputs.final_average_weight_kg, 1)} kg`],
+    ['Rendimento de Carcaca:', `${formatNumber(inputs.carcass_yield_percentage, 1)}%`],
+    ['Peso de Carcaca:', `${formatNumber(calculations.carcass_weight_kg, 1)} kg`],
+    ['Arrobas por Cabeca:', `${formatNumber(calculations.arrobas_per_head, 2)} @`],
+    ['Total de Arrobas:', `${formatNumber(calculations.total_arrobas, 1)} @`],
+    ['Preco da Arroba:', formatCurrency(inputs.arroba_price)],
+    ['Receita Total:', formatCurrency(calculations.total_revenue)]
   ];
 
-  operationData.forEach(([label, value]) => {
+  revenueData.forEach(([label, value], index) => {
+    if (index === revenueData.length - 1) {
+      doc.setFont('helvetica', 'bold');
+    }
     doc.text(label, 14, yPos);
     doc.text(value, 100, yPos);
     yPos += 6;

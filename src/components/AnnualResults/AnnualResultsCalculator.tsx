@@ -17,6 +17,9 @@ interface AnnualResult {
   year: number;
   title: string;
   total_heads: number;
+  final_average_weight_kg: number;
+  carcass_yield_percentage: number;
+  arroba_price: number;
   total_revenue: number;
   profit_margin_percentage: number;
   final_result: number;
@@ -39,7 +42,7 @@ export function AnnualResultsCalculator() {
     setLoading(true);
     const { data, error } = await supabase
       .from('annual_results')
-      .select('id, year, title, total_heads, total_revenue, profit_margin_percentage, final_result, created_at')
+      .select('id, year, title, total_heads, final_average_weight_kg, carcass_yield_percentage, arroba_price, total_revenue, profit_margin_percentage, final_result, created_at')
       .order('year', { ascending: false });
 
     if (!error && data) {
@@ -64,7 +67,13 @@ export function AnnualResultsCalculator() {
       year: currentInputs.year,
       title: currentInputs.title,
       total_heads: currentInputs.total_heads,
-      total_revenue: currentInputs.total_revenue,
+      final_average_weight_kg: currentInputs.final_average_weight_kg,
+      carcass_yield_percentage: currentInputs.carcass_yield_percentage,
+      arroba_price: currentInputs.arroba_price,
+      carcass_weight_kg: currentCalculations.carcass_weight_kg,
+      arrobas_per_head: currentCalculations.arrobas_per_head,
+      total_arrobas: currentCalculations.total_arrobas,
+      total_revenue: currentCalculations.total_revenue,
       cattle_purchase_cost: currentInputs.cattle_purchase_cost,
       freight_cost: currentInputs.freight_cost,
       commission_cost: currentInputs.commission_cost,
@@ -253,6 +262,31 @@ export function AnnualResultsCalculator() {
           </div>
         </div>
 
+        <div className="bg-white rounded-xl p-6 border border-gray-200 mb-8">
+          <h3 className="text-xl font-bold text-gray-900 mb-6">Calculo de Receita</h3>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div>
+              <p className="text-gray-600 text-sm mb-2">Peso Final Medio</p>
+              <p className="text-2xl font-bold text-gray-900">{formatNumber(currentInputs.final_average_weight_kg, 1)} kg</p>
+            </div>
+            <div>
+              <p className="text-gray-600 text-sm mb-2">Rendimento de Carcaca</p>
+              <p className="text-2xl font-bold text-gray-900">{formatNumber(currentInputs.carcass_yield_percentage, 1)}%</p>
+              <p className="text-sm text-gray-500 mt-1">{formatNumber(currentCalculations.carcass_weight_kg, 1)} kg de carcaca</p>
+            </div>
+            <div>
+              <p className="text-gray-600 text-sm mb-2">Arrobas por Cabeca</p>
+              <p className="text-2xl font-bold text-gray-900">{formatNumber(currentCalculations.arrobas_per_head, 2)} @</p>
+              <p className="text-sm text-gray-500 mt-1">{formatNumber(currentCalculations.total_arrobas, 1)} @ total</p>
+            </div>
+            <div>
+              <p className="text-gray-600 text-sm mb-2">Preco da Arroba</p>
+              <p className="text-2xl font-bold text-gray-900">{formatCurrency(currentInputs.arroba_price)}</p>
+              <p className="text-sm text-green-600 mt-1 font-semibold">= {formatCurrency(currentCalculations.total_revenue)}</p>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <div className="flex items-center gap-3 mb-2">
@@ -262,7 +296,7 @@ export function AnnualResultsCalculator() {
               <span className="text-sm text-gray-600">Receita Total</span>
             </div>
             <p className="text-2xl font-bold text-gray-900">
-              {formatCurrency(currentInputs.total_revenue)}
+              {formatCurrency(currentCalculations.total_revenue)}
             </p>
           </div>
 

@@ -14,7 +14,9 @@ export function AnnualResultsForm({ onCalculate, initialData }: AnnualResultsFor
       year: currentYear,
       title: '',
       total_heads: 0,
-      total_revenue: 0,
+      final_average_weight_kg: 0,
+      carcass_yield_percentage: 52,
+      arroba_price: 0,
       cattle_purchase_cost: 0,
       freight_cost: 0,
       commission_cost: 0,
@@ -85,20 +87,62 @@ export function AnnualResultsForm({ onCalculate, initialData }: AnnualResultsFor
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
           </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Calculo de Receita</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Peso Final Estimado (kg) *
+            </label>
+            <input
+              type="number"
+              required
+              min="0"
+              step="0.1"
+              value={formData.final_average_weight_kg || ''}
+              onChange={(e) => handleChange('final_average_weight_kg', parseFloat(e.target.value) || 0)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              placeholder="600"
+            />
+            <p className="text-xs text-gray-500 mt-1">Peso vivo médio no abate</p>
+          </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Receita Total (R$) *
+              Rendimento de Carcaca (%) *
+            </label>
+            <input
+              type="number"
+              required
+              min="0"
+              max="100"
+              step="0.1"
+              value={formData.carcass_yield_percentage || ''}
+              onChange={(e) => handleChange('carcass_yield_percentage', parseFloat(e.target.value) || 0)}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              placeholder="52"
+            />
+            <p className="text-xs text-gray-500 mt-1">Tipicamente entre 50% e 55%</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Preco da Arroba (R$) *
             </label>
             <input
               type="number"
               required
               min="0"
               step="0.01"
-              value={formData.total_revenue || ''}
-              onChange={(e) => handleChange('total_revenue', parseFloat(e.target.value) || 0)}
+              value={formData.arroba_price || ''}
+              onChange={(e) => handleChange('arroba_price', parseFloat(e.target.value) || 0)}
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              placeholder="280.00"
             />
+            <p className="text-xs text-gray-500 mt-1">Valor da arroba na sua regiao</p>
           </div>
         </div>
       </div>
