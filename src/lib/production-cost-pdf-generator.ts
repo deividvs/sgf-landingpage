@@ -39,6 +39,7 @@ export function generateProductionCostPDF(
     ['Mão de Obra Mensal:', `R$ ${inputs.labor_monthly.toFixed(2)}`],
     ['Custos Variáveis Mensais:', `R$ ${inputs.variable_costs_monthly.toFixed(2)}`],
     ['GMD (Ganho Médio Diário):', `${inputs.gmd_kg.toFixed(3)} kg/dia`],
+    ['Rendimento de Carcaça:', `${inputs.carcass_yield_percentage.toFixed(1)}%`],
   ];
 
   entryData.forEach(([label, value]) => {
@@ -60,7 +61,7 @@ export function generateProductionCostPDF(
     ['Despesa Mensal Total:', `R$ ${results.total_monthly_expense.toFixed(2)}`],
     ['Despesa Mensal por Animal:', `R$ ${results.monthly_expense_per_animal.toFixed(2)}`],
     ['Custo Diário por Animal:', `R$ ${results.daily_cost_per_animal.toFixed(2)}/dia`],
-    ['Dias para Produzir 1 Arroba:', `${results.days_per_arroba.toFixed(2)} dias`],
+    ['Dias p/ Produzir 1@ Carcaça:', `${results.days_per_arroba.toFixed(2)} dias`],
     ['Custo por Arroba Produzida:', `R$ ${results.cost_per_arroba.toFixed(2)}/@`],
   ];
 

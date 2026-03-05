@@ -17,6 +17,7 @@ export function ProductionCostForm({ onCalculate }: ProductionCostFormProps) {
     labor_monthly: 5000,
     variable_costs_monthly: 3500,
     gmd_kg: 0.478,
+    carcass_yield_percentage: 52,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -38,7 +39,7 @@ export function ProductionCostForm({ onCalculate }: ProductionCostFormProps) {
           <CardTitle>Dados do Rebanho</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <Label htmlFor="quantity_animals">
                 Quantidade de Animais (cabeças)
@@ -68,6 +69,25 @@ export function ProductionCostForm({ onCalculate }: ProductionCostFormProps) {
                 step="0.001"
                 required
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="carcass_yield_percentage">
+                Rendimento de Carcaça (%)
+              </Label>
+              <Input
+                id="carcass_yield_percentage"
+                type="number"
+                value={formData.carcass_yield_percentage}
+                onChange={(e) => handleChange('carcass_yield_percentage', e.target.value)}
+                min="0"
+                max="100"
+                step="0.1"
+                required
+              />
+              <p className="text-xs text-muted-foreground">
+                Tipicamente entre 50% e 55%
+              </p>
             </div>
           </div>
         </CardContent>

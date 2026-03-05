@@ -39,6 +39,7 @@ export function ProductionCostCalculator() {
         labor_monthly: inputs.labor_monthly,
         variable_costs_monthly: inputs.variable_costs_monthly,
         gmd_kg: inputs.gmd_kg,
+        carcass_yield_percentage: inputs.carcass_yield_percentage,
         total_monthly_expense: results.total_monthly_expense,
         monthly_expense_per_animal: results.monthly_expense_per_animal,
         daily_cost_per_animal: results.daily_cost_per_animal,
@@ -186,7 +187,7 @@ export function ProductionCostCalculator() {
               <p className="text-3xl font-bold text-blue-600">
                 {results.days_per_arroba.toFixed(2)}
               </p>
-              <p className="text-sm text-gray-600 mt-1">dias para produzir 30kg</p>
+              <p className="text-sm text-gray-600 mt-1">dias para produzir 1@ de carcaça (15kg)</p>
             </div>
 
             <div className="bg-purple-50 rounded-lg p-6 border border-purple-200 md:col-span-2">
