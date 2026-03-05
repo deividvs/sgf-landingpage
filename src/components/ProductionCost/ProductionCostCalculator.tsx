@@ -40,12 +40,17 @@ export function ProductionCostCalculator() {
         variable_costs_monthly: inputs.variable_costs_monthly,
         gmd_kg: inputs.gmd_kg,
         carcass_yield_percentage: inputs.carcass_yield_percentage,
+        final_weight_kg: inputs.final_weight_kg,
+        arroba_price: inputs.arroba_price,
         total_monthly_expense: results.total_monthly_expense,
         monthly_expense_per_animal: results.monthly_expense_per_animal,
         daily_cost_per_animal: results.daily_cost_per_animal,
         days_per_arroba: results.days_per_arroba,
         cost_per_arroba: results.cost_per_arroba,
         classification: results.classification,
+        carcass_weight_kg: results.carcass_weight_kg,
+        total_arrobas: results.total_arrobas,
+        total_revenue: results.total_revenue,
       });
 
       if (!error) {
@@ -200,6 +205,42 @@ export function ProductionCostCalculator() {
               </p>
             </div>
           </div>
+
+          {results.total_revenue && results.carcass_weight_kg && results.total_arrobas && (
+            <div className="bg-green-50 rounded-lg p-6 border-2 border-green-200">
+              <h3 className="font-semibold text-gray-800 mb-4 text-lg">Cálculo de Receita de Venda</h3>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="text-center">
+                  <p className="text-sm text-gray-600 mb-1">Peso Vivo</p>
+                  <p className="text-2xl font-bold text-gray-800">{inputs.final_weight_kg} kg</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-gray-600 mb-1">Peso Carcaça ({inputs.carcass_yield_percentage}%)</p>
+                  <p className="text-2xl font-bold text-gray-800">{results.carcass_weight_kg.toFixed(1)} kg</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-gray-600 mb-1">Total de Arrobas</p>
+                  <p className="text-2xl font-bold text-gray-800">{results.total_arrobas.toFixed(2)} @</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-gray-600 mb-1">Receita Total</p>
+                  <p className="text-2xl font-bold text-green-600">R$ {results.total_revenue.toFixed(2)}</p>
+                </div>
+              </div>
+              <div className="mt-4 p-4 bg-white rounded-lg border border-green-300">
+                <p className="text-sm text-gray-600 mb-1">Cálculo:</p>
+                <p className="text-sm text-gray-700">
+                  {inputs.final_weight_kg}kg × {inputs.carcass_yield_percentage}% = {results.carcass_weight_kg.toFixed(1)}kg de carcaça
+                </p>
+                <p className="text-sm text-gray-700">
+                  {results.carcass_weight_kg.toFixed(1)}kg ÷ 15kg/@ = {results.total_arrobas.toFixed(2)} arrobas
+                </p>
+                <p className="text-sm text-gray-700 font-semibold">
+                  {results.total_arrobas.toFixed(2)}@ × R$ {inputs.arroba_price?.toFixed(2)} = R$ {results.total_revenue.toFixed(2)}
+                </p>
+              </div>
+            </div>
+          )}
 
           <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
             <h3 className="font-semibold text-gray-800 mb-3">Interpretação</h3>

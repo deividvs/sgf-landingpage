@@ -6,6 +6,8 @@ export interface ProductionCostInputs {
   variable_costs_monthly: number;
   gmd_kg: number;
   carcass_yield_percentage: number;
+  final_weight_kg?: number;
+  arroba_price?: number;
 }
 
 export interface ProductionCostResults {
@@ -15,6 +17,10 @@ export interface ProductionCostResults {
   days_per_arroba: number;
   cost_per_arroba: number;
   classification: 'excelente' | 'media' | 'alto_custo';
+  carcass_weight_kg?: number;
+  total_arrobas?: number;
+  total_revenue?: number;
+  revenue_per_animal?: number;
 }
 
 export function calculateProductionCost(inputs: ProductionCostInputs): ProductionCostResults {
@@ -44,7 +50,7 @@ export function calculateProductionCost(inputs: ProductionCostInputs): Productio
     classification = 'alto_custo';
   }
 
-  return {
+  const results: ProductionCostResults = {
     total_monthly_expense,
     monthly_expense_per_animal,
     daily_cost_per_animal,
@@ -52,4 +58,18 @@ export function calculateProductionCost(inputs: ProductionCostInputs): Productio
     cost_per_arroba,
     classification,
   };
+
+  if (inputs.final_weight_kg && inputs.arroba_price) {
+    const carcass_weight_kg = inputs.final_weight_kg * carcass_yield_decimal;
+    const total_arrobas = carcass_weight_kg / kg_carcass_per_arroba;
+    const total_revenue = total_arrobas * inputs.arroba_price;
+    const revenue_per_animal = total_revenue;
+
+    results.carcass_weight_kg = carcass_weight_kg;
+    results.total_arrobas = total_arrobas;
+    results.total_revenue = total_revenue;
+    results.revenue_per_animal = revenue_per_animal;
+  }
+
+  return results;
 }
