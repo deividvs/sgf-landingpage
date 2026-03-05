@@ -1,4 +1,13 @@
-export type SupplementationType = 'proteinado' | 'proteico_energetico' | 'proteico_energetico_forte' | 'racao' | 'custom';
+export type SupplementationType =
+  | 'proteinado_01'
+  | 'proteinado_02'
+  | 'proteico_energetico_03'
+  | 'proteico_energetico_04'
+  | 'proteico_energetico_05'
+  | 'concentrado_engorda_1'
+  | 'concentrado_engorda_15'
+  | 'concentrado_engorda_2'
+  | 'custom';
 
 export type SupplementationInputs = {
   animal_quantity: number;
@@ -24,10 +33,14 @@ export type SupplementationComparison = {
 };
 
 export const SUPPLEMENTATION_TYPES = {
-  proteinado: { label: 'Proteinado', percentage: 0.1 },
-  proteico_energetico: { label: 'Proteico Energético', percentage: 0.2 },
-  proteico_energetico_forte: { label: 'Proteico Energético Forte', percentage: 0.3 },
-  racao: { label: 'Ração', percentage: 5.0 },
+  proteinado_01: { label: 'Proteinado', percentage: 0.1 },
+  proteinado_02: { label: 'Proteinado', percentage: 0.2 },
+  proteico_energetico_03: { label: 'Proteico energético', percentage: 0.3 },
+  proteico_energetico_04: { label: 'Proteico energético', percentage: 0.4 },
+  proteico_energetico_05: { label: 'Proteico energético', percentage: 0.5 },
+  concentrado_engorda_1: { label: 'Concentrado engorda', percentage: 1.0 },
+  concentrado_engorda_15: { label: 'Concentrado engorda', percentage: 1.5 },
+  concentrado_engorda_2: { label: 'Concentrado engorda', percentage: 2.0 },
   custom: { label: 'Personalizado', percentage: 0 },
 };
 
