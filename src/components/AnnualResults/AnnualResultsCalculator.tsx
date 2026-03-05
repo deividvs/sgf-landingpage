@@ -98,7 +98,7 @@ export function AnnualResultsCalculator() {
 
     if (!error) {
       await loadSavedResults();
-      alert('Apuracao salva com sucesso!');
+      alert('Apuração salva com sucesso!');
     } else {
       alert('Erro ao salvar apuracao.');
     }
@@ -114,12 +114,12 @@ export function AnnualResultsCalculator() {
     return (
       <div>
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Apuracao de Resultados Anuais</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Apuração de Resultados Anuais</h1>
           <button
             onClick={() => setView('form')}
             className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
           >
-            Nova Apuracao
+            Nova Apuração
           </button>
         </div>
 
@@ -136,7 +136,7 @@ export function AnnualResultsCalculator() {
               onClick={() => setView('form')}
               className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
             >
-              Criar Apuracao
+              Criar Apuração
             </button>
           </div>
         ) : (
@@ -220,7 +220,7 @@ export function AnnualResultsCalculator() {
           Voltar
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Nova Apuracao Anual</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">Nova Apuração Anual</h1>
 
         <AnnualResultsForm onCalculate={handleCalculate} />
       </div>
@@ -263,7 +263,7 @@ export function AnnualResultsCalculator() {
         </div>
 
         <div className="bg-white rounded-xl p-6 border border-gray-200 mb-8">
-          <h3 className="text-xl font-bold text-gray-900 mb-6">Calculo de Receita</h3>
+          <h3 className="text-xl font-bold text-gray-900 mb-6">Cálculo de Receita</h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
               <p className="text-gray-600 text-sm mb-2">Peso Final Medio</p>
@@ -395,7 +395,7 @@ export function AnnualResultsCalculator() {
           <h3 className="text-xl font-bold text-gray-900 mb-6">Indicadores por Cabeca</h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
-              <p className="text-gray-600 text-sm mb-2">Receita Media</p>
+              <p className="text-gray-600 text-sm mb-2">Receita Média</p>
               <p className="text-2xl font-bold text-gray-900">{formatCurrency(currentCalculations.revenue_per_head)}</p>
             </div>
             <div>

@@ -11,7 +11,7 @@ export function generateAnnualResultsPDF(
 
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  doc.text('Apuracao de Resultados Anuais', pageWidth / 2, yPos, { align: 'center' });
+  doc.text('Apuração de Resultados Anuais', pageWidth / 2, yPos, { align: 'center' });
 
   yPos += 10;
   doc.setFontSize(12);
@@ -26,20 +26,20 @@ export function generateAnnualResultsPDF(
   yPos += 15;
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('Calculo de Receita', 14, yPos);
+  doc.text('Cálculo de Receita', 14, yPos);
 
   yPos += 8;
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
 
   const revenueData = [
-    ['Total de Cabecas:', inputs.total_heads.toLocaleString('pt-BR')],
-    ['Peso Final Medio:', `${formatNumber(inputs.final_average_weight_kg, 1)} kg`],
-    ['Rendimento de Carcaca:', `${formatNumber(inputs.carcass_yield_percentage, 1)}%`],
-    ['Peso de Carcaca:', `${formatNumber(calculations.carcass_weight_kg, 1)} kg`],
-    ['Arrobas por Cabeca:', `${formatNumber(calculations.arrobas_per_head, 2)} @`],
+    ['Total de Cabeças:', inputs.total_heads.toLocaleString('pt-BR')],
+    ['Peso Final Médio:', `${formatNumber(inputs.final_average_weight_kg, 1)} kg`],
+    ['Rendimento de Carcaça:', `${formatNumber(inputs.carcass_yield_percentage, 1)}%`],
+    ['Peso de Carcaça:', `${formatNumber(calculations.carcass_weight_kg, 1)} kg`],
+    ['Arrobas por Cabeça:', `${formatNumber(calculations.arrobas_per_head, 2)} @`],
     ['Total de Arrobas:', `${formatNumber(calculations.total_arrobas, 1)} @`],
-    ['Preco da Arroba:', formatCurrency(inputs.arroba_price)],
+    ['Preço da Arroba:', formatCurrency(inputs.arroba_price)],
     ['Receita Total:', formatCurrency(calculations.total_revenue)]
   ];
 
@@ -117,17 +117,17 @@ export function generateAnnualResultsPDF(
   yPos += 5;
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('Indicadores por Cabeca', 14, yPos);
+  doc.text('Indicadores por Cabeça', 14, yPos);
 
   yPos += 8;
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
 
   const perHeadMetrics = [
-    ['Receita Media:', formatCurrency(calculations.revenue_per_head)],
-    ['Custo por Cabeca:', formatCurrency(calculations.cost_per_head)],
-    ['Despesa por Cabeca:', formatCurrency(calculations.expense_per_head)],
-    ['Lucro por Cabeca:', formatCurrency(calculations.profit_per_head)]
+    ['Receita Média:', formatCurrency(calculations.revenue_per_head)],
+    ['Custo por Cabeça:', formatCurrency(calculations.cost_per_head)],
+    ['Despesa por Cabeça:', formatCurrency(calculations.expense_per_head)],
+    ['Lucro por Cabeça:', formatCurrency(calculations.profit_per_head)]
   ];
 
   perHeadMetrics.forEach(([label, value]) => {

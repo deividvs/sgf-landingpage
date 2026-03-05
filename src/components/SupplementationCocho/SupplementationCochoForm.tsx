@@ -42,11 +42,11 @@ export function SupplementationCochoForm({ onCalculate, initialData }: Supplemen
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Informacoes da Simulacao</h3>
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Informações da Simulação</h3>
 
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Titulo da Simulacao (opcional)
+            Título da Simulação (opcional)
           </label>
           <input
             type="text"
@@ -60,7 +60,7 @@ export function SupplementationCochoForm({ onCalculate, initialData }: Supplemen
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Quantidade de Cabecas *
+              Quantidade de Cabeças *
             </label>
             <input
               type="number"
@@ -71,12 +71,12 @@ export function SupplementationCochoForm({ onCalculate, initialData }: Supplemen
               placeholder="200"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
-            <p className="text-xs text-gray-500 mt-1">Numero de animais a serem suplementados</p>
+            <p className="text-xs text-gray-500 mt-1">Número de animais a serem suplementados</p>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Peso Medio do Rebanho (kg) *
+              Peso Médio do Rebanho (kg) *
             </label>
             <input
               type="number"
@@ -88,12 +88,12 @@ export function SupplementationCochoForm({ onCalculate, initialData }: Supplemen
               placeholder="350"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
-            <p className="text-xs text-gray-500 mt-1">Peso medio estimado dos animais</p>
+            <p className="text-xs text-gray-500 mt-1">Peso médio estimado dos animais</p>
           </div>
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tipo de Suplementacao *
+              Tipo de Suplementação *
             </label>
             <select
               value={formData.supplementation_type}
@@ -101,12 +101,12 @@ export function SupplementationCochoForm({ onCalculate, initialData }: Supplemen
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             >
               <option value="Proteinado">Proteinado (0,1%)</option>
-              <option value="Proteico Energetico">Proteico Energetico (0,2%)</option>
-              <option value="Proteico Energetico Forte">Proteico Energetico Forte (0,3%)</option>
-              <option value="Racao">Racao (5,0%)</option>
+              <option value="Proteico Energetico">Proteico Energético (0,2%)</option>
+              <option value="Proteico Energetico Forte">Proteico Energético Forte (0,3%)</option>
+              <option value="Racao">Ração (5,0%)</option>
               <option value="Personalizado">Personalizado</option>
             </select>
-            <p className="text-xs text-gray-500 mt-1">Define o percentual padrao de consumo</p>
+            <p className="text-xs text-gray-500 mt-1">Define o percentual padrão de consumo</p>
           </div>
 
           <div>
@@ -126,7 +126,7 @@ export function SupplementationCochoForm({ onCalculate, initialData }: Supplemen
             />
             <p className="text-xs text-gray-500 mt-1">
               {formData.supplementation_type !== 'Personalizado'
-                ? 'Automatico conforme tipo selecionado'
+                ? 'Automático conforme tipo selecionado'
                 : 'Insira o percentual desejado'}
             </p>
           </div>

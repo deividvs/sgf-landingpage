@@ -33,17 +33,17 @@ export function BreakevenForm({ onCalculate, initialData }: BreakevenFormProps) 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Informacoes da Simulacao</h3>
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Informações da Simulação</h3>
 
         <div className="mb-6">
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Titulo da Simulacao (opcional)
+            Título da Simulação (opcional)
           </label>
           <input
             type="text"
             value={formData.title}
             onChange={(e) => handleChange('title', e.target.value)}
-            placeholder="Ex: Simulacao Safra 2025"
+            placeholder="Ex: Simulação Safra 2025"
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
           />
         </div>
@@ -51,7 +51,7 @@ export function BreakevenForm({ onCalculate, initialData }: BreakevenFormProps) 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Valor de Aquisicao (R$) *
+              Valor de Aquisição (R$) *
             </label>
             <input
               type="number"
@@ -68,7 +68,7 @@ export function BreakevenForm({ onCalculate, initialData }: BreakevenFormProps) 
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Custo Diario por Animal (R$) *
+              Custo Diário por Animal (R$) *
             </label>
             <input
               type="number"
@@ -80,7 +80,7 @@ export function BreakevenForm({ onCalculate, initialData }: BreakevenFormProps) 
               placeholder="2.60"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
-            <p className="text-xs text-gray-500 mt-1">Soma dos custos medios diarios</p>
+            <p className="text-xs text-gray-500 mt-1">Soma dos custos médios diários</p>
           </div>
 
           <div>
@@ -96,7 +96,7 @@ export function BreakevenForm({ onCalculate, initialData }: BreakevenFormProps) 
               placeholder="365"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
-            <p className="text-xs text-gray-500 mt-1">Periodo total de recria/engorda</p>
+            <p className="text-xs text-gray-500 mt-1">Período total de recria/engorda</p>
           </div>
 
           <div>
@@ -130,7 +130,7 @@ export function BreakevenForm({ onCalculate, initialData }: BreakevenFormProps) 
               placeholder="300.00"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
             />
-            <p className="text-xs text-gray-500 mt-1">Preco de mercado da arroba</p>
+            <p className="text-xs text-gray-500 mt-1">Preço de mercado da arroba</p>
           </div>
         </div>
       </div>
@@ -140,7 +140,7 @@ export function BreakevenForm({ onCalculate, initialData }: BreakevenFormProps) 
           type="submit"
           className="px-8 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
         >
-          Calcular Ponto de Equilibrio
+          Calcular Ponto de Equilíbrio
         </button>
       </div>
     </form>

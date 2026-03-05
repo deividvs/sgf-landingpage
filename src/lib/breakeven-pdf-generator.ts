@@ -11,7 +11,7 @@ export function generateBreakevenPDF(
 
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  doc.text('Calculo do Ponto de Equilibrio da Arroba', pageWidth / 2, yPos, { align: 'center' });
+  doc.text('Cálculo do Ponto de Equilíbrio da Arroba', pageWidth / 2, yPos, { align: 'center' });
 
   yPos += 10;
   doc.setFontSize(12);
@@ -34,8 +34,8 @@ export function generateBreakevenPDF(
   doc.setFont('helvetica', 'normal');
 
   const inputData = [
-    ['Valor de Aquisicao:', formatCurrency(inputs.acquisition_value)],
-    ['Custo Diario por Animal:', formatCurrency(inputs.daily_cost)],
+    ['Valor de Aquisição:', formatCurrency(inputs.acquisition_value)],
+    ['Custo Diário por Animal:', formatCurrency(inputs.daily_cost)],
     ['Quantidade de Dias:', inputs.days_in_cycle.toString()],
     ['Peso Final (kg):', formatNumber(inputs.final_weight_kg, 2) + ' kg'],
     ['Valor Atual da Arroba:', formatCurrency(inputs.current_arroba_price)]
@@ -50,7 +50,7 @@ export function generateBreakevenPDF(
   yPos += 10;
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  doc.text('Calculos Detalhados', 14, yPos);
+  doc.text('Cálculos Detalhados', 14, yPos);
 
   yPos += 8;
   doc.setFontSize(11);
@@ -79,7 +79,7 @@ export function generateBreakevenPDF(
 
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  doc.text('Resultado do Ponto de Equilibrio', 14 + 5, yPos);
+  doc.text('Resultado do Ponto de Equilíbrio', 14 + 5, yPos);
 
   yPos += 10;
   doc.setFontSize(14);
@@ -88,7 +88,7 @@ export function generateBreakevenPDF(
   const breakEvenColor = [34, 139, 230];
   doc.setTextColor(...breakEvenColor);
   doc.text(
-    `Ponto de Equilibrio: ${formatCurrency(calculations.breakeven_price)}/@`,
+    `Ponto de Equilíbrio: ${formatCurrency(calculations.breakeven_price)}/@`,
     14 + 5,
     yPos
   );
@@ -97,7 +97,7 @@ export function generateBreakevenPDF(
   const profitColor = calculations.profit_per_arroba >= 0 ? [22, 163, 74] : [220, 38, 38];
   doc.setTextColor(...profitColor);
   doc.text(
-    `${calculations.profit_per_arroba >= 0 ? 'Lucro' : 'Prejuizo'} por Arroba: ${formatCurrency(Math.abs(calculations.profit_per_arroba))}/@`,
+    `${calculations.profit_per_arroba >= 0 ? 'Lucro' : 'Prejuízo'} por Arroba: ${formatCurrency(Math.abs(calculations.profit_per_arroba))}/@`,
     14 + 5,
     yPos
   );
@@ -114,7 +114,7 @@ export function generateBreakevenPDF(
   yPos += 20;
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
-  doc.text('Analise:', 14, yPos);
+  doc.text('Análise:', 14, yPos);
 
   yPos += 6;
   doc.setFontSize(10);
@@ -144,9 +144,9 @@ export function generateBreakevenPDF(
   doc.setFont('helvetica', 'normal');
 
   const comparison = [
-    `- Preco de Mercado: ${formatCurrency(inputs.current_arroba_price)}/@`,
-    `- Ponto de Equilibrio: ${formatCurrency(calculations.breakeven_price)}/@`,
-    `- Diferenca: ${formatCurrency(Math.abs(calculations.profit_per_arroba))}/@`
+    `- Preço de Mercado: ${formatCurrency(inputs.current_arroba_price)}/@`,
+    `- Ponto de Equilíbrio: ${formatCurrency(calculations.breakeven_price)}/@`,
+    `- Diferença: ${formatCurrency(Math.abs(calculations.profit_per_arroba))}/@`
   ];
 
   comparison.forEach((line) => {
@@ -158,7 +158,7 @@ export function generateBreakevenPDF(
   doc.setFontSize(8);
   doc.setTextColor(100, 100, 100);
   doc.text(
-    `Relatorio gerado em ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}`,
+    `Relatório gerado em ${new Date().toLocaleDateString('pt-BR')} as ${new Date().toLocaleTimeString('pt-BR')}`,
     pageWidth / 2,
     yPos,
     { align: 'center' }

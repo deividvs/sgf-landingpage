@@ -162,6 +162,6 @@ export function generateSupplementationPDF(inputs: SupplementationInputs, result
     align: 'center',
   });
 
-  const fileName = `Calculo_Suplementacao_${new Date().toISOString().split('T')[0]}.pdf`;
+  const fileName = `Cálculo_Suplementação_${new Date().toISOString().split('T')[0]}.pdf`;
   pdf.save(fileName);
 }

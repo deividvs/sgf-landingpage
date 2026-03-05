@@ -11,7 +11,7 @@ export function generateSupplementationCochoPDF(
 
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  doc.text('Calculo de Suplementacao no Cocho', pageWidth / 2, yPos, { align: 'center' });
+  doc.text('Cálculo de Suplementação no Cocho', pageWidth / 2, yPos, { align: 'center' });
 
   yPos += 10;
   doc.setFontSize(12);
@@ -36,7 +36,7 @@ export function generateSupplementationCochoPDF(
   const inputData = [
     ['Quantidade de Cabecas:', inputs.quantity_heads.toString()],
     ['Peso Medio do Rebanho:', formatNumber(inputs.average_weight_kg, 2) + ' kg'],
-    ['Tipo de Suplementacao:', inputs.supplementation_type],
+    ['Tipo de Suplementação:', inputs.supplementation_type],
     ['Percentual de Consumo:', formatNumber(inputs.consumption_percentage, 2) + '%'],
     ['Peso do Saco:', formatNumber(inputs.bag_weight_kg, 0) + ' kg']
   ];
@@ -123,7 +123,7 @@ export function generateSupplementationCochoPDF(
   doc.setTextColor(100, 100, 100);
 
   const disclaimer = doc.splitTextToSize(
-    'Calculadora de Suplementacao - resultado estimado com base no peso medio informado.',
+    'Calculadora de Suplementação - resultado estimado com base no peso medio informado.',
     pageWidth - 28
   );
 

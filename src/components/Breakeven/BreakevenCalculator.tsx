@@ -78,7 +78,7 @@ export function BreakevenCalculator() {
 
     if (!error) {
       await loadSimulations();
-      alert('Simulacao salva com sucesso!');
+      alert('Simulação salva com sucesso!');
     } else {
       alert('Erro ao salvar simulacao.');
     }
@@ -95,14 +95,14 @@ export function BreakevenCalculator() {
       <div>
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Ponto de Equilibrio da Arroba</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Ponto de Equilíbrio da Arroba</h1>
             <p className="text-gray-600 mt-2">Descubra o preco minimo para nao ter prejuizo</p>
           </div>
           <button
             onClick={() => setView('form')}
             className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
           >
-            Nova Simulacao
+            Nova Simulação
           </button>
         </div>
 
@@ -119,7 +119,7 @@ export function BreakevenCalculator() {
               onClick={() => setView('form')}
               className="px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors"
             >
-              Criar Simulacao
+              Criar Simulação
             </button>
           </div>
         ) : (
@@ -132,7 +132,7 @@ export function BreakevenCalculator() {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
                     <h3 className="text-lg font-bold text-gray-900">
-                      {sim.title || 'Simulacao'}
+                      {sim.title || 'Simulação'}
                     </h3>
                     <p className="text-xs text-gray-500 mt-1">
                       {new Date(sim.created_at).toLocaleDateString('pt-BR')}
@@ -149,7 +149,7 @@ export function BreakevenCalculator() {
 
                 <div className="space-y-3">
                   <div className="bg-blue-50 p-3 rounded-lg">
-                    <p className="text-xs text-blue-600 mb-1">Ponto de Equilibrio</p>
+                    <p className="text-xs text-blue-600 mb-1">Ponto de Equilíbrio</p>
                     <p className="text-lg font-bold text-blue-700">
                       {formatCurrency(sim.breakeven_price)}/@
                     </p>
@@ -207,7 +207,7 @@ export function BreakevenCalculator() {
           Voltar
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Nova Simulacao</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Nova Simulação</h1>
         <p className="text-gray-600 mb-8">Preencha os dados para calcular o ponto de equilibrio</p>
 
         <BreakevenForm onCalculate={handleCalculate} />
@@ -335,7 +335,7 @@ export function BreakevenCalculator() {
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-blue-600 font-medium">Ponto de Equilibrio:</span>
+                <span className="text-blue-600 font-medium">Ponto de Equilíbrio:</span>
                 <span className="font-bold text-blue-600">
                   {formatCurrency(currentCalculations.breakeven_price)}/@
                 </span>
@@ -362,11 +362,11 @@ export function BreakevenCalculator() {
           <div className="flex items-center gap-4 mb-4">
             <div className="text-5xl">{currentCalculations.interpretation.icon}</div>
             <div>
-              <h3 className="text-2xl font-bold">Resultado da Simulacao</h3>
+              <h3 className="text-2xl font-bold">Resultado da Simulação</h3>
               <p className="text-lg opacity-90">
                 {currentCalculations.status === 'profit' ? 'Operacao Lucrativa' :
                  currentCalculations.status === 'loss' ? 'Operacao com Prejuizo' :
-                 'Ponto de Equilibrio'}
+                 'Ponto de Equilíbrio'}
               </p>
             </div>
           </div>

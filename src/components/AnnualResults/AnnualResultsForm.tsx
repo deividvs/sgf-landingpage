@@ -44,11 +44,11 @@ export function AnnualResultsForm({ onCalculate, initialData }: AnnualResultsFor
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Informacoes Gerais</h3>
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Informações Gerais</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Ano de Referencia *
+              Ano de Referência *
             </label>
             <input
               type="number"
@@ -63,7 +63,7 @@ export function AnnualResultsForm({ onCalculate, initialData }: AnnualResultsFor
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Titulo (opcional)
+              Título (opcional)
             </label>
             <input
               type="text"
@@ -76,7 +76,7 @@ export function AnnualResultsForm({ onCalculate, initialData }: AnnualResultsFor
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Total de Cabecas *
+              Total de Cabeças *
             </label>
             <input
               type="number"
@@ -91,7 +91,7 @@ export function AnnualResultsForm({ onCalculate, initialData }: AnnualResultsFor
       </div>
 
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Calculo de Receita</h3>
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Cálculo de Receita</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -112,7 +112,7 @@ export function AnnualResultsForm({ onCalculate, initialData }: AnnualResultsFor
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Rendimento de Carcaca (%) *
+              Rendimento de Carcaça (%) *
             </label>
             <input
               type="number"
@@ -130,7 +130,7 @@ export function AnnualResultsForm({ onCalculate, initialData }: AnnualResultsFor
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Preco da Arroba (R$) *
+              Preço da Arroba (R$) *
             </label>
             <input
               type="number"
@@ -142,13 +142,13 @@ export function AnnualResultsForm({ onCalculate, initialData }: AnnualResultsFor
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               placeholder="280.00"
             />
-            <p className="text-xs text-gray-500 mt-1">Valor da arroba na sua regiao</p>
+            <p className="text-xs text-gray-500 mt-1">Valor da arroba na sua região</p>
           </div>
         </div>
       </div>
 
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Custos de Aquisicao</h3>
+        <h3 className="text-lg font-bold text-gray-900 mb-4">Custos de Aquisição</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -180,7 +180,7 @@ export function AnnualResultsForm({ onCalculate, initialData }: AnnualResultsFor
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Comissoes (R$)
+              Comissões (R$)
             </label>
             <input
               type="number"
@@ -227,7 +227,7 @@ export function AnnualResultsForm({ onCalculate, initialData }: AnnualResultsFor
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Racao, Suplementos e Medicamentos (R$)
+              Ração, Suplementos e Medicamentos (R$)
             </label>
             <input
               type="number"
@@ -255,7 +255,7 @@ export function AnnualResultsForm({ onCalculate, initialData }: AnnualResultsFor
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Cercas, Veiculos e Manutencao (R$)
+              Cercas, Veículos e Manutenção (R$)
             </label>
             <input
               type="number"
