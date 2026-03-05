@@ -66,12 +66,25 @@ export function generatePDF(inputs: SimulationInputs, results: SimulationResults
   addText(`Meses ate Venda: ${formatNumber(results.months_to_sell)} meses`, 17);
   yPos += 2;
 
-  addSection('RESUMO FINANCEIRO');
+  addSection('CALCULO DE RECEITA');
   yPos += 2;
+  addText(`Rendimento de Carcaca: ${formatNumber(inputs.carcass_yield_percentage)}%`, 17);
+  yPos += 6;
+  addText(`Peso de Carcaca: ${formatNumber(results.carcass_weight_kg, 1)} kg`, 17);
+  yPos += 6;
+  addText(`Arrobas por Animal: ${formatNumber(results.arrobas_per_head, 2)} @`, 17);
+  yPos += 6;
+  addText(`Total de Arrobas: ${formatNumber(results.total_arrobas, 1)} @`, 17);
+  yPos += 6;
+  addText(`Valor da Arroba: ${formatCurrency(inputs.arroba_value)}`, 17);
+  yPos += 8;
   addText('RECEITA TOTAL:', 17, 11, 'bold');
   addText(formatCurrency(results.total_revenue), pageWidth - 60, 11, 'bold');
   yPos += 8;
   addLine();
+
+  addSection('RESUMO FINANCEIRO');
+  yPos += 2;
 
   addText('Custo de Reposicao:', 17);
   addText(formatCurrency(results.acquisition_costs), pageWidth - 60);

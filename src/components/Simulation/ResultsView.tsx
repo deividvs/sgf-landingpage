@@ -152,9 +152,13 @@ export function ResultsView({ inputs, results, onNewSimulation, onSave, showSave
                 <span className="text-gray-700">Venda Total</span>
                 <span className="text-2xl font-bold text-green-700">{formatCurrency(results.total_revenue)}</span>
               </div>
-              <div className="text-sm text-gray-600 mt-2">
+              <div className="text-sm text-gray-600 mt-2 space-y-1">
+                <p>Peso Final: {formatNumber(inputs.final_weight)} kg</p>
+                <p>Rendimento Carcaça: {formatNumber(inputs.carcass_yield_percentage)}%</p>
+                <p>Peso Carcaça: {formatNumber(results.carcass_weight_kg, 1)} kg</p>
+                <p>Arrobas/Animal: {formatNumber(results.arrobas_per_head, 2)} @</p>
+                <p>Total Arrobas: {formatNumber(results.total_arrobas, 1)} @</p>
                 <p>Valor da Arroba: {formatCurrency(inputs.arroba_value)}</p>
-                <p>Peso Final por Animal: {formatNumber(inputs.final_weight)} kg</p>
               </div>
             </div>
           </div>

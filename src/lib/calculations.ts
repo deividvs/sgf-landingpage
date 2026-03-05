@@ -3,6 +3,7 @@ export type SimulationInputs = {
   quantity: number;
   initial_weight: number;
   final_weight: number;
+  carcass_yield_percentage: number;
   acquisition_value_per_kg: number;
   average_daily_gain: number;
   lease_monthly_per_head: number;
@@ -19,6 +20,9 @@ export type SimulationInputs = {
 export type SimulationResults = {
   weight_to_gain: number;
   months_to_sell: number;
+  carcass_weight_kg: number;
+  arrobas_per_head: number;
+  total_arrobas: number;
   total_revenue: number;
   acquisition_costs: number;
   lease_costs: number;
@@ -43,6 +47,7 @@ export function calculateSimulation(inputs: SimulationInputs): SimulationResults
     quantity,
     initial_weight,
     final_weight,
+    carcass_yield_percentage,
     acquisition_value_per_kg,
     average_daily_gain,
     lease_monthly_per_head,
@@ -59,8 +64,10 @@ export function calculateSimulation(inputs: SimulationInputs): SimulationResults
   const days_to_sell = weight_to_gain / average_daily_gain;
   const months_to_sell = days_to_sell / 30;
 
-  const final_weight_arrobas = final_weight / ARROBA_KG;
-  const total_revenue = quantity * final_weight_arrobas * arroba_value;
+  const carcass_weight_kg = final_weight * (carcass_yield_percentage / 100);
+  const arrobas_per_head = carcass_weight_kg / ARROBA_KG;
+  const total_arrobas = quantity * arrobas_per_head;
+  const total_revenue = total_arrobas * arroba_value;
 
   const acquisition_costs = quantity * acquisition_value_per_kg;
 
@@ -87,12 +94,14 @@ export function calculateSimulation(inputs: SimulationInputs): SimulationResults
   const result_per_animal = result_total / quantity;
   const profit_margin_percentage = total_revenue > 0 ? (result_total / total_revenue) * 100 : 0;
 
-  const total_arrobas = quantity * final_weight_arrobas;
   const cost_per_arroba = total_arrobas > 0 ? total_expenses / total_arrobas : 0;
 
   return {
     weight_to_gain,
     months_to_sell,
+    carcass_weight_kg,
+    arrobas_per_head,
+    total_arrobas,
     total_revenue,
     acquisition_costs,
     lease_costs,
