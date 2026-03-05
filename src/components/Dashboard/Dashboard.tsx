@@ -123,11 +123,40 @@ export function Dashboard() {
   const [activeFilter, setActiveFilter] = useState<FilterType>('all');
   const [favoritedTools, setFavoritedTools] = useState<Set<string>>(new Set());
   const [loadingFavorites, setLoadingFavorites] = useState(false);
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
   useEffect(() => {
     loadSimulations();
     loadFavoriteTools();
   }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 60000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const getGreeting = () => {
+    const hour = currentDateTime.getHours();
+    if (hour >= 6 && hour < 12) return 'Bom dia';
+    if (hour >= 12 && hour < 18) return 'Boa tarde';
+    return 'Boa noite';
+  };
+
+  const getFormattedDateTime = () => {
+    const time = currentDateTime.toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    const date = currentDateTime.toLocaleDateString('pt-BR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    return `agora são ${time} de ${date}`;
+  };
 
   const loadSimulations = async () => {
     setLoading(true);
@@ -327,6 +356,11 @@ export function Dashboard() {
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-3 border-b border-gray-100">
+            <p className="text-sm text-gray-600">
+              <span className="font-medium text-gray-800">{getGreeting()}</span>, {user?.email} | {getFormattedDateTime()}
+            </p>
+          </div>
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
@@ -334,7 +368,6 @@ export function Dashboard() {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-800">Sistema Gestão de Fazenda</h1>
-                <p className="text-xs text-gray-500">{user?.email}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
