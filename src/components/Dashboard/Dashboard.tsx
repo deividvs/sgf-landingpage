@@ -15,12 +15,18 @@ import { SupplementationCochoCalculator } from '../SupplementationCocho/Suppleme
 import { ProductionCostCalculator } from '../ProductionCost/ProductionCostCalculator';
 import PurchaseCalculator from '../Purchase/PurchaseCalculator';
 import { CarcassYieldCalculator } from '../CarcassYield/CarcassYieldCalculator';
-import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Filter, Star, Grid3x3, FileBarChart, Scale, PackageOpen, Target, ShoppingCart, Beef } from 'lucide-react';
+import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Star, Grid3x3, FileBarChart, Scale, PackageOpen, Target, ShoppingCart, Beef, Menu, User, Settings, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Separator } from '@/components/ui/separator';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { ScrollArea } from '@/components/ui/scroll-area';
+
 type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results' | 'breakeven' | 'supplementation_cocho' | 'production_cost' | 'purchase' | 'carcass_yield';
 type FilterType = 'all' | 'favorites' | 'recent';
 
@@ -352,273 +358,247 @@ export function Dashboard() {
     return badgeColors[color] || 'bg-gray-100 text-gray-700';
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-3 border-b border-gray-100">
-            <p className="text-sm text-gray-600">
-              <span className="font-medium text-gray-800">{getGreeting()}</span>, {user?.email} | {getFormattedDateTime()}
-            </p>
+  const getUserInitials = () => {
+    const email = user?.email || '';
+    return email.substring(0, 2).toUpperCase();
+  };
+
+  const ToolNavigationSheet = () => (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" className="md:hidden">
+          <Menu className="h-5 w-5" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="w-72">
+        <SheetHeader>
+          <SheetTitle>Ferramentas</SheetTitle>
+        </SheetHeader>
+        <ScrollArea className="h-[calc(100vh-8rem)] mt-4">
+          <div className="space-y-1">
+            {ALL_TOOLS.map((tool) => (
+              <button
+                key={tool.id}
+                onClick={() => {
+                  setActiveSection(tool.section);
+                  if (tool.section === 'simulations') {
+                    setView('list');
+                  }
+                }}
+                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-colors ${
+                  activeSection === tool.section
+                    ? 'bg-green-100 text-green-900'
+                    : 'hover:bg-gray-100'
+                }`}
+              >
+                {getToolIcon(tool.id)}
+                <span className="text-sm font-medium">{tool.name}</span>
+              </button>
+            ))}
           </div>
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">P</span>
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-800">Sistema Gestão de Fazenda</h1>
+        </ScrollArea>
+      </SheetContent>
+    </Sheet>
+  );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center gap-4">
+              <ToolNavigationSheet />
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-600/30">
+                  <span className="text-white font-bold text-xl">F</span>
+                </div>
+                <div className="hidden sm:block">
+                  <h1 className="text-lg font-bold text-gray-900">Gestão de Fazenda</h1>
+                  <p className="text-xs text-gray-500">{getGreeting()}</p>
+                </div>
               </div>
             </div>
-            <div className="flex items-center gap-3">
+
+            <div className="flex items-center gap-2">
               {activeSection === 'simulations' && view === 'list' && (
-                <button
-                  onClick={() => setView('create')}
-                  className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                >
-                  <Plus className="w-5 h-5" />
+                <Button onClick={() => setView('create')} size="sm" className="hidden sm:flex">
+                  <Plus className="w-4 h-4 mr-2" />
                   Nova Simulação
-                </button>
+                </Button>
               )}
               {activeSection === 'simulations' && view === 'create' && (
-                <button
-                  onClick={() => setView('list')}
-                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-                >
-                  <List className="w-5 h-5" />
+                <Button onClick={() => setView('list')} size="sm" variant="outline" className="hidden sm:flex">
+                  <List className="w-4 h-4 mr-2" />
                   Minhas Simulações
-                </button>
+                </Button>
               )}
-              <button
-                onClick={signOut}
-                className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-gray-900"
-              >
-                <LogOut className="w-5 h-5" />
-                Sair
-              </button>
+
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="h-5 w-5" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-green-600 rounded-full"></span>
+              </Button>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                    <Avatar>
+                      <AvatarFallback className="bg-green-100 text-green-700 font-semibold">
+                        {getUserInitials()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">Minha Conta</p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user?.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Perfil</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Configurações</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={signOut} className="text-red-600 focus:text-red-600">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Sair</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
-      </nav>
 
-      <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-gray-700">
+        <Separator />
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex gap-2 overflow-x-auto py-4">
-            <button
-              onClick={() => setActiveSection('home')}
-              title="Ferramentas"
-              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
-                activeSection === 'home'
-                  ? 'bg-green-600 text-white shadow-lg shadow-green-600/50'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              <Grid3x3 className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => {
-                setActiveSection('simulations');
-                setView('list');
-              }}
-              title="Simulador de Resultados"
-              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
-                activeSection === 'simulations'
-                  ? 'bg-green-600 text-white shadow-lg shadow-green-600/50'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              <TrendingUp className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setActiveSection('premium')}
-              title="Diluir Ágio"
-              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
-                activeSection === 'premium'
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/50'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              <Calculator className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setActiveSection('supplementation')}
-              title="Suplementação"
-              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
-                activeSection === 'supplementation'
-                  ? 'bg-amber-600 text-white shadow-lg shadow-amber-600/50'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              <Package className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setActiveSection('stocking_rate')}
-              title="Taxa de Lotação"
-              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
-                activeSection === 'stocking_rate'
-                  ? 'bg-teal-600 text-white shadow-lg shadow-teal-600/50'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              <MapPin className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setActiveSection('daily_cost')}
-              title="Cálculo da Diária"
-              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
-                activeSection === 'daily_cost'
-                  ? 'bg-emerald-600 text-white shadow-lg shadow-emerald-600/50'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              <DollarSign className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setActiveSection('annual_results')}
-              title="Apuração de Resultados Anuais"
-              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
-                activeSection === 'annual_results'
-                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/50'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              <FileBarChart className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setActiveSection('breakeven')}
-              title="Ponto de Equilíbrio da Arroba"
-              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
-                activeSection === 'breakeven'
-                  ? 'bg-sky-600 text-white shadow-lg shadow-sky-600/50'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              <Scale className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setActiveSection('supplementation_cocho')}
-              title="Suplementação no Cocho"
-              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
-                activeSection === 'supplementation_cocho'
-                  ? 'bg-orange-600 text-white shadow-lg shadow-orange-600/50'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              <PackageOpen className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setActiveSection('production_cost')}
-              title="Custo de Produção PRO"
-              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
-                activeSection === 'production_cost'
-                  ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              <Target className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setActiveSection('purchase')}
-              title="Simulação de Compra"
-              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
-                activeSection === 'purchase'
-                  ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/50'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              <ShoppingCart className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setActiveSection('carcass_yield')}
-              title="Rendimento de Carcaça"
-              className={`flex items-center justify-center w-11 h-11 rounded-lg transition-all ${
-                activeSection === 'carcass_yield'
-                  ? 'bg-rose-600 text-white shadow-lg shadow-rose-600/50'
-                  : 'text-gray-300 hover:text-white hover:bg-gray-700/50'
-              }`}
-            >
-              <Beef className="w-5 h-5" />
-            </button>
-          </div>
+          <ScrollArea className="w-full">
+            <div className="flex gap-2 py-3 min-w-max">
+              <Button
+                onClick={() => setActiveSection('home')}
+                variant={activeSection === 'home' ? 'default' : 'ghost'}
+                size="sm"
+                className="hidden md:flex"
+              >
+                <Grid3x3 className="w-4 h-4 mr-2" />
+                Todas
+              </Button>
+              <Button
+                onClick={() => {
+                  setActiveSection('simulations');
+                  setView('list');
+                }}
+                variant={activeSection === 'simulations' ? 'default' : 'ghost'}
+                size="sm"
+                className="hidden md:flex"
+              >
+                <TrendingUp className="w-4 h-4 mr-2" />
+                Simulações
+              </Button>
+              <Button
+                onClick={() => setActiveSection('premium')}
+                variant={activeSection === 'premium' ? 'default' : 'ghost'}
+                size="sm"
+                className="hidden md:flex"
+              >
+                <Calculator className="w-4 h-4 mr-2" />
+                Ágio
+              </Button>
+              <Button
+                onClick={() => setActiveSection('supplementation')}
+                variant={activeSection === 'supplementation' ? 'default' : 'ghost'}
+                size="sm"
+                className="hidden md:flex"
+              >
+                <Package className="w-4 h-4 mr-2" />
+                Suplementação
+              </Button>
+              <Button
+                onClick={() => setActiveSection('stocking_rate')}
+                variant={activeSection === 'stocking_rate' ? 'default' : 'ghost'}
+                size="sm"
+                className="hidden md:flex"
+              >
+                <MapPin className="w-4 h-4 mr-2" />
+                Taxa Lotação
+              </Button>
+              <Button
+                onClick={() => setActiveSection('daily_cost')}
+                variant={activeSection === 'daily_cost' ? 'default' : 'ghost'}
+                size="sm"
+                className="hidden md:flex"
+              >
+                <DollarSign className="w-4 h-4 mr-2" />
+                Diária
+              </Button>
+            </div>
+          </ScrollArea>
         </div>
-      </div>
+      </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeSection === 'home' ? (
-          <div>
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">Ferramentas</h1>
+          <div className="space-y-8">
+            <div className="flex flex-col gap-4">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900 mb-2">Ferramentas de Gestão</h1>
+                <p className="text-gray-600">Escolha uma ferramenta para começar sua análise</p>
+              </div>
+
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                 <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Input
                     type="text"
                     placeholder="Buscar ferramentas..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    className="pl-10"
                   />
                 </div>
-                <button className="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
-                  <Filter className="w-5 h-5" />
-                  <span className="sm:inline">Filtros</span>
-                </button>
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2 sm:gap-4 mb-6">
-              <button
-                onClick={() => setActiveFilter('all')}
-                className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
-                  activeFilter === 'all'
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                Todas
-              </button>
-              <button
-                onClick={() => setActiveFilter('favorites')}
-                className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
-                  activeFilter === 'favorites'
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                Favoritas
-              </button>
-              <button
-                onClick={() => setActiveFilter('recent')}
-                className={`px-3 sm:px-4 py-2 rounded-lg font-medium transition-colors text-sm sm:text-base ${
-                  activeFilter === 'recent'
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                Recentes
-              </button>
-            </div>
+            <Tabs value={activeFilter} onValueChange={(value) => setActiveFilter(value as FilterType)} className="w-full">
+              <TabsList className="grid w-full max-w-md grid-cols-3">
+                <TabsTrigger value="all">Todas</TabsTrigger>
+                <TabsTrigger value="favorites">Favoritas</TabsTrigger>
+                <TabsTrigger value="recent">Recentes</TabsTrigger>
+              </TabsList>
+            </Tabs>
 
             {getFilteredTools().length === 0 ? (
-              <div className="text-center py-16">
-                <Star className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-gray-700 mb-2">
-                  {activeFilter === 'favorites' ? 'Nenhuma ferramenta favoritada' : 'Nenhuma ferramenta encontrada'}
-                </h3>
-                <p className="text-gray-500">
-                  {activeFilter === 'favorites'
-                    ? 'Clique na estrela das ferramentas para adicioná-las aos favoritos'
-                    : 'Tente ajustar sua busca ou filtros'}
-                </p>
-              </div>
+              <Card>
+                <CardContent className="flex flex-col items-center justify-center py-16">
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                    <Star className="w-8 h-8 text-gray-400" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {activeFilter === 'favorites' ? 'Nenhuma ferramenta favoritada' : 'Nenhuma ferramenta encontrada'}
+                  </h3>
+                  <p className="text-gray-600 text-center max-w-md">
+                    {activeFilter === 'favorites'
+                      ? 'Clique na estrela das ferramentas para adicioná-las aos favoritos'
+                      : 'Tente ajustar sua busca ou filtros'}
+                  </p>
+                </CardContent>
+              </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {getFilteredTools().map((tool) => {
                   const colors = getToolColors(tool.id);
                   return (
-                    <div
+                    <Card
                       key={tool.id}
-                      className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-shadow cursor-pointer group"
+                      className="group cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border-2 hover:border-green-200"
                       onClick={() => {
                         setActiveSection(tool.section);
                         if (tool.section === 'simulations') {
@@ -626,29 +606,39 @@ export function Dashboard() {
                         }
                       }}
                     >
-                      <div className="flex items-start justify-between mb-4">
-                        <div className={`w-12 h-12 ${colors.bg} rounded-lg flex items-center justify-center ${colors.hover} transition-colors`}>
-                          <div className={colors.icon}>
-                            {getToolIcon(tool.id)}
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between mb-4">
+                          <div className={`w-14 h-14 ${colors.bg} rounded-xl flex items-center justify-center transition-all duration-200 ${colors.hover} shadow-sm`}>
+                            <div className={colors.icon}>
+                              {getToolIcon(tool.id)}
+                            </div>
                           </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 -mt-1 -mr-1"
+                            onClick={(e) => toggleFavorite(tool.id, e)}
+                          >
+                            <Star
+                              className={`w-5 h-5 transition-colors ${
+                                favoritedTools.has(tool.id) ? 'text-yellow-500 fill-yellow-500' : 'text-gray-400'
+                              }`}
+                            />
+                          </Button>
                         </div>
-                        <button
-                          onClick={(e) => toggleFavorite(tool.id, e)}
-                          className={`transition-colors ${favoritedTools.has(tool.id) ? 'text-yellow-500' : 'text-gray-400 hover:text-yellow-500'}`}
-                        >
-                          <Star className="w-5 h-5" fill={favoritedTools.has(tool.id) ? 'currentColor' : 'none'} />
-                        </button>
-                      </div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-2">{tool.name}</h3>
-                      <p className="text-sm text-gray-600 mb-4">{tool.description}</p>
-                      {tool.badge && (
-                        <div className="flex items-center gap-2">
-                          <span className={`px-2 py-1 ${getBadgeColors(tool.badge.color)} text-xs font-medium rounded`}>
+                        <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-green-700 transition-colors">
+                          {tool.name}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                          {tool.description}
+                        </p>
+                        {tool.badge && (
+                          <Badge variant="secondary" className={getBadgeColors(tool.badge.color)}>
                             {tool.badge.text}
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                          </Badge>
+                        )}
+                      </CardContent>
+                    </Card>
                   );
                 })}
               </div>

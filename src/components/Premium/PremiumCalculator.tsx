@@ -3,6 +3,9 @@ import { PremiumInputs, PremiumResults } from '../../lib/premium-calculator';
 import { PremiumForm } from './PremiumForm';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
+import { Calculator } from 'lucide-react';
+import { CalculatorLayout } from '../Layout/CalculatorLayout';
+import { useToast } from '@/components/ui/use-toast';
 
 export function PremiumCalculator() {
   const { user } = useAuth();
@@ -42,8 +45,12 @@ export function PremiumCalculator() {
   };
 
   return (
-    <div>
+    <CalculatorLayout
+      title="Diluir Ágio"
+      description="Calcule quantos dias são necessários para diluir o ágio pago na compra de animais"
+      icon={<Calculator className="w-6 h-6" />}
+    >
       <PremiumForm onCalculate={handleCalculate} onSave={handleSave} />
-    </div>
+    </CalculatorLayout>
   );
 }
