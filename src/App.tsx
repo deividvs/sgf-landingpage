@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { OnboardingScreen } from './components/Onboarding/OnboardingScreen';
 import { LoginForm } from './components/Auth/LoginForm';
 import { SignUpForm } from './components/Auth/SignUpForm';
 import { ForgotPasswordForm } from './components/Auth/ForgotPasswordForm';
@@ -9,20 +8,7 @@ import { Skeleton } from './components/ui/skeleton';
 
 function AppContent() {
   const { user, loading } = useAuth();
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [authView, setAuthView] = useState<'login' | 'signup' | 'forgot'>('login');
-
-  useEffect(() => {
-    const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
-    if (!hasSeenOnboarding && !user) {
-      setShowOnboarding(true);
-    }
-  }, [user]);
-
-  const handleCompleteOnboarding = () => {
-    localStorage.setItem('hasSeenOnboarding', 'true');
-    setShowOnboarding(false);
-  };
 
   if (loading) {
     return (
@@ -58,10 +44,6 @@ function AppContent() {
         </div>
       </div>
     );
-  }
-
-  if (showOnboarding) {
-    return <OnboardingScreen onComplete={handleCompleteOnboarding} />;
   }
 
   if (!user) {
