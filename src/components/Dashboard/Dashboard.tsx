@@ -11,11 +11,10 @@ import { StockingRateCalculator } from '../StockingRate/StockingRateCalculator';
 import { DailyCostCalculator } from '../DailyCost/DailyCostCalculator';
 import { AnnualResultsCalculator } from '../AnnualResults/AnnualResultsCalculator';
 import { BreakevenCalculator } from '../Breakeven/BreakevenCalculator';
-import { SupplementationCochoCalculator } from '../SupplementationCocho/SupplementationCochoCalculator';
 import { ProductionCostCalculator } from '../ProductionCost/ProductionCostCalculator';
 import PurchaseCalculator from '../Purchase/PurchaseCalculator';
 import { CarcassYieldCalculator } from '../CarcassYield/CarcassYieldCalculator';
-import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Star, Grid3x3, FileBarChart, Scale, PackageOpen, Target, ShoppingCart, Beef, Menu, User, Settings, Bell } from 'lucide-react';
+import { LogOut, Plus, List, Calculator, TrendingUp, Package, MapPin, DollarSign, Search, Star, Grid3x3, FileBarChart, Scale, Target, ShoppingCart, Beef, Menu, User, Settings, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -29,7 +28,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { SubscriptionBadge } from '../Subscription/SubscriptionBadge';
 import { SessionInfo } from './SessionInfo';
 
-type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results' | 'breakeven' | 'supplementation_cocho' | 'production_cost' | 'purchase' | 'carcass_yield';
+type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results' | 'breakeven' | 'production_cost' | 'purchase' | 'carcass_yield';
 type FilterType = 'all' | 'favorites' | 'recent';
 
 interface Tool {
@@ -89,13 +88,6 @@ const ALL_TOOLS: Tool[] = [
     description: 'Calcule o preço mínimo da arroba para não ter prejuízo',
     section: 'breakeven',
     badge: { text: 'Novo', color: 'sky' }
-  },
-  {
-    id: 'supplementation_cocho',
-    name: 'Suplementação no Cocho',
-    description: 'Calcule a quantidade exata de suplemento diário necessário',
-    section: 'supplementation_cocho',
-    badge: { text: 'Novo', color: 'orange' }
   },
   {
     id: 'production_cost',
@@ -318,7 +310,6 @@ export function Dashboard() {
       daily_cost: <DollarSign {...iconProps} />,
       annual_results: <FileBarChart {...iconProps} />,
       breakeven: <Scale {...iconProps} />,
-      supplementation_cocho: <PackageOpen {...iconProps} />,
       production_cost: <Target {...iconProps} />,
       purchase: <ShoppingCart {...iconProps} />,
       carcass_yield: <Beef {...iconProps} />
@@ -335,7 +326,6 @@ export function Dashboard() {
       daily_cost: { bg: 'bg-emerald-100', hover: 'group-hover:bg-emerald-200', icon: 'text-emerald-600' },
       annual_results: { bg: 'bg-purple-100', hover: 'group-hover:bg-purple-200', icon: 'text-purple-600' },
       breakeven: { bg: 'bg-sky-100', hover: 'group-hover:bg-sky-200', icon: 'text-sky-600' },
-      supplementation_cocho: { bg: 'bg-orange-100', hover: 'group-hover:bg-orange-200', icon: 'text-orange-600' },
       production_cost: { bg: 'bg-red-100', hover: 'group-hover:bg-red-200', icon: 'text-red-600' },
       purchase: { bg: 'bg-indigo-100', hover: 'group-hover:bg-indigo-200', icon: 'text-indigo-600' },
       carcass_yield: { bg: 'bg-rose-100', hover: 'group-hover:bg-rose-200', icon: 'text-rose-600' }
@@ -564,15 +554,6 @@ export function Dashboard() {
                 <Scale className="w-4 h-4" />
               </Button>
               <Button
-                onClick={() => setActiveSection('supplementation_cocho')}
-                variant={activeSection === 'supplementation_cocho' ? 'default' : 'ghost'}
-                size="icon"
-                className="hidden md:flex"
-                title="Suplementação no Cocho"
-              >
-                <PackageOpen className="w-4 h-4" />
-              </Button>
-              <Button
                 onClick={() => setActiveSection('production_cost')}
                 variant={activeSection === 'production_cost' ? 'default' : 'ghost'}
                 size="icon"
@@ -736,8 +717,6 @@ export function Dashboard() {
           <AnnualResultsCalculator />
         ) : activeSection === 'breakeven' ? (
           <BreakevenCalculator />
-        ) : activeSection === 'supplementation_cocho' ? (
-          <SupplementationCochoCalculator />
         ) : activeSection === 'production_cost' ? (
           <ProductionCostCalculator />
         ) : activeSection === 'purchase' ? (
