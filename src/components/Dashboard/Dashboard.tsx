@@ -105,7 +105,7 @@ const ALL_TOOLS: Tool[] = [
   },
   {
     id: 'carcass_yield',
-    name: 'Rendimento de Carcaça',
+    name: 'Fechamento de Lote',
     description: 'Calcule o rendimento de carcaça e receita estimada da venda de animais',
     section: 'carcass_yield',
     badge: { text: 'Novo', color: 'rose' }
@@ -576,7 +576,7 @@ export function Dashboard() {
                 variant={activeSection === 'carcass_yield' ? 'default' : 'ghost'}
                 size="icon"
                 className="hidden md:flex"
-                title="Rendimento de Carcaça"
+                title="Fechamento de Lote"
               >
                 <Beef className="w-4 h-4" />
               </Button>

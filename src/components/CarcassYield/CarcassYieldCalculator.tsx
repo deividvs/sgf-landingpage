@@ -45,7 +45,7 @@ export function CarcassYieldCalculator() {
 
   const handleExportPDF = () => {
     if (!results) return;
-    generateCarcassYieldPDF(inputs, results, title || 'Cálculo de Rendimento de Carcaça');
+    generateCarcassYieldPDF(inputs, results, title || 'Fechamento de Lote');
   };
 
   const handleSave = async () => {
@@ -92,7 +92,7 @@ export function CarcassYieldCalculator() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Rendimento de Carcaça</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Fechamento de Lote</h1>
           <p className="text-gray-600 mt-1">Calcule o rendimento de carcaça e receita estimada</p>
         </div>
       </div>

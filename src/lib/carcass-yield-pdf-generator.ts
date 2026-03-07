@@ -4,7 +4,7 @@ import type { CarcassYieldInputs, CarcassYieldResults } from './carcass-yield-ca
 export function generateCarcassYieldPDF(
   inputs: CarcassYieldInputs,
   results: CarcassYieldResults,
-  title: string = 'Cálculo de Rendimento de Carcaça'
+  title: string = 'Fechamento de Lote'
 ) {
   const pdf = new jsPDF();
   const pageWidth = pdf.internal.pageSize.width;
