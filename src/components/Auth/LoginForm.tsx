@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Checkbox } from '@/components/ui/checkbox';
 
 type Props = {
   onToggleForm: () => void;
@@ -18,13 +19,18 @@ export function LoginForm({ onToggleForm, onForgotPassword }: Props) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(() => {
+    return localStorage.getItem('rememberMe') === 'true';
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
-    const { error } = await signIn(email, password);
+    localStorage.setItem('rememberMe', rememberMe.toString());
+
+    const { error } = await signIn(email, password, rememberMe);
 
     if (error) {
       setError(error.message);
@@ -88,14 +94,29 @@ export function LoginForm({ onToggleForm, onForgotPassword }: Props) {
               </div>
             </div>
 
-            <Button
-              type="button"
-              variant="link"
-              onClick={onForgotPassword}
-              className="p-0 h-auto"
-            >
-              Esqueceu sua senha?
-            </Button>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="remember"
+                  checked={rememberMe}
+                  onCheckedChange={(checked) => setRememberMe(checked as boolean)}
+                />
+                <Label
+                  htmlFor="remember"
+                  className="text-sm font-normal cursor-pointer"
+                >
+                  Lembrar-me
+                </Label>
+              </div>
+              <Button
+                type="button"
+                variant="link"
+                onClick={onForgotPassword}
+                className="p-0 h-auto text-sm"
+              >
+                Esqueceu sua senha?
+              </Button>
+            </div>
 
             <Button
               type="submit"

@@ -16,10 +16,11 @@ type AuthContextType = {
   user: User | null;
   loading: boolean;
   signUp: (email: string, password: string) => Promise<{ data: any; error: AuthError | null }>;
-  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
+  signIn: (email: string, password: string, rememberMe?: boolean) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
   checkEmailEligibility: (email: string) => Promise<EmailEligibilityResult>;
+  sessionExpiresAt: Date | null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,16 +28,25 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [sessionExpiresAt, setSessionExpiresAt] = useState<Date | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
+      if (session?.expires_at) {
+        setSessionExpiresAt(new Date(session.expires_at * 1000));
+      }
       setLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       (async () => {
         setUser(session?.user ?? null);
+        if (session?.expires_at) {
+          setSessionExpiresAt(new Date(session.expires_at * 1000));
+        } else {
+          setSessionExpiresAt(null);
+        }
       })();
     });
 
@@ -51,11 +61,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { data, error };
   };
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+  const signIn = async (email: string, password: string, rememberMe: boolean = false) => {
+    const options: any = {
       email,
       password,
-    });
+    };
+
+    if (!rememberMe) {
+      options.options = {
+        sessionDuration: 86400,
+      };
+    }
+
+    const { error, data } = await supabase.auth.signInWithPassword(options);
+
+    if (data.session?.expires_at) {
+      setSessionExpiresAt(new Date(data.session.expires_at * 1000));
+    }
+
     return { error };
   };
 
@@ -100,7 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, resetPassword, checkEmailEligibility }}>
+    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, resetPassword, checkEmailEligibility, sessionExpiresAt }}>
       {children}
     </AuthContext.Provider>
   );

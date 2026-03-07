@@ -27,6 +27,7 @@ import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { SubscriptionBadge } from '../Subscription/SubscriptionBadge';
+import { SessionInfo } from './SessionInfo';
 
 type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results' | 'breakeven' | 'supplementation_cocho' | 'production_cost' | 'purchase' | 'carcass_yield';
 type FilterType = 'all' | 'favorites' | 'recent';
@@ -606,6 +607,7 @@ export function Dashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeSection === 'home' ? (
           <div className="space-y-8">
+            <SessionInfo />
             <div className="flex flex-col gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">Ferramentas de Gestão</h1>
