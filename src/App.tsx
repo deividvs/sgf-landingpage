@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { LoginForm } from './components/Auth/LoginForm';
 import { SignUpForm } from './components/Auth/SignUpForm';
 import { ForgotPasswordForm } from './components/Auth/ForgotPasswordForm';
@@ -11,10 +11,6 @@ type AuthView = 'login' | 'signup' | 'forgot-password';
 function App() {
   const { user, loading } = useAuth();
   const [authView, setAuthView] = useState<AuthView>('login');
-
-  useEffect(() => {
-    console.log('App: Auth state -', { user: user?.email, loading });
-  }, [user, loading]);
 
   if (loading) {
     return (
@@ -36,15 +32,15 @@ function App() {
       <div className="w-full max-w-md">
         {authView === 'login' && (
           <LoginForm
-            onSignUpClick={() => setAuthView('signup')}
-            onForgotPasswordClick={() => setAuthView('forgot-password')}
+            onToggleForm={() => setAuthView('signup')}
+            onForgotPassword={() => setAuthView('forgot-password')}
           />
         )}
         {authView === 'signup' && (
-          <SignUpForm onLoginClick={() => setAuthView('login')} />
+          <SignUpForm onToggleForm={() => setAuthView('login')} />
         )}
         {authView === 'forgot-password' && (
-          <ForgotPasswordForm onBackToLoginClick={() => setAuthView('login')} />
+          <ForgotPasswordForm onBack={() => setAuthView('login')} />
         )}
       </div>
     </div>

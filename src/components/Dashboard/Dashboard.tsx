@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { localStorageService, Simulation } from '../../lib/localStorage';
-import { SimulationInputs, SimulationResults, calculateResults } from '../../lib/calculations';
+import { SimulationInputs, SimulationResults } from '../../lib/calculations';
 import { SimulationWizard } from '../Simulation/SimulationWizard';
 import { SimulationList } from './SimulationList';
 import { SimulationDetails } from './SimulationDetails';
