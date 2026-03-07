@@ -1,4 +1,4 @@
-import { Simulation } from '../../lib/supabase';
+import { Simulation } from '../../lib/localStorage';
 import { Calendar, TrendingUp, TrendingDown, Trash2, Plus, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

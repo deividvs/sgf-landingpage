@@ -1,6 +1,9 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, AuthError } from '@supabase/supabase-js';
-import { supabase } from '../lib/supabase';
+import { localStorageService, User } from '../lib/localStorage';
+
+type AuthError = {
+  message: string;
+};
 
 type AuthContextType = {
   user: User | null;
@@ -18,50 +21,47 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('AuthContext: Initializing auth session');
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('AuthContext: Session loaded', session ? 'User logged in' : 'No user');
-      setUser(session?.user ?? null);
-      setLoading(false);
-    }).catch((error) => {
-      console.error('AuthContext: Error loading session:', error);
-      setLoading(false);
-    });
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      (async () => {
-        console.log('AuthContext: Auth state changed', _event);
-        setUser(session?.user ?? null);
-      })();
-    });
-
-    return () => subscription.unsubscribe();
+    const currentUser = localStorageService.auth.getCurrentUser();
+    setUser(currentUser);
+    setLoading(false);
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    return { data, error };
+    try {
+      const user = localStorageService.auth.signUp(email, password);
+      setUser(user);
+      return { data: { user }, error: null };
+    } catch (err) {
+      return { data: null, error: { message: (err as Error).message } };
+    }
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { error };
+    try {
+      const user = localStorageService.auth.signIn(email, password);
+      setUser(user);
+      return { error: null };
+    } catch (err) {
+      return { error: { message: (err as Error).message } };
+    }
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    localStorageService.auth.signOut();
+    setUser(null);
   };
 
   const resetPassword = async (email: string) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
-    return { error };
+    try {
+      const newPassword = prompt('Digite a nova senha:');
+      if (!newPassword) {
+        return { error: { message: 'Senha não fornecida' } };
+      }
+      localStorageService.auth.resetPassword(email, newPassword);
+      return { error: null };
+    } catch (err) {
+      return { error: { message: (err as Error).message } };
+    }
   };
 
   return (
