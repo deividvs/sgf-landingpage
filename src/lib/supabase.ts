@@ -3,11 +3,22 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+console.log('supabase.ts: Initializing Supabase client', {
+  hasUrl: !!supabaseUrl,
+  hasKey: !!supabaseAnonKey,
+  url: supabaseUrl
+});
+
 if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('supabase.ts: Missing environment variables!', {
+    supabaseUrl,
+    supabaseAnonKey: supabaseAnonKey ? '***' : undefined
+  });
   throw new Error('Missing Supabase environment variables. Check your .env file.');
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+console.log('supabase.ts: Supabase client created successfully');
 
 export type Simulation = {
   id: string;

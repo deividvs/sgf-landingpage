@@ -29,16 +29,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('AuthContext: Initializing auth session');
+
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('AuthContext: Session loaded', session ? 'User logged in' : 'No user');
       setUser(session?.user ?? null);
       setLoading(false);
     }).catch((error) => {
-      console.error('Error loading session:', error);
+      console.error('AuthContext: Error loading session:', error);
       setLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       (async () => {
+        console.log('AuthContext: Auth state changed', _event);
         setUser(session?.user ?? null);
       })();
     });

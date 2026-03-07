@@ -11,7 +11,10 @@ function AppContent() {
   const { user, loading } = useAuth();
   const [authView, setAuthView] = useState<'login' | 'signup' | 'forgot'>('login');
 
+  console.log('AppContent: Rendering', { user: !!user, loading });
+
   if (loading) {
+    console.log('AppContent: Showing loading skeleton');
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -48,6 +51,7 @@ function AppContent() {
   }
 
   if (!user) {
+    console.log('AppContent: Showing auth forms');
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center p-4">
         {authView === 'login' && (
@@ -66,6 +70,7 @@ function AppContent() {
     );
   }
 
+  console.log('AppContent: User authenticated, showing dashboard');
   return (
     <SubscriptionGate>
       <Dashboard />
@@ -74,6 +79,7 @@ function AppContent() {
 }
 
 function App() {
+  console.log('App: Component rendering');
   return (
     <AuthProvider>
       <AppContent />
