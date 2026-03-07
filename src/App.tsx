@@ -1,17 +1,51 @@
+import { useState, useEffect } from 'react';
+import { LoginForm } from './components/Auth/LoginForm';
+import { SignUpForm } from './components/Auth/SignUpForm';
+import { ForgotPasswordForm } from './components/Auth/ForgotPasswordForm';
+import { Dashboard } from './components/Dashboard/Dashboard';
+import { useAuth } from './contexts/AuthContext';
+import { Loader2 } from 'lucide-react';
+
+type AuthView = 'login' | 'signup' | 'forgot-password';
+
 function App() {
-  console.log('App: Component rendering - SIMPLIFIED VERSION');
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center p-4">
-      <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full text-center">
-        <h1 className="text-3xl font-bold text-green-700 mb-4">
-          Sistema de Simulação Pecuária
-        </h1>
-        <p className="text-gray-600 mb-6">
-          A aplicação está funcionando!
-        </p>
-        <div className="bg-green-100 text-green-800 py-3 px-4 rounded-lg font-semibold">
-          ✓ React Carregado com Sucesso
+  const { user, loading } = useAuth();
+  const [authView, setAuthView] = useState<AuthView>('login');
+
+  useEffect(() => {
+    console.log('App: Auth state -', { user: user?.email, loading });
+  }, [user, loading]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-green-600 mx-auto mb-4" />
+          <p className="text-gray-600 font-medium">Carregando aplicação...</p>
         </div>
+      </div>
+    );
+  }
+
+  if (user) {
+    return <Dashboard />;
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {authView === 'login' && (
+          <LoginForm
+            onSignUpClick={() => setAuthView('signup')}
+            onForgotPasswordClick={() => setAuthView('forgot-password')}
+          />
+        )}
+        {authView === 'signup' && (
+          <SignUpForm onLoginClick={() => setAuthView('login')} />
+        )}
+        {authView === 'forgot-password' && (
+          <ForgotPasswordForm onBackToLoginClick={() => setAuthView('login')} />
+        )}
       </div>
     </div>
   );
