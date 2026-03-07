@@ -26,6 +26,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Separator } from '@/components/ui/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { SubscriptionBadge } from '../Subscription/SubscriptionBadge';
 
 type AppSection = 'home' | 'simulations' | 'premium' | 'supplementation' | 'stocking_rate' | 'daily_cost' | 'annual_results' | 'breakeven' | 'supplementation_cocho' | 'production_cost' | 'purchase' | 'carcass_yield';
 type FilterType = 'all' | 'favorites' | 'recent';
@@ -422,6 +423,8 @@ export function Dashboard() {
             </div>
 
             <div className="flex items-center gap-2">
+              <SubscriptionBadge />
+
               {activeSection === 'simulations' && view === 'list' && (
                 <Button onClick={() => setView('create')} size="sm" className="hidden sm:flex">
                   <Plus className="w-4 h-4 mr-2" />
