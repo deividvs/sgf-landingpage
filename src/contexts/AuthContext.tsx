@@ -2,6 +2,16 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { User, AuthError } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
 
+type EmailEligibilityResult = {
+  eligible: boolean;
+  message: string;
+  purchaseData?: {
+    buyer_name: string;
+    product_id: string;
+    purchase_date: string;
+  };
+};
+
 type AuthContextType = {
   user: User | null;
   loading: boolean;
@@ -9,6 +19,7 @@ type AuthContextType = {
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
+  checkEmailEligibility: (email: string) => Promise<EmailEligibilityResult>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,8 +68,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error };
   };
 
+  const checkEmailEligibility = async (email: string): Promise<EmailEligibilityResult> => {
+    if (import.meta.env.VITE_BYPASS_SUBSCRIPTION === 'true') {
+      return {
+        eligible: true,
+        message: 'Modo desenvolvimento - validação ignorada',
+      };
+    }
+
+    try {
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/check-hotmart-email`;
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error checking email eligibility:', error);
+      return {
+        eligible: false,
+        message: 'Erro ao verificar email. Tente novamente.',
+      };
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, resetPassword }}>
+    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, resetPassword, checkEmailEligibility }}>
       {children}
     </AuthContext.Provider>
   );

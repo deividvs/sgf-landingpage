@@ -12,13 +12,14 @@ type Props = {
 };
 
 export function SignUpForm({ onToggleForm }: Props) {
-  const { signUp } = useAuth();
+  const { signUp, checkEmailEligibility } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [checkingEmail, setCheckingEmail] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +32,17 @@ export function SignUpForm({ onToggleForm }: Props) {
 
     if (password.length < 6) {
       setError('A senha deve ter pelo menos 6 caracteres');
+      return;
+    }
+
+    setCheckingEmail(true);
+
+    const eligibilityResult = await checkEmailEligibility(email);
+
+    setCheckingEmail(false);
+
+    if (!eligibilityResult.eligible) {
+      setError(eligibilityResult.message);
       return;
     }
 
@@ -134,8 +146,8 @@ export function SignUpForm({ onToggleForm }: Props) {
               </div>
             </div>
 
-            <Button type="submit" disabled={loading} className="w-full">
-              {loading ? 'Criando conta...' : 'Criar conta'}
+            <Button type="submit" disabled={loading || checkingEmail} className="w-full">
+              {checkingEmail ? 'Verificando email...' : loading ? 'Criando conta...' : 'Criar conta'}
             </Button>
           </form>
 
