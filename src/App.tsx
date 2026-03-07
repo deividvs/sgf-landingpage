@@ -5,7 +5,6 @@ import { SignUpForm } from './components/Auth/SignUpForm';
 import { ForgotPasswordForm } from './components/Auth/ForgotPasswordForm';
 import { Dashboard } from './components/Dashboard/Dashboard';
 import { Skeleton } from './components/ui/skeleton';
-import { SubscriptionGate } from './components/Subscription/SubscriptionGate';
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -71,11 +70,7 @@ function AppContent() {
   }
 
   console.log('AppContent: User authenticated, showing dashboard');
-  return (
-    <SubscriptionGate>
-      <Dashboard />
-    </SubscriptionGate>
-  );
+  return <Dashboard />;
 }
 
 function App() {
