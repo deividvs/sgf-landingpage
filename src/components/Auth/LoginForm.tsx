@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { Mail, Lock, AlertCircle } from 'lucide-react';
+import { Mail, Lock, AlertCircle, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -41,6 +41,13 @@ export function LoginForm({ onToggleForm, onForgotPassword }: Props) {
           <CardDescription>Entre para acessar suas simulações</CardDescription>
         </CardHeader>
         <CardContent>
+          <Alert className="mb-4 border-blue-200 bg-blue-50">
+            <Info className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-800">
+              Cadastre o mesmo email de compra
+            </AlertDescription>
+          </Alert>
+
           {error && (
             <Alert variant="destructive" className="mb-4">
               <AlertCircle className="h-4 w-4" />
