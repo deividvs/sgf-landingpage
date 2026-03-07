@@ -15,7 +15,7 @@ type EmailEligibilityResult = {
 type AuthContextType = {
   user: User | null;
   loading: boolean;
-  signUp: (email: string, password: string) => Promise<{ error: AuthError | null }>;
+  signUp: (email: string, password: string) => Promise<{ data: any; error: AuthError | null }>;
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
@@ -44,11 +44,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
-    return { error };
+    return { data, error };
   };
 
   const signIn = async (email: string, password: string) => {
@@ -69,13 +69,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const checkEmailEligibility = async (email: string): Promise<EmailEligibilityResult> => {
-    if (import.meta.env.VITE_BYPASS_SUBSCRIPTION === 'true') {
-      return {
-        eligible: true,
-        message: 'Modo desenvolvimento - validação ignorada',
-      };
-    }
-
     try {
       const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/check-hotmart-email`;
 
@@ -88,6 +81,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       const data = await response.json();
+
+      if (!data.eligible) {
+        return {
+          eligible: false,
+          message: `Seu email ${email} não consta em nossas compras aprovadas. Verifique se usou o mesmo email da compra ou adquira o acesso.`,
+        };
+      }
+
       return data;
     } catch (error) {
       console.error('Error checking email eligibility:', error);

@@ -48,12 +48,40 @@ export function SignUpForm({ onToggleForm }: Props) {
 
     setLoading(true);
 
-    const { error } = await signUp(email, password);
+    const { error, data } = await signUp(email, password);
 
     if (error) {
       setError(error.message);
-    } else {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-user-subscription`;
+
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: data?.user?.id,
+          buyer_email: email,
+        }),
+      });
+
+      const subscriptionData = await response.json();
+
+      if (!response.ok || !subscriptionData.success) {
+        setError('Conta criada mas houve erro ao ativar assinatura. Contate o suporte.');
+        setLoading(false);
+        return;
+      }
+
       setSuccess(true);
+    } catch (subscriptionError) {
+      console.error('Error creating subscription:', subscriptionError);
+      setError('Conta criada mas houve erro ao ativar assinatura. Contate o suporte.');
     }
 
     setLoading(false);

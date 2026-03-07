@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { useSubscription } from '../../hooks/useSubscription';
+import { useAuth } from '../../contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -11,11 +12,12 @@ interface SubscriptionGateProps {
 
 export function SubscriptionGate({ children }: SubscriptionGateProps) {
   const { subscription, isActive, loading, error } = useSubscription();
+  const { user } = useAuth();
 
-  // Bypass subscription check in development mode
   const bypassSubscription = import.meta.env.VITE_BYPASS_SUBSCRIPTION === 'true';
+  const isDevelopment = import.meta.env.DEV;
 
-  if (bypassSubscription) {
+  if (bypassSubscription && isDevelopment) {
     return <>{children}</>;
   }
 
@@ -54,19 +56,19 @@ export function SubscriptionGate({ children }: SubscriptionGateProps) {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
         <Card className="w-full max-w-2xl">
           <CardHeader className="text-center">
-            <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Lock className="w-8 h-8 text-amber-600" />
+            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <XCircle className="w-8 h-8 text-red-600" />
             </div>
-            <CardTitle className="text-3xl">Acesso Restrito</CardTitle>
+            <CardTitle className="text-3xl">Acesso Negado</CardTitle>
             <CardDescription className="text-base">
-              Você precisa de uma assinatura ativa para acessar o sistema
+              Seu email {user?.email} não consta em nossas compras aprovadas
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <Alert className="border-blue-200 bg-blue-50">
-              <AlertCircle className="h-4 w-4 text-blue-600" />
-              <AlertDescription className="text-blue-800">
-                Cadastre-se usando o mesmo email que você utilizou na compra para ativar sua assinatura automaticamente.
+            <Alert className="border-red-200 bg-red-50">
+              <AlertCircle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-800">
+                Você precisa adquirir o acesso ao sistema para usar as ferramentas. Após a compra, faça login com o mesmo email usado na compra.
               </AlertDescription>
             </Alert>
 
