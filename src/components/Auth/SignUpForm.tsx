@@ -12,14 +12,13 @@ type Props = {
 };
 
 export function SignUpForm({ onToggleForm }: Props) {
-  const { signUp, checkEmailEligibility } = useAuth();
+  const { signUp } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [checkingEmail, setCheckingEmail] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,20 +34,9 @@ export function SignUpForm({ onToggleForm }: Props) {
       return;
     }
 
-    setCheckingEmail(true);
-
-    const eligibilityResult = await checkEmailEligibility(email);
-
-    setCheckingEmail(false);
-
-    if (!eligibilityResult.eligible) {
-      setError(eligibilityResult.message);
-      return;
-    }
-
     setLoading(true);
 
-    const { error, data } = await signUp(email, password);
+    const { error } = await signUp(email, password);
 
     if (error) {
       setError(error.message);
@@ -56,34 +44,7 @@ export function SignUpForm({ onToggleForm }: Props) {
       return;
     }
 
-    try {
-      const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-user-subscription`;
-
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_id: data?.user?.id,
-          buyer_email: email,
-        }),
-      });
-
-      const subscriptionData = await response.json();
-
-      if (!response.ok || !subscriptionData.success) {
-        setError('Conta criada mas houve erro ao ativar assinatura. Contate o suporte.');
-        setLoading(false);
-        return;
-      }
-
-      setSuccess(true);
-    } catch (subscriptionError) {
-      console.error('Error creating subscription:', subscriptionError);
-      setError('Conta criada mas houve erro ao ativar assinatura. Contate o suporte.');
-    }
-
+    setSuccess(true);
     setLoading(false);
   };
 
@@ -174,8 +135,8 @@ export function SignUpForm({ onToggleForm }: Props) {
               </div>
             </div>
 
-            <Button type="submit" disabled={loading || checkingEmail} className="w-full">
-              {checkingEmail ? 'Verificando email...' : loading ? 'Criando conta...' : 'Criar conta'}
+            <Button type="submit" disabled={loading} className="w-full">
+              {loading ? 'Criando conta...' : 'Criar conta'}
             </Button>
           </form>
 
