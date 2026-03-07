@@ -35,9 +35,9 @@ export function calculateProductionCost(inputs: ProductionCostInputs): Productio
   const cost_per_arroba = daily_cost_per_animal * days_per_arroba;
 
   let classification: 'excelente' | 'media' | 'alto_custo';
-  if (cost_per_arroba < 270) {
+  if (cost_per_arroba < 110) {
     classification = 'excelente';
-  } else if (cost_per_arroba <= 320) {
+  } else if (cost_per_arroba <= 220) {
     classification = 'media';
   } else {
     classification = 'alto_custo';

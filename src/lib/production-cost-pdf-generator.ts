@@ -105,9 +105,9 @@ export function generateProductionCostPDF(
   pdf.setFont('helvetica', 'normal');
 
   const interpretations = [
-    'Custo < R$ 270/@ = Excelente eficiência',
-    'Custo entre R$ 270 e R$ 320/@ = Dentro da média',
-    'Custo > R$ 320/@ = Alto custo, necessita revisão'
+    'Custo < R$ 110/@ = Excelente eficiência',
+    'Entre R$ 110 e R$ 220/@ = Dentro da média',
+    'Acima de R$ 220/@ = Esse custo pode comprometer sua margem de lucro'
   ];
 
   interpretations.forEach((text) => {

@@ -205,15 +205,15 @@ export function ProductionCostCalculator() {
             <ul className="space-y-2 text-sm text-gray-700">
               <li className="flex items-start gap-2">
                 <span className="text-green-600 font-bold">•</span>
-                <span>Custo &lt; R$ 270/@ = Excelente eficiência</span>
+                <span>Custo &lt; R$ 110/@ = Excelente eficiência</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-yellow-600 font-bold">•</span>
-                <span>Custo entre R$ 270 e R$ 320/@ = Dentro da média</span>
+                <span>Entre R$ 110 e R$ 220/@ = Dentro da média</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-red-600 font-bold">•</span>
-                <span>Custo &gt; R$ 320/@ = Alto custo, necessita revisão</span>
+                <span>Acima de R$ 220/@ = Esse custo pode comprometer sua margem de lucro dentro do tri 2.0 vc tem acesso a um mapa com ferramentas, estratégias e formulações para corrigir isso e aumentar o seu lucro</span>
               </li>
             </ul>
           </div>
