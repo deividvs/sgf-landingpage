@@ -409,9 +409,11 @@ export function Dashboard() {
             <div className="flex items-center gap-4">
               <ToolNavigationSheet />
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-green-600 to-green-700 rounded-xl flex items-center justify-center shadow-lg shadow-green-600/30">
-                  <span className="text-white font-bold text-xl">F</span>
-                </div>
+                <img
+                  src="/Untitled_design_(1).jpg"
+                  alt="SGF Logo"
+                  className="w-10 h-10 object-contain"
+                />
                 <div className="hidden sm:block">
                   <h1 className="text-lg font-bold text-gray-900">Gestão de Fazenda</h1>
                   <p className="text-xs text-gray-500">{getGreeting()}</p>
