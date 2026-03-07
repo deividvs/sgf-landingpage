@@ -4,7 +4,20 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Livestock Viability Simulation System</title>
+    <title>Sistema de Simulação Pecuária</title>
+    <style>
+      #root:empty::before {
+        content: 'Carregando aplicação...';
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 1.125rem;
+        color: #374151;
+        background: linear-gradient(to bottom right, #f9fafb, #f3f4f6);
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>
