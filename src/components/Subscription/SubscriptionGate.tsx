@@ -12,6 +12,13 @@ interface SubscriptionGateProps {
 export function SubscriptionGate({ children }: SubscriptionGateProps) {
   const { subscription, isActive, loading, error } = useSubscription();
 
+  // Bypass subscription check in development mode
+  const bypassSubscription = import.meta.env.VITE_BYPASS_SUBSCRIPTION === 'true';
+
+  if (bypassSubscription) {
+    return <>{children}</>;
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
