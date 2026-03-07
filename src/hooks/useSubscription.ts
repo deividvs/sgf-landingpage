@@ -21,7 +21,26 @@ export function useSubscription() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const bypassSubscription = import.meta.env.VITE_BYPASS_SUBSCRIPTION === 'true';
+
   useEffect(() => {
+    if (bypassSubscription) {
+      setIsActive(true);
+      setLoading(false);
+      setSubscription({
+        id: 'bypass',
+        user_id: user?.id || '',
+        hotmart_transaction_id: 'BYPASS-DEV',
+        subscription_status: 'active',
+        started_at: new Date().toISOString(),
+        expires_at: null,
+        cancelled_at: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      });
+      return;
+    }
+
     if (!user) {
       setSubscription(null);
       setIsActive(false);
