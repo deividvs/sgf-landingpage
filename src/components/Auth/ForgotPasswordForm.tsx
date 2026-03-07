@@ -43,9 +43,9 @@ export function ForgotPasswordForm({ onBack }: Props) {
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
                 <CheckCircle className="w-8 h-8 text-primary" />
               </div>
-              <h2 className="text-2xl font-bold mb-2">Senha redefinida!</h2>
+              <h2 className="text-2xl font-bold mb-2">E-mail enviado!</h2>
               <p className="text-muted-foreground mb-6">
-                Sua senha foi redefinida com sucesso.
+                Verifique sua caixa de entrada para redefinir sua senha.
               </p>
               <Button onClick={onBack} className="w-full">
                 Voltar para login
@@ -71,7 +71,7 @@ export function ForgotPasswordForm({ onBack }: Props) {
           </Button>
           <CardTitle className="text-3xl">Esqueceu sua senha?</CardTitle>
           <CardDescription>
-            Informe seu e-mail e defina uma nova senha
+            Informe seu e-mail e enviaremos instruções para redefinir sua senha
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -100,7 +100,7 @@ export function ForgotPasswordForm({ onBack }: Props) {
             </div>
 
             <Button type="submit" disabled={loading} className="w-full">
-              {loading ? 'Redefinindo...' : 'Redefinir senha'}
+              {loading ? 'Enviando...' : 'Enviar instruções'}
             </Button>
           </form>
         </CardContent>

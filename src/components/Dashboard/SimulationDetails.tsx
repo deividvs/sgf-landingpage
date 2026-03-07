@@ -1,4 +1,4 @@
-import { Simulation } from '../../lib/localStorage';
+import { Simulation } from '../../lib/supabase';
 import { SimulationInputs, SimulationResults } from '../../lib/calculations';
 import { ResultsView } from '../Simulation/ResultsView';
 import { ArrowLeft } from 'lucide-react';
@@ -9,49 +9,41 @@ type Props = {
 };
 
 export function SimulationDetails({ simulation, onBack }: Props) {
-  const monthsToSell = simulation.feeding_days / 30;
-  const weightToGain = simulation.final_weight - simulation.initial_weight;
-
   const inputs: SimulationInputs = {
-    herd_description: simulation.title,
+    herd_description: simulation.herd_description,
     quantity: simulation.quantity,
     initial_weight: simulation.initial_weight,
     final_weight: simulation.final_weight,
-    acquisition_value_per_kg: 0,
-    average_daily_gain: weightToGain / simulation.feeding_days,
-    lease_monthly_per_head: simulation.lease_per_animal,
-    workers_count: simulation.workers,
-    labor_monthly_per_worker: simulation.labor_cost_per_worker,
-    supplement_bag_price: simulation.supplement_cost,
-    supplement_bag_weight: 25,
-    supplement_percentage: 1,
-    supplement_daily_consumption: simulation.supplement_consumption_per_day,
-    other_expenses_monthly_per_head: simulation.other_expenses,
+    acquisition_value_per_kg: simulation.acquisition_value_per_kg,
+    average_daily_gain: simulation.average_daily_gain,
+    lease_monthly_per_head: simulation.lease_monthly_per_head,
+    workers_count: simulation.workers_count,
+    labor_monthly_per_worker: simulation.labor_monthly_per_worker,
+    supplement_bag_price: simulation.supplement_bag_price,
+    supplement_bag_weight: simulation.supplement_bag_weight,
+    supplement_percentage: simulation.supplement_percentage,
+    supplement_daily_consumption: simulation.supplement_daily_consumption,
+    other_expenses_monthly_per_head: simulation.other_expenses_monthly_per_head,
     arroba_value: simulation.arroba_value,
   };
 
-  const monthlyLeaseCost = simulation.lease_per_animal;
-  const monthlyLaborCost = inputs.quantity > 0 ? (simulation.labor_cost_per_worker * simulation.workers) / inputs.quantity : 0;
-  const monthlySupplementCost = simulation.supplement_consumption_per_day * (simulation.supplement_cost / 25) * 30;
-  const monthlyOtherCost = simulation.other_expenses;
-
   const results: SimulationResults = {
-    weight_to_gain: weightToGain,
-    months_to_sell: monthsToSell,
+    weight_to_gain: simulation.weight_to_gain,
+    months_to_sell: simulation.months_to_sell,
     total_revenue: simulation.total_revenue,
-    acquisition_costs: 0,
-    lease_costs: monthlyLeaseCost * monthsToSell * simulation.quantity,
-    labor_costs: simulation.labor_cost_per_worker * simulation.workers * monthsToSell,
-    supplement_costs: monthlySupplementCost * monthsToSell * simulation.quantity,
-    other_costs: monthlyOtherCost * monthsToSell * simulation.quantity,
+    acquisition_costs: simulation.acquisition_costs || 0,
+    lease_costs: simulation.lease_costs || 0,
+    labor_costs: simulation.labor_costs || 0,
+    supplement_costs: simulation.supplement_costs || 0,
+    other_costs: simulation.other_costs || 0,
     total_expenses: simulation.total_expenses,
     profit_margin_percentage: simulation.profit_margin_percentage,
     result_per_animal: simulation.result_per_animal,
-    cost_per_arroba: simulation.total_expenses / ((simulation.final_weight / 15) * simulation.quantity),
-    monthly_lease_cost: monthlyLeaseCost,
-    monthly_labor_cost: monthlyLaborCost,
-    monthly_supplement_cost: monthlySupplementCost,
-    monthly_other_cost: monthlyOtherCost,
+    cost_per_arroba: simulation.cost_per_arroba,
+    monthly_lease_cost: simulation.lease_monthly_per_head,
+    monthly_labor_cost: inputs.quantity > 0 ? (simulation.labor_monthly_per_worker * simulation.workers_count) / inputs.quantity : 0,
+    monthly_supplement_cost: simulation.supplement_daily_consumption * (simulation.supplement_bag_price / simulation.supplement_bag_weight) * 30,
+    monthly_other_cost: simulation.other_expenses_monthly_per_head,
     monthly_cost_total: 0,
   };
 

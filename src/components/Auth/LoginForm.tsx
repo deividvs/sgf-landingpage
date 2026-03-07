@@ -41,6 +41,12 @@ export function LoginForm({ onToggleForm, onForgotPassword }: Props) {
           <CardDescription>Entre para acessar suas simulações</CardDescription>
         </CardHeader>
         <CardContent>
+          <Alert className="mb-4 border-blue-200 bg-blue-50">
+            <Info className="h-4 w-4 text-blue-600" />
+            <AlertDescription className="text-blue-800">
+              Cadastre o mesmo email de compra
+            </AlertDescription>
+          </Alert>
 
           {error && (
             <Alert variant="destructive" className="mb-4">
