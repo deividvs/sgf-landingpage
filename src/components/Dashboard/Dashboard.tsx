@@ -172,41 +172,47 @@ export function Dashboard() {
   };
 
   const handleSaveSimulation = async (inputs: SimulationInputs, results: SimulationResults) => {
-    const { error } = await supabase.from('simulations').insert({
-      user_id: user!.id,
-      title: inputs.herd_description,
-      herd_description: inputs.herd_description,
-      quantity: inputs.quantity,
-      initial_weight: inputs.initial_weight,
-      final_weight: inputs.final_weight,
-      acquisition_value_per_kg: inputs.acquisition_value_per_kg,
-      average_daily_gain: inputs.average_daily_gain,
-      lease_monthly_per_head: inputs.lease_monthly_per_head,
-      workers_count: inputs.workers_count,
-      labor_monthly_per_worker: inputs.labor_monthly_per_worker,
-      supplement_bag_price: inputs.supplement_bag_price,
-      supplement_bag_weight: inputs.supplement_bag_weight,
-      supplement_percentage: inputs.supplement_percentage,
-      supplement_daily_consumption: inputs.supplement_daily_consumption,
-      other_expenses_monthly_per_head: inputs.other_expenses_monthly_per_head,
-      arroba_value: inputs.arroba_value,
-      weight_to_gain: results.weight_to_gain,
-      months_to_sell: results.months_to_sell,
-      total_revenue: results.total_revenue,
-      acquisition_costs: results.acquisition_costs,
-      lease_costs: results.lease_costs,
-      labor_costs: results.labor_costs,
-      supplement_costs: results.supplement_costs,
-      other_costs: results.other_costs,
-      total_expenses: results.total_expenses,
-      profit_margin_percentage: results.profit_margin_percentage,
-      result_per_animal: results.result_per_animal,
-      cost_per_arroba: results.cost_per_arroba,
-    });
+    try {
+      const { error } = await supabase.from('simulations').insert({
+        user_id: user!.id,
+        title: inputs.herd_description,
+        herd_description: inputs.herd_description,
+        quantity: inputs.quantity,
+        initial_weight: inputs.initial_weight,
+        final_weight: inputs.final_weight,
+        acquisition_value_per_kg: inputs.acquisition_value_per_kg,
+        average_daily_gain: inputs.average_daily_gain,
+        lease_monthly_per_head: inputs.lease_monthly_per_head,
+        workers_count: inputs.workers_count,
+        labor_monthly_per_worker: inputs.labor_monthly_per_worker,
+        supplement_bag_price: inputs.supplement_bag_price,
+        supplement_bag_weight: inputs.supplement_bag_weight,
+        supplement_percentage: inputs.supplement_percentage,
+        supplement_daily_consumption: inputs.supplement_daily_consumption,
+        other_expenses_monthly_per_head: inputs.other_expenses_monthly_per_head,
+        arroba_value: inputs.arroba_value,
+        weight_to_gain: results.weight_to_gain,
+        months_to_sell: results.months_to_sell,
+        total_revenue: results.total_revenue,
+        acquisition_costs: results.acquisition_costs,
+        lease_costs: results.lease_costs,
+        labor_costs: results.labor_costs,
+        supplement_costs: results.supplement_costs,
+        other_costs: results.other_costs,
+        total_expenses: results.total_expenses,
+        profit_margin_percentage: results.profit_margin_percentage,
+        result_per_animal: results.result_per_animal,
+        cost_per_arroba: results.cost_per_arroba,
+      });
 
-    if (!error) {
-      await loadSimulations();
-      setView('list');
+      if (!error) {
+        await loadSimulations();
+        setView('list');
+      } else {
+        alert('Erro ao salvar simulação. Tente novamente.');
+      }
+    } catch (err) {
+      alert('Erro ao salvar simulação. Tente novamente.');
     }
   };
 

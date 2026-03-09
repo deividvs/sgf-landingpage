@@ -18,20 +18,24 @@ export function StockingRateCalculator() {
   const handleSave = async (inputs: StockingRateInputs, results: StockingRateResults) => {
     if (!user) return;
 
-    const { error } = await supabase.from('stocking_rate_simulations').insert({
-      user_id: user.id,
-      area_ha: inputs.area_ha,
-      animal_quantity: inputs.animal_quantity,
-      average_weight_kg: inputs.average_weight_kg,
-      total_weight_kg: results.total_weight_kg,
-      total_animal_units: results.total_animal_units,
-      stocking_rate_ua_ha: results.stocking_rate_ua_ha,
-      classification: results.classification,
-    });
+    try {
+      const { error } = await supabase.from('stocking_rate_simulations').insert({
+        user_id: user.id,
+        area_ha: inputs.area_ha,
+        animal_quantity: inputs.animal_quantity,
+        average_weight_kg: inputs.average_weight_kg,
+        total_weight_kg: results.total_weight_kg,
+        total_animal_units: results.total_animal_units,
+        stocking_rate_ua_ha: results.stocking_rate_ua_ha,
+        classification: results.classification,
+      });
 
-    if (!error) {
-      alert('Simulação salva com sucesso!');
-    } else {
+      if (!error) {
+        alert('Simulação salva com sucesso!');
+      } else {
+        alert('Erro ao salvar simulação. Tente novamente.');
+      }
+    } catch (err) {
       alert('Erro ao salvar simulação. Tente novamente.');
     }
   };
