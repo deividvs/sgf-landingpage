@@ -100,7 +100,8 @@ export function AnnualResultsCalculator() {
       await loadSavedResults();
       alert('Apuração salva com sucesso!');
     } else {
-      alert('Erro ao salvar apuracao.');
+      console.error('Erro ao salvar apuração:', error);
+      alert(`Erro ao salvar apuração: ${error.message || 'Erro desconhecido'}`);
     }
     setLoading(false);
   };
