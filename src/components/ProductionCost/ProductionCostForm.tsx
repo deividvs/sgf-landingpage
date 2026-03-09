@@ -16,7 +16,7 @@ export function ProductionCostForm({ onCalculate }: ProductionCostFormProps) {
     supplementation_monthly: 8000,
     labor_monthly: 5000,
     variable_costs_monthly: 3500,
-    gmd_kg: 0.478,
+    gmd_kg: 15,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -56,7 +56,7 @@ export function ProductionCostForm({ onCalculate }: ProductionCostFormProps) {
 
             <div className="space-y-2">
               <Label htmlFor="gmd_kg">
-                GMD - Ganho Médio Diário (kg/dia)
+                GMD - Ganho Médio Diário Mensal (kg/mês)
               </Label>
               <Input
                 id="gmd_kg"
@@ -64,8 +64,8 @@ export function ProductionCostForm({ onCalculate }: ProductionCostFormProps) {
                 value={formData.gmd_kg}
                 onChange={(e) => handleChange('gmd_kg', e.target.value)}
                 min="0.1"
-                max="3"
-                step="0.001"
+                max="100"
+                step="0.01"
                 required
               />
             </div>
