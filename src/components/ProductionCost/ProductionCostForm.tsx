@@ -16,7 +16,7 @@ export function ProductionCostForm({ onCalculate }: ProductionCostFormProps) {
     supplementation_monthly: 8000,
     labor_monthly: 5000,
     variable_costs_monthly: 3500,
-    gmd_kg: 15,
+    gmd_kg: 1,
   });
 
   const handleSubmit = (e: React.FormEvent) => {
