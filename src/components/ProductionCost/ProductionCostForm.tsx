@@ -25,9 +25,10 @@ export function ProductionCostForm({ onCalculate }: ProductionCostFormProps) {
   };
 
   const handleChange = (field: keyof ProductionCostInputs, value: string) => {
+    const numValue = parseFloat(value);
     setFormData((prev) => ({
       ...prev,
-      [field]: parseFloat(value) || 0,
+      [field]: isNaN(numValue) ? prev[field] : numValue,
     }));
   };
 
