@@ -30,7 +30,8 @@ export function calculateProductionCost(inputs: ProductionCostInputs): Productio
   const carcass_yield_decimal = 0.52;
   const kg_carcass_per_arroba = 15;
   const kg_live_weight_per_arroba = kg_carcass_per_arroba / carcass_yield_decimal;
-  const days_per_arroba = kg_live_weight_per_arroba / inputs.gmd_kg;
+  const gmd_daily = inputs.gmd_kg / 30;
+  const days_per_arroba = kg_live_weight_per_arroba / gmd_daily;
 
   const cost_per_arroba = daily_cost_per_animal * days_per_arroba;
 
