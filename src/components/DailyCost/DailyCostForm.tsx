@@ -264,7 +264,7 @@ export function DailyCostForm({ onCalculate, onSave, onExportPDF }: Props) {
             <div className="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-lg p-4">
               <p className="text-sm font-medium text-gray-600 mb-1">Dias para Produzir 1@</p>
               <p className="text-2xl font-bold text-purple-700">{formatNumber(results.days_to_produce_arroba, 0)} dias</p>
-              <p className="text-xs text-gray-500 mt-1">30kg ÷ {formatNumber(formData.average_daily_gain_kg, 3)} kg/dia</p>
+              <p className="text-xs text-gray-500 mt-1">dias para produzir 1@ de peso vivo (30kg)</p>
             </div>
 
             <div className="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-lg p-4">
