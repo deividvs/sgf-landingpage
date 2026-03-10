@@ -213,7 +213,7 @@ export function ProductionCostCalculator() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-red-600 font-bold">•</span>
-                <span>Acima de R$ 220/@ = Esse custo pode comprometer sua margem de lucro dentro do tri 2.0 vc tem acesso a um mapa com ferramentas, estratégias e formulações para corrigir isso e aumentar o seu lucro</span>
+                <span>Acima de R$ 220/@ = Esse custo pode comprometer sua margem de lucro dentro do T.R.I. 2.0 e você tem acesso a um mapa com ferramentas, estratégias e formulações para corrigir isso e aumentar o seu lucro</span>
               </li>
             </ul>
           </div>

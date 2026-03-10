@@ -107,7 +107,7 @@ export function generateProductionCostPDF(
   const interpretations = [
     'Custo < R$ 110/@ = Excelente eficiência',
     'Entre R$ 110 e R$ 220/@ = Dentro da média',
-    'Acima de R$ 220/@ = Esse custo pode comprometer sua margem de lucro'
+    'Acima de R$ 220/@ = Esse custo pode comprometer sua margem de lucro dentro do T.R.I. 2.0 e você tem acesso a um mapa com ferramentas, estratégias e formulações para corrigir isso e aumentar o seu lucro'
   ];
 
   interpretations.forEach((text) => {
