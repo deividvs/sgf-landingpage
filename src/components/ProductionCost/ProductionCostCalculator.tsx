@@ -186,7 +186,7 @@ export function ProductionCostCalculator() {
               <p className="text-3xl font-bold text-blue-600">
                 {results.days_per_arroba.toFixed(2)}
               </p>
-              <p className="text-sm text-gray-600 mt-1">dias para produzir 1@ de carcaça (15kg)</p>
+              <p className="text-sm text-gray-600 mt-1">dias para produzir 1@ de peso vivo (30kg)</p>
             </div>
 
             <div className="bg-purple-50 rounded-lg p-6 border border-purple-200 md:col-span-2">
