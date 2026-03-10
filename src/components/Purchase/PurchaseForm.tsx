@@ -281,7 +281,7 @@ export default function PurchaseForm({ onSubmit, initialSuppliers }: PurchaseFor
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Pedágio (R$)
+                Pedágio Total (R$)
               </label>
               <input
                 type="text"
