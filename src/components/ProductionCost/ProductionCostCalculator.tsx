@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ArrowLeft, Download, DollarSign, Calendar, TrendingUp, Target } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ArrowLeft, Download, DollarSign, Calendar, TrendingUp, Target, Plus, List, Trash2 } from 'lucide-react';
 import { ProductionCostForm } from './ProductionCostForm';
 import {
   calculateProductionCost,
@@ -9,14 +9,44 @@ import {
 import { generateProductionCostPDF } from '../../lib/production-cost-pdf-generator';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button';
+
+interface SavedCalculation {
+  id: string;
+  title: string;
+  quantity_animals: number;
+  cost_per_arroba: number;
+  classification: string;
+  created_at: string;
+}
 
 export function ProductionCostCalculator() {
   const { user } = useAuth();
-  const [view, setView] = useState<'form' | 'results'>('form');
+  const [view, setView] = useState<'list' | 'form' | 'results'>('list');
+  const [savedCalculations, setSavedCalculations] = useState<SavedCalculation[]>([]);
+  const [loading, setLoading] = useState(false);
   const [inputs, setInputs] = useState<ProductionCostInputs | null>(null);
   const [results, setResults] = useState<ProductionCostResults | null>(null);
   const [title, setTitle] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    loadCalculations();
+  }, []);
+
+  const loadCalculations = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('production_cost_calculations')
+      .select('id, title, quantity_animals, cost_per_arroba, classification, created_at')
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      setSavedCalculations(data);
+    }
+    setLoading(false);
+  };
 
   const handleCalculate = (newInputs: ProductionCostInputs) => {
     const newResults = calculateProductionCost(newInputs);
@@ -49,12 +79,27 @@ export function ProductionCostCalculator() {
 
       if (!error) {
         alert('Cálculo salvo com sucesso!');
+        await loadCalculations();
       }
     } catch (error) {
       console.error('Erro ao salvar:', error);
       alert('Erro ao salvar o cálculo.');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirmed = confirm('Tem certeza que deseja excluir este cálculo?');
+    if (!confirmed) return;
+
+    const { error } = await supabase
+      .from('production_cost_calculations')
+      .delete()
+      .eq('id', id);
+
+    if (!error) {
+      await loadCalculations();
     }
   };
 
@@ -96,6 +141,92 @@ export function ProductionCostCalculator() {
         return '';
     }
   };
+
+  if (view === 'list') {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Custo de Produção PRO</h1>
+            <p className="text-gray-600 mt-1">Cálculos salvos de custo de produção</p>
+          </div>
+          <Button onClick={() => setView('form')} className="bg-green-600 hover:bg-green-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Novo Cálculo
+          </Button>
+        </div>
+
+        {loading ? (
+          <Card>
+            <CardContent className="py-12">
+              <p className="text-center text-gray-500">Carregando cálculos...</p>
+            </CardContent>
+          </Card>
+        ) : savedCalculations.length === 0 ? (
+          <Card>
+            <CardContent className="py-12 text-center">
+              <Target className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Nenhum cálculo salvo</h3>
+              <p className="text-gray-600 mb-4">Comece criando seu primeiro cálculo de custo de produção</p>
+              <Button onClick={() => setView('form')} className="bg-green-600 hover:bg-green-700">
+                <Plus className="w-4 h-4 mr-2" />
+                Criar Primeiro Cálculo
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {savedCalculations.map((calc) => (
+              <Card key={calc.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="text-lg">{calc.title}</CardTitle>
+                  <CardDescription>
+                    {new Date(calc.created_at).toLocaleDateString('pt-BR', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric'
+                    })}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Animais:</span>
+                      <span className="font-semibold">{calc.quantity_animals} cabeças</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Custo/@:</span>
+                      <span className="font-semibold">R$ {calc.cost_per_arroba?.toFixed(2) || '0,00'}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Classificação:</span>
+                      <span className={`font-semibold ${
+                        calc.classification === 'excelente' ? 'text-green-600' :
+                        calc.classification === 'media' ? 'text-yellow-600' :
+                        'text-red-600'
+                      }`}>
+                        {getClassificationText(calc.classification)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() => handleDelete(calc.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   if (view === 'results' && results && inputs) {
     return (
