@@ -52,8 +52,10 @@ export function SupplementationCalculator() {
     if (!user) return;
 
     try {
+      const title = `Suplementação - ${inputs.animal_quantity} cabeças`;
       const { error } = await supabase.from('supplementation_calculations').insert({
         user_id: user.id,
+        title,
         quantity_heads: inputs.animal_quantity,
         average_weight_kg: inputs.average_weight_kg,
         supplementation_type: inputs.supplementation_type,
@@ -67,9 +69,11 @@ export function SupplementationCalculator() {
         alert('Cálculo salvo com sucesso!');
         await loadCalculations();
       } else {
+        console.error('Erro ao salvar:', error);
         alert('Erro ao salvar cálculo. Tente novamente.');
       }
     } catch (err) {
+      console.error('Erro ao salvar:', err);
       alert('Erro ao salvar cálculo. Tente novamente.');
     }
   };
