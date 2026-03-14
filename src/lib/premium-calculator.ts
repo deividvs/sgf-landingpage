@@ -14,6 +14,7 @@ export type PremiumResults = {
   total_premium_discount_per_animal: number;
   daily_premium_to_dilute: number;
   daily_gain_needed_kg: number;
+  additional_weight_needed_kg: number;
   situation: 'premium' | 'discount' | 'neutral';
   months_to_dilute: number;
 };
@@ -46,6 +47,8 @@ export function calculatePremium(inputs: PremiumInputs): PremiumResults {
 
   const daily_gain_needed_kg = cost_per_kg > 0 ? daily_premium_to_dilute / cost_per_kg : 0;
 
+  const additional_weight_needed_kg = daily_gain_needed_kg * rearing_period_days;
+
   const months_to_dilute = rearing_period_days / 30;
 
   let situation: 'premium' | 'discount' | 'neutral' = 'neutral';
@@ -64,6 +67,7 @@ export function calculatePremium(inputs: PremiumInputs): PremiumResults {
     total_premium_discount_per_animal,
     daily_premium_to_dilute,
     daily_gain_needed_kg,
+    additional_weight_needed_kg,
     situation,
     months_to_dilute,
   };

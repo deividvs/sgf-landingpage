@@ -65,6 +65,7 @@ export function PremiumCalculator() {
         total_premium_discount_per_animal: results.total_premium_discount_per_animal,
         daily_premium_to_dilute: results.daily_premium_to_dilute,
         daily_gain_needed_kg: results.daily_gain_needed_kg,
+        additional_weight_needed_kg: results.additional_weight_needed_kg,
         situation: results.situation,
       });
 
@@ -73,9 +74,11 @@ export function PremiumCalculator() {
         await loadSimulations();
       } else {
         alert('Erro ao salvar simulação. Tente novamente.');
+        console.error('Erro ao salvar:', error);
       }
     } catch (err) {
       alert('Erro ao salvar simulação. Tente novamente.');
+      console.error('Erro ao salvar:', err);
     }
   };
 
