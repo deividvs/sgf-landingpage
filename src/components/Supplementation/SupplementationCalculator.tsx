@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { SupplementationInputs, SupplementationResults } from '../../lib/supplementation-calculator';
+import { SupplementationInputs, SupplementationResults, calculateSupplementation } from '../../lib/supplementation-calculator';
 import { generateSupplementationPDF } from '../../lib/supplementation-pdf-generator';
 import { SupplementationForm } from './SupplementationForm';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../contexts/AuthContext';
-import { Package, Plus, List, Trash2 } from 'lucide-react';
+import { Package, Plus, List, Trash2, Eye } from 'lucide-react';
 import { CalculatorLayout } from '../Layout/CalculatorLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
@@ -20,7 +20,7 @@ interface SavedCalculation {
 
 export function SupplementationCalculator() {
   const { user } = useAuth();
-  const [view, setView] = useState<'list' | 'form'>('list');
+  const [view, setView] = useState<'list' | 'form' | 'results'>('list');
   const [savedCalculations, setSavedCalculations] = useState<SavedCalculation[]>([]);
   const [loading, setLoading] = useState(false);
   const [currentInputs, setCurrentInputs] = useState<SupplementationInputs | null>(null);
@@ -46,6 +46,32 @@ export function SupplementationCalculator() {
   const handleCalculate = (inputs: SupplementationInputs, results: SupplementationResults) => {
     setCurrentInputs(inputs);
     setCurrentResults(results);
+    setView('results');
+  };
+
+  const handleViewDetails = async (id: string) => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('supplementation_calculations')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (!error && data) {
+      const inputs: SupplementationInputs = {
+        animal_quantity: data.quantity_heads,
+        average_weight_kg: Number(data.average_weight_kg),
+        supplementation_type: data.supplementation_type,
+        consumption_percentage: Number(data.consumption_percentage),
+        bag_weight_kg: Number(data.bag_weight_kg)
+      };
+
+      const results = calculateSupplementation(inputs);
+      setCurrentInputs(inputs);
+      setCurrentResults(results);
+      setView('results');
+    }
+    setLoading(false);
   };
 
   const handleSave = async (inputs: SupplementationInputs, results: SupplementationResults) => {
@@ -159,9 +185,17 @@ export function SupplementationCalculator() {
                   </div>
                   <div className="flex gap-2">
                     <Button
+                      variant="default"
+                      size="sm"
+                      className="flex-1 bg-green-600 hover:bg-green-700"
+                      onClick={() => handleViewDetails(calc.id)}
+                    >
+                      <Eye className="w-4 h-4 mr-1" />
+                      Ver Detalhes
+                    </Button>
+                    <Button
                       variant="outline"
                       size="sm"
-                      className="flex-1"
                       onClick={() => handleDelete(calc.id)}
                     >
                       <Trash2 className="w-4 h-4" />
@@ -176,24 +210,53 @@ export function SupplementationCalculator() {
     );
   }
 
-  return (
-    <CalculatorLayout
-      title="Cálculo de Suplementação"
-      description="Determine a quantidade exata de suplemento necessária para seu rebanho diariamente"
-      icon={<Package className="w-6 h-6" />}
-      onBack={() => setView('list')}
-      actions={
-        <Button onClick={() => setView('list')} variant="outline">
-          <List className="w-4 h-4 mr-2" />
-          Ver Salvos
-        </Button>
-      }
-    >
-      <SupplementationForm
-        onCalculate={handleCalculate}
-        onSave={handleSave}
-        onExportPDF={handleExportPDF}
-      />
-    </CalculatorLayout>
-  );
+  if (view === 'form') {
+    return (
+      <CalculatorLayout
+        title="Cálculo de Suplementação"
+        description="Determine a quantidade exata de suplemento necessária para seu rebanho diariamente"
+        icon={<Package className="w-6 h-6" />}
+        onBack={() => setView('list')}
+        actions={
+          <Button onClick={() => setView('list')} variant="outline">
+            <List className="w-4 h-4 mr-2" />
+            Ver Salvos
+          </Button>
+        }
+      >
+        <SupplementationForm
+          onCalculate={handleCalculate}
+          onSave={handleSave}
+          onExportPDF={handleExportPDF}
+        />
+      </CalculatorLayout>
+    );
+  }
+
+  if (view === 'results' && currentInputs && currentResults) {
+    return (
+      <CalculatorLayout
+        title="Resultados - Suplementação"
+        description="Confira os resultados do cálculo de suplementação"
+        icon={<Package className="w-6 h-6" />}
+        onBack={() => setView('form')}
+        actions={
+          <Button onClick={() => setView('list')} variant="outline">
+            <List className="w-4 h-4 mr-2" />
+            Ver Salvos
+          </Button>
+        }
+      >
+        <SupplementationForm
+          onCalculate={handleCalculate}
+          onSave={handleSave}
+          onExportPDF={handleExportPDF}
+          initialInputs={currentInputs}
+          initialResults={currentResults}
+        />
+      </CalculatorLayout>
+    );
+  }
+
+  return null;
 }

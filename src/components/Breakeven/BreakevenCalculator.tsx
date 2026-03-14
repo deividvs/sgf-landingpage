@@ -10,7 +10,7 @@ import {
 } from '../../lib/breakeven-calculator';
 import { generateBreakevenPDF } from '../../lib/breakeven-pdf-generator';
 import { BreakevenForm } from './BreakevenForm';
-import { ArrowLeft, Download, Save, TrendingUp, TrendingDown, Scale, DollarSign, Calendar, Weight } from 'lucide-react';
+import { ArrowLeft, Download, Save, TrendingUp, TrendingDown, Scale, DollarSign, Calendar, Weight, Eye } from 'lucide-react';
 
 interface BreakevenSimulation {
   id: string;
@@ -88,6 +88,32 @@ export function BreakevenCalculator() {
   const handleDownloadPDF = () => {
     if (!currentInputs || !currentCalculations) return;
     generateBreakevenPDF(currentInputs, currentCalculations);
+  };
+
+  const handleViewDetails = async (simulationId: string) => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('breakeven_simulations')
+      .select('*')
+      .eq('id', simulationId)
+      .single();
+
+    if (!error && data) {
+      const inputs: BreakevenInputs = {
+        title: data.title,
+        acquisition_value: Number(data.acquisition_value),
+        daily_cost: Number(data.daily_cost),
+        days_in_cycle: data.days_in_cycle,
+        final_weight_kg: Number(data.final_weight_kg),
+        current_arroba_price: Number(data.current_arroba_price)
+      };
+
+      const calculations = calculateBreakeven(inputs);
+      setCurrentInputs(inputs);
+      setCurrentCalculations(calculations);
+      setView('results');
+    }
+    setLoading(false);
   };
 
   if (view === 'list') {
@@ -176,7 +202,7 @@ export function BreakevenCalculator() {
                   </div>
 
                   <div className="pt-3 border-t border-gray-200">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between mb-3">
                       <span className="text-sm font-medium text-gray-700">Resultado Total:</span>
                       <span
                         className={`font-bold text-lg ${
@@ -186,6 +212,13 @@ export function BreakevenCalculator() {
                         {formatCurrency(Math.abs(sim.final_result))}
                       </span>
                     </div>
+                    <button
+                      onClick={() => handleViewDetails(sim.id)}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                    >
+                      <Eye className="w-4 h-4" />
+                      Ver Detalhes
+                    </button>
                   </div>
                 </div>
               </div>
