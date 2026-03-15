@@ -27,6 +27,17 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
           </p>
         </div>
 
+        <div className="flex justify-center pt-2">
+          <Button
+            onClick={onComplete}
+            size="lg"
+            className="bg-green-600 hover:bg-green-700 text-white px-12 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
+          >
+            <CheckCircle2 className="w-5 h-5 mr-2" />
+            Começar Cadastro
+          </Button>
+        </div>
+
         <div className="grid md:grid-cols-2 gap-6">
           <div className="flex gap-4 p-4 bg-green-50 rounded-lg border border-green-200">
             <div className="flex-shrink-0">
@@ -127,17 +138,6 @@ export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
             <span className="font-bold">IMPORTANTE:</span> Anote sua senha em um local seguro para não esquecer. Você precisará dela para acessar o sistema.
           </AlertDescription>
         </Alert>
-
-        <div className="flex justify-center pt-4">
-          <Button
-            onClick={onComplete}
-            size="lg"
-            className="bg-green-600 hover:bg-green-700 text-white px-12 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
-          >
-            <CheckCircle2 className="w-5 h-5 mr-2" />
-            Começar Cadastro
-          </Button>
-        </div>
       </Card>
     </div>
   );
