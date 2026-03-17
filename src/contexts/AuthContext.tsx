@@ -53,12 +53,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  const translateAuthError = (error: AuthError | null): AuthError | null => {
+    if (!error) return null;
+
+    const errorMessages: Record<string, string> = {
+      'User already registered': 'Usuário já cadastrado',
+      'Email already registered': 'Email já cadastrado',
+      'Invalid email': 'Email inválido',
+      'Password should be at least 6 characters': 'A senha deve ter pelo menos 6 caracteres',
+      'Email not confirmed': 'Email não confirmado',
+      'Invalid login credentials': 'Email ou senha incorretos',
+      'User not found': 'Usuário não encontrado',
+      'Invalid password': 'Senha incorreta',
+    };
+
+    const translatedMessage = errorMessages[error.message] || error.message;
+
+    return {
+      ...error,
+      message: translatedMessage,
+    };
+  };
+
   const signUp = async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
     });
-    return { data, error };
+    return { data, error: translateAuthError(error) };
   };
 
   const signIn = async (email: string, password: string, rememberMe: boolean = false) => {
@@ -79,7 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setSessionExpiresAt(new Date(data.session.expires_at * 1000));
     }
 
-    return { error };
+    return { error: translateAuthError(error) };
   };
 
   const signOut = async () => {
@@ -88,7 +110,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const resetPassword = async (email: string) => {
     const { error } = await supabase.auth.resetPasswordForEmail(email);
-    return { error };
+    return { error: translateAuthError(error) };
   };
 
   const checkEmailEligibility = async (email: string): Promise<EmailEligibilityResult> => {
