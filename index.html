@@ -3,72 +3,1671 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Minhas Tarefas</title>
+  <title>Gestão da Fazenda — Controle Total da Sua Pecuária</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --bg-0:        #070F07;
+      --bg-1:        #0C1A0C;
+      --bg-2:        #112511;
+      --bg-card:     #162816;
+      --bg-lift:     #1C341C;
+      --border:      rgba(255,255,255,.07);
+
+      --green-cta:   #2ECC40;
+      --green-mid:   #1A9F2E;
+      --green-glow:  rgba(46,204,64,.18);
+      --amber:       #D4A017;
+      --amber-light: #F5C842;
+      --red:         #E74C3C;
+
+      --text-1:      #EDF5ED;
+      --text-2:      #A8C8A8;
+      --text-3:      #6A8F6A;
+
+      --radius:      14px;
+      --radius-lg:   22px;
+    }
+
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-0);
+      color: var(--text-1);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    img { max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── NOISE TEXTURE OVERLAY ──────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: .4;
+    }
+
+    /* ─── LAYOUT ─────────────────────────────────────────────── */
+    section { position: relative; z-index: 1; }
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .container--wide {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ─── TYPOGRAPHY ─────────────────────────────────────────── */
+    .display {
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      line-height: 1.12;
+      letter-spacing: -.02em;
+    }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      line-height: 1.2;
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+    .reveal-delay-5 { transition-delay: .5s; }
+    .reveal-delay-6 { transition-delay: .6s; }
+
+    /* ─── BUTTON ─────────────────────────────────────────────── */
+    .btn-cta {
+      display: inline-block;
+      background: var(--green-cta);
+      color: #000;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 18px 36px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      border: none;
+      letter-spacing: .01em;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 0 32px var(--green-glow);
+      text-align: center;
+      line-height: 1.3;
+    }
+    .btn-cta:hover {
+      background: #36e04a;
+      transform: translateY(-2px);
+      box-shadow: 0 0 48px rgba(46,204,64,.35);
+    }
+    .btn-cta--lg {
+      font-size: 1.15rem;
+      padding: 22px 44px;
+      width: 100%;
+      max-width: 520px;
+    }
+
+    /* ─── DIVIDER ────────────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    /* ══════════════════════════════════════════════════════════ */
+    /* HERO                                                        */
+    /* ══════════════════════════════════════════════════════════ */
+    #hero {
+      padding: 100px 0 80px;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(46,204,64,.12) 0%, transparent 70%),
+        linear-gradient(180deg, #0B1E0B 0%, var(--bg-0) 100%);
+      text-align: center;
+      overflow: hidden;
+    }
+    #hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent, var(--bg-0));
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(46,204,64,.1);
+      border: 1px solid rgba(46,204,64,.25);
+      color: var(--green-cta);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: 7px 16px;
+      border-radius: 999px;
+      margin-bottom: 28px;
+    }
+    .hero-headline {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      max-width: 780px;
+      margin: 0 auto 28px;
+      color: var(--text-1);
+    }
+    .hero-headline em {
+      font-style: normal;
+      color: var(--amber-light);
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2.2vw, 1.18rem);
+      color: var(--text-2);
+      max-width: 580px;
+      margin: 0 auto 40px;
+      font-weight: 300;
+    }
+    .hero-cta-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .hero-trust {
+      font-size: .85rem;
+      color: var(--text-3);
+    }
+    .hero-trust strong {
+      color: var(--text-2);
+    }
+    .hero-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .hero-pill {
+      font-size: .78rem;
+      color: var(--text-2);
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 4px 14px;
+    }
+
+    /* ══════════════════════════════════════════════════════════ */
+    /* PROBLEMA                                                    */
+    /* ══════════════════════════════════════════════════════════ */
+    #problema {
+      padding: 90px 0;
+      background: var(--bg-1);
+    }
+    #problema .section-title {
+      max-width: 640px;
+      margin-bottom: 48px;
+    }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 56px;
+    }
+    .problem-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: relative;
+    }
+    .problem-card::before {
+      content: '"';
+      font-family: 'Playfair Display', serif;
+      font-size: 5rem;
+      line-height: 0;
+      color: var(--amber);
+      opacity: .18;
+      position: absolute;
+      top: 28px;
+      left: 20px;
+    }
+    .problem-card p {
+      font-size: .97rem;
+      color: var(--text-2);
+      font-style: italic;
+      padding-top: 24px;
+    }
+    .problem-connection {
+      background: var(--bg-card);
+      border-left: 3px solid var(--amber);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      padding: 32px 36px;
+      max-width: 640px;
+    }
+    .problem-connection p {
+      font-size: 1.05rem;
+      font-weight: 500;
+      margin-bottom: 16px;
+      color: var(--text-2);
+    }
+    .problem-arrow {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-1);
+    }
+    .problem-final {
+      margin-top: 16px;
+      font-size: .92rem;
+      color: var(--text-3);
+      font-style: italic;
+    }
+
+    /* ══════════════════════════════════════════════════════════ */
+    /* AGRAVAMENTO                                                 */
+    /* ══════════════════════════════════════════════════════════ */
+    #agravamento {
+      padding: 90px 0;
+      background: var(--bg-0);
+    }
+    .consequence-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 32px 0 56px;
+    }
+    .consequence-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      font-size: 1rem;
+    }
+    .consequence-item--bad {
+      background: rgba(231,76,60,.06);
+      border: 1px solid rgba(231,76,60,.14);
+    }
+    .consequence-item--good {
+      background: rgba(46,204,64,.06);
+      border: 1px solid rgba(46,204,64,.14);
+    }
+    .consequence-item span:first-child {
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .consequence-item span:last-child {
+      color: var(--text-2);
+    }
+    .contrast-block {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    @media (max-width: 640px) {
+      .contrast-block { grid-template-columns: 1fr; }
+    }
+    .contrast-card {
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    .contrast-card--bad {
+      background: rgba(231,76,60,.07);
+      border: 1px solid rgba(231,76,60,.18);
+    }
+    .contrast-card--good {
+      background: rgba(46,204,64,.07);
+      border: 1px solid rgba(46,204,64,.18);
+    }
+    .contrast-card h4 {
+      font-size: .82rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .contrast-card--bad h4 { color: var(--red); }
+    .contrast-card--good h4 { color: var(--green-cta); }
+    .diferenca-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      text-align: center;
+    }
+    .diferenca-box h3 {
+      font-size: 1.3rem;
+      color: var(--text-3);
+      margin-bottom: 20px;
+    }
+    .diferenca-box p {
+      font-size: 1.05rem;
+      color: var(--text-2);
+      margin-bottom: 8px;
+    }
+    .diferenca-box .highlight {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--amber-light);
+      margin-top: 8px;
+    }
+
+    /* ══════════════════════════════════════════════════════════ */
+    /* ANTI-PLANILHA                                              */
+    /* ══════════════════════════════════════════════════════════ */
+    #antiplanilha {
+      padding: 90px 0;
+      background: linear-gradient(135deg, #0C1E0C 0%, #0A1A14 100%);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .antiplanilha-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+    @media (max-width: 680px) {
+      .antiplanilha-grid { grid-template-columns: 1fr; }
+    }
+    .strike-list {
+      margin: 24px 0 32px;
+    }
+    .strike-item {
+      font-size: 1.1rem;
+      color: var(--text-3);
+      text-decoration: line-through;
+      text-decoration-color: var(--red);
+      margin-bottom: 10px;
+      padding-left: 4px;
+    }
+    .sistema-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--green-cta);
+      margin-bottom: 12px;
+    }
+    .sistema-desc {
+      font-size: 1.05rem;
+      color: var(--text-2);
+      margin-bottom: 24px;
+    }
+    .decision-pills {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+    .decision-pill {
+      background: rgba(46,204,64,.08);
+      border: 1px solid rgba(46,204,64,.2);
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--green-cta);
+    }
+    .device-row {
+      display: flex;
+      gap: 20px;
+      margin-top: 8px;
+    }
+    .device-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .95rem;
+      color: var(--text-2);
+    }
+    .device-item span:first-child { font-size: 1.3rem; }
+
+    /* right side visual */
+    .vs-visual {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    .vs-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .vs-col {
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+    }
+    .vs-col--bad {
+      background: rgba(231,76,60,.07);
+      border: 1px solid rgba(231,76,60,.15);
+    }
+    .vs-col--good {
+      background: rgba(46,204,64,.07);
+      border: 1px solid rgba(46,204,64,.15);
+    }
+    .vs-col h5 {
+      font-size: .75rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .vs-col--bad h5 { color: var(--red); }
+    .vs-col--good h5 { color: var(--green-cta); }
+    .vs-col li {
+      list-style: none;
+      font-size: .87rem;
+      color: var(--text-2);
+      margin-bottom: 7px;
+      text-align: left;
+    }
+
+    /* ══════════════════════════════════════════════════════════ */
+    /* FERRAMENTAS                                                 */
+    /* ══════════════════════════════════════════════════════════ */
+    #ferramentas {
+      padding: 90px 0;
+      background: var(--bg-1);
+    }
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 14px;
+      margin: 40px 0 48px;
+    }
+    .tool-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 20px;
+      transition: border-color .2s, transform .2s;
+    }
+    .tool-card:hover {
+      border-color: rgba(46,204,64,.3);
+      transform: translateY(-3px);
+    }
+    .tool-icon {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+    .tool-name {
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--text-1);
+      margin-bottom: 6px;
+    }
+    .tool-desc {
+      font-size: .85rem;
+      color: var(--text-3);
+      line-height: 1.5;
+    }
+    .tools-benefit {
+      background: linear-gradient(135deg, rgba(46,204,64,.08), rgba(212,160,23,.08));
+      border: 1px solid rgba(46,204,64,.18);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      text-align: center;
+    }
+    .tools-benefit h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    .benefit-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 1rem;
+      color: var(--text-2);
+      margin-bottom: 8px;
+    }
+
+    /* ══════════════════════════════════════════════════════════ */
+    /* OBJEÇÕES                                                   */
+    /* ══════════════════════════════════════════════════════════ */
+    #objecoes {
+      padding: 90px 0;
+      background: var(--bg-0);
+    }
+    .objection-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 48px;
+    }
+    .objection-card {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      align-items: start;
+    }
+    @media (max-width: 500px) {
+      .objection-card { grid-template-columns: 1fr; }
+    }
+    .objection-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.5rem;
+      font-weight: 900;
+      line-height: 1;
+      opacity: .12;
+    }
+    .objection-num--1 { color: var(--red); }
+    .objection-num--2 { color: var(--amber); }
+    .objection-num--3 { color: #F5C842; }
+    .objection-body h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--text-1);
+    }
+    .objection-body p {
+      font-size: .95rem;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    /* ══════════════════════════════════════════════════════════ */
+    /* IDENTIFICAÇÃO                                              */
+    /* ══════════════════════════════════════════════════════════ */
+    #identificacao {
+      padding: 90px 0;
+      background: var(--bg-1);
+    }
+    .id-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin: 40px 0 48px;
+    }
+    .id-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      font-size: .92rem;
+      color: var(--text-2);
+      font-style: italic;
+      position: relative;
+      transition: border-color .2s;
+    }
+    .id-card:hover { border-color: rgba(212,160,23,.3); }
+    .id-card::before {
+      content: '"';
+      font-family: 'Playfair Display', serif;
+      font-size: 4rem;
+      line-height: 0;
+      position: absolute;
+      top: 24px; left: 14px;
+      color: var(--amber);
+      opacity: .15;
+    }
+    .id-card p { padding-top: 18px; }
+    .id-transition {
+      background: linear-gradient(135deg, rgba(46,204,64,.07), transparent);
+      border: 1px solid rgba(46,204,64,.15);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      text-align: center;
+    }
+    .id-transition p {
+      font-size: 1.05rem;
+      color: var(--text-2);
+      margin-bottom: 12px;
+    }
+    .id-transition .highlight {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--text-1);
+      font-weight: 700;
+    }
+    .id-transition .green-text {
+      color: var(--green-cta);
+      font-weight: 700;
+    }
+
+    /* ══════════════════════════════════════════════════════════ */
+    /* STACK DE VALOR                                             */
+    /* ══════════════════════════════════════════════════════════ */
+    #stack {
+      padding: 90px 0;
+      background: var(--bg-0);
+    }
+    .stack-list {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin: 40px 0 24px;
+    }
+    .stack-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 28px;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+    .stack-item:last-child { border-bottom: none; }
+    .stack-item:nth-child(odd) { background: rgba(255,255,255,.015); }
+    .stack-item-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: .95rem;
+      color: var(--text-2);
+    }
+    .stack-item-left span:first-child { font-size: 1.3rem; }
+    .stack-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--text-3);
+      flex-shrink: 0;
+    }
+    .bonus-card {
+      background: linear-gradient(135deg, rgba(212,160,23,.1), rgba(212,160,23,.04));
+      border: 1px solid rgba(212,160,23,.25);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 32px;
+    }
+    .bonus-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 8px;
+    }
+    .bonus-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-1);
+      margin-bottom: 16px;
+    }
+    .bonus-items { list-style: none; }
+    .bonus-items li {
+      font-size: .9rem;
+      color: var(--text-2);
+      margin-bottom: 6px;
+      padding-left: 18px;
+      position: relative;
+    }
+    .bonus-items li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--amber);
+    }
+    .bonus-price {
+      margin-top: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .9rem;
+      color: var(--text-3);
+      text-decoration: line-through;
+    }
+    .total-value {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .total-value-label {
+      font-size: .85rem;
+      color: var(--text-3);
+      margin-bottom: 4px;
+    }
+    .total-value-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-3);
+      text-decoration: line-through;
+    }
+
+    /* ══════════════════════════════════════════════════════════ */
+    /* OFERTA                                                     */
+    /* ══════════════════════════════════════════════════════════ */
+    #oferta {
+      padding: 90px 0;
+      background:
+        radial-gradient(ellipse 70% 40% at 50% 50%, rgba(46,204,64,.1) 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%);
+      text-align: center;
+    }
+    .price-tag {
+      display: inline-block;
+      margin: 24px 0 8px;
+    }
+    .price-from {
+      font-size: 1.1rem;
+      color: var(--text-3);
+      text-decoration: line-through;
+      margin-bottom: 4px;
+    }
+    .price-main {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 10vw, 7rem);
+      font-weight: 900;
+      line-height: 1;
+      color: var(--green-cta);
+      text-shadow: 0 0 60px rgba(46,204,64,.4);
+    }
+    .price-period {
+      font-size: .95rem;
+      color: var(--text-3);
+      margin-top: 4px;
+    }
+    .offer-triggers {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 32px 0 40px;
+    }
+    .offer-trigger {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 18px;
+      font-size: .87rem;
+      color: var(--text-2);
+    }
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 60px;
+      text-align: left;
+    }
+    @media (max-width: 600px) {
+      .steps-grid { grid-template-columns: 1fr; }
+    }
+    .step-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .step-num {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+    .step-card h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-1);
+      margin-bottom: 6px;
+    }
+    .step-card p {
+      font-size: .85rem;
+      color: var(--text-3);
+    }
+
+    /* ══════════════════════════════════════════════════════════ */
+    /* GARANTIA                                                   */
+    /* ══════════════════════════════════════════════════════════ */
+    #garantia {
+      padding: 90px 0;
+      background: var(--bg-1);
+      text-align: center;
+    }
+    .guarantee-box {
+      background: linear-gradient(135deg, rgba(212,160,23,.08), rgba(212,160,23,.03));
+      border: 2px solid rgba(212,160,23,.3);
+      border-radius: var(--radius-lg);
+      padding: 60px 40px;
+      max-width: 640px;
+      margin: 0 auto 48px;
+    }
+    .guarantee-icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+    }
+    .guarantee-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--amber-light);
+      margin-bottom: 20px;
+    }
+    .guarantee-text {
+      font-size: 1rem;
+      color: var(--text-2);
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+    .guarantee-strong {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-1);
+    }
+
+    /* ══════════════════════════════════════════════════════════ */
+    /* FAQ                                                        */
+    /* ══════════════════════════════════════════════════════════ */
+    #faq {
+      padding: 90px 0;
+      background: var(--bg-0);
+    }
+    .faq-list {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .faq-question {
+      width: 100%;
+      background: none;
+      border: none;
+      color: var(--text-1);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: left;
+      padding: 22px 24px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: color .2s;
+    }
+    .faq-question:hover { color: var(--green-cta); }
+    .faq-icon {
+      font-size: 1.3rem;
+      color: var(--amber);
+      flex-shrink: 0;
+      transition: transform .3s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .35s ease;
+    }
+    .faq-item.open .faq-answer { max-height: 200px; }
+    .faq-answer p {
+      padding: 0 24px 22px;
+      font-size: .95rem;
+      color: var(--text-2);
+      line-height: 1.65;
+    }
+
+    /* ══════════════════════════════════════════════════════════ */
+    /* FINAL CTA BAR                                              */
+    /* ══════════════════════════════════════════════════════════ */
+    #final-cta {
+      padding: 100px 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(46,204,64,.12) 0%, transparent 70%),
+        var(--bg-1);
+      text-align: center;
+    }
+    #final-cta h2 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      margin-bottom: 16px;
+    }
+    #final-cta p {
+      color: var(--text-2);
+      margin-bottom: 40px;
+      font-size: 1.05rem;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      padding: 32px 0;
+      background: var(--bg-0);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    footer p {
+      font-size: .82rem;
+      color: var(--text-3);
+    }
+
+    /* ─── STICKY CTA BAR ─────────────────────────────────────── */
+    .sticky-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(7,15,7,.92);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      z-index: 100;
+      transform: translateY(100%);
+      transition: transform .4s ease;
+    }
+    .sticky-bar.visible { transform: none; }
+    .sticky-bar-text {
+      font-size: .88rem;
+      color: var(--text-2);
+      font-weight: 500;
+    }
+    .sticky-bar-text strong {
+      color: var(--green-cta);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .btn-sticky {
+      background: var(--green-cta);
+      color: #000;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700;
+      font-size: .9rem;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background .2s;
+    }
+    .btn-sticky:hover { background: #36e04a; }
+    @media (max-width: 500px) {
+      .sticky-bar { flex-direction: column; text-align: center; }
+    }
+  </style>
 </head>
 <body>
-  <div class="app">
-    <header class="header">
-      <div class="header-content">
-        <h1 class="title">
-          <span class="title-icon">✓</span>
-          Minhas Tarefas
-        </h1>
-        <p class="subtitle" id="subtitle">Você está em dia! 🎉</p>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- HERO                                                         -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-badge reveal">Sistema de Gestão Pecuária</div>
+
+    <h1 class="display hero-headline reveal reveal-delay-1">
+      Se você não conhece os números da sua fazenda, você não está tomando decisão…
+      <em>está apostando</em>
+    </h1>
+
+    <p class="hero-sub reveal reveal-delay-2">
+      Um sistema simples e prático que te mostra quanto custa, quanto retorna e onde você está
+      ganhando ou perdendo dinheiro — direto do celular ou computador.<br><br>
+      Mesmo que você nunca tenha usado nenhuma ferramenta de gestão antes.
+    </p>
+
+    <div class="hero-cta-wrap reveal reveal-delay-3">
+      <a href="#oferta" class="btn-cta btn-cta--lg">
+        👉 QUERO TER CONTROLE TOTAL DA MINHA FAZENDA
+      </a>
+      <div class="hero-trust">
+        <strong>Mais de 1.000 pecuaristas</strong> já tomam decisões com segurança
       </div>
-    </header>
-
-    <main class="main">
-      <div class="card">
-        <!-- Input -->
-        <div class="input-wrapper">
-          <input
-            type="text"
-            id="taskInput"
-            class="task-input"
-            placeholder="Adicionar nova tarefa..."
-            maxlength="120"
-            autocomplete="off"
-          />
-          <button id="addBtn" class="add-btn" aria-label="Adicionar tarefa">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="5" x2="12" y2="19"></line>
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-            </svg>
-          </button>
-        </div>
-
-        <!-- Filters -->
-        <div class="filters">
-          <button class="filter-btn active" data-filter="all">Todas</button>
-          <button class="filter-btn" data-filter="active">Ativas</button>
-          <button class="filter-btn" data-filter="completed">Concluídas</button>
-        </div>
-
-        <!-- Task list -->
-        <ul class="task-list" id="taskList">
-          <!-- Tasks rendered by JS -->
-        </ul>
-
-        <!-- Empty state -->
-        <div class="empty-state" id="emptyState">
-          <div class="empty-icon">📝</div>
-          <p class="empty-text">Nenhuma tarefa aqui</p>
-          <p class="empty-hint">Adicione uma tarefa acima para começar!</p>
-        </div>
-
-        <!-- Footer -->
-        <div class="card-footer" id="cardFooter">
-          <span class="count" id="taskCount">0 tarefas pendentes</span>
-          <button class="clear-btn" id="clearBtn">Limpar concluídas</button>
-        </div>
+      <div class="hero-pills">
+        <span class="hero-pill">✅ Acesso imediato</span>
+        <span class="hero-pill">📱 Celular ou computador</span>
+        <span class="hero-pill">🔒 Garantia de 7 dias</span>
       </div>
-    </main>
+    </div>
   </div>
+</section>
 
-  <script src="script.js"></script>
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- PROBLEMA                                                     -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="problema">
+  <div class="container">
+    <div class="section-label reveal">A realidade da pecuária</div>
+    <h2 class="section-title reveal reveal-delay-1">
+      Vamos falar a verdade…<br>
+      Se você está na pecuária, provavelmente já passou por alguma dessas situações:
+    </h2>
+
+    <div class="problem-grid">
+      <div class="problem-card reveal reveal-delay-1">
+        <p>Comprei gado achando que ia lucrar — e no fechamento não sobrou nada.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-2">
+        <p>Não sei se a suplementação que uso tá pagando o que custa.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-3">
+        <p>Fico segurando lote sem saber se é a hora certa de vender.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-4">
+        <p>Olho pro extrato do banco e não entendo onde o dinheiro foi parar.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-5">
+        <p>Já tentei planilha, mas erro nos cálculos e acabo abandonando.</p>
+      </div>
+      <div class="problem-card reveal reveal-delay-6">
+        <p>Tomo decisão no feeling — e fico na dúvida se acertei.</p>
+      </div>
+    </div>
+
+    <div class="problem-connection reveal">
+      <p>Trabalhar sem conhecer seus números não é só desorganização.</p>
+      <div class="problem-arrow">👉 <span>É prejuízo escondido</span></div>
+      <div class="problem-arrow">👉 <span>É decisão errada todo dia</span></div>
+      <div class="problem-arrow">👉 <span>É dinheiro ficando na mesa sem você perceber</span></div>
+      <p class="problem-final">E o pior: achando que está tudo certo.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- AGRAVAMENTO                                                  -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="agravamento">
+  <div class="container">
+    <div class="section-label reveal">As consequências</div>
+    <h2 class="section-title reveal reveal-delay-1">
+      O problema é que continuar no escuro<br>só aumenta o prejuízo
+    </h2>
+
+    <div class="consequence-list">
+      <div class="consequence-item consequence-item--bad reveal reveal-delay-1">
+        <span>❌</span>
+        <span>Você compra errado — sem saber o real custo por arroba</span>
+      </div>
+      <div class="consequence-item consequence-item--bad reveal reveal-delay-2">
+        <span>❌</span>
+        <span>Você suplementa errado — sem saber se o gasto se paga</span>
+      </div>
+      <div class="consequence-item consequence-item--bad reveal reveal-delay-3">
+        <span>❌</span>
+        <span>Você segura o gado tempo demais — perdendo rentabilidade por dia</span>
+      </div>
+      <div class="consequence-item consequence-item--bad reveal reveal-delay-4">
+        <span>❌</span>
+        <span>Você vende na hora errada — sem enxergar o ponto de equilíbrio</span>
+      </div>
+      <div class="consequence-item consequence-item--bad reveal reveal-delay-5">
+        <span>❌</span>
+        <span>Você repete os mesmos erros — porque não tem número pra comparar</span>
+      </div>
+    </div>
+
+    <div class="contrast-block">
+      <div class="contrast-card contrast-card--bad reveal reveal-delay-1">
+        <h4>Sem controle</h4>
+        <ul style="list-style:none">
+          <li style="color:var(--text-3);font-size:.9rem;margin-bottom:8px">❌ Decisão no achismo</li>
+          <li style="color:var(--text-3);font-size:.9rem;margin-bottom:8px">❌ Prejuízo invisível</li>
+          <li style="color:var(--text-3);font-size:.9rem;margin-bottom:8px">❌ Erros repetidos</li>
+          <li style="color:var(--text-3);font-size:.9rem">❌ Resultado incerto</li>
+        </ul>
+      </div>
+      <div class="contrast-card contrast-card--good reveal reveal-delay-2">
+        <h4>Com os números na mão</h4>
+        <ul style="list-style:none">
+          <li style="color:var(--text-2);font-size:.9rem;margin-bottom:8px">✅ Sabem quanto custa cada decisão</li>
+          <li style="color:var(--text-2);font-size:.9rem;margin-bottom:8px">✅ Identificam onde estão perdendo</li>
+          <li style="color:var(--text-2);font-size:.9rem;margin-bottom:8px">✅ Compram, suplementam e vendem na hora certa</li>
+          <li style="color:var(--text-2);font-size:.9rem">✅ Fecham lote sabendo o lucro real</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="diferenca-box reveal">
+      <h3>A diferença?</h3>
+      <p>Não é o tamanho da fazenda.</p>
+      <p>Não é o capital disponível.</p>
+      <div class="highlight">É a clareza dos números.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ANTI-PLANILHA                                               -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="antiplanilha">
+  <div class="container--wide">
+    <div class="antiplanilha-grid">
+      <div>
+        <div class="section-label reveal">Posicionamento</div>
+        <h2 class="section-title reveal reveal-delay-1">Isso aqui não é planilha.</h2>
+
+        <div class="strike-list reveal reveal-delay-2">
+          <div class="strike-item">Planilha você preenche.</div>
+          <div class="strike-item">Planilha você erra.</div>
+          <div class="strike-item">Planilha você abandona.</div>
+        </div>
+
+        <div class="sistema-label reveal reveal-delay-3">Sistema de decisão</div>
+        <p class="sistema-desc reveal reveal-delay-3">
+          Ele faz as contas pra você e te mostra o que realmente importa:
+        </p>
+
+        <div class="decision-pills reveal reveal-delay-4">
+          <div class="decision-pill">👉 Lucro</div>
+          <div class="decision-pill">👉 Custo</div>
+          <div class="decision-pill">👉 Resultado</div>
+        </div>
+
+        <div class="device-row reveal reveal-delay-5">
+          <div class="device-item"><span>📱</span><span>Celular no campo</span></div>
+          <div class="device-item"><span>💻</span><span>Computador na sede</span></div>
+        </div>
+        <p style="margin-top:16px;font-size:.9rem;color:var(--text-3)" class="reveal reveal-delay-6">
+          Tudo automático. Sem conta manual. Sem erro.
+        </p>
+      </div>
+
+      <div class="vs-visual reveal reveal-delay-2">
+        <div class="vs-row">
+          <div class="vs-col vs-col--bad">
+            <h5>Planilha</h5>
+            <ul>
+              <li>Fórmulas manuais</li>
+              <li>Erros de digitação</li>
+              <li>Atualização lenta</li>
+              <li>Abandono garantido</li>
+              <li>Sem resultado claro</li>
+            </ul>
+          </div>
+          <div class="vs-col vs-col--good">
+            <h5>Sistema</h5>
+            <ul>
+              <li>Cálculo automático</li>
+              <li>Zero erro de fórmula</li>
+              <li>Atualização instantânea</li>
+              <li>Simples de usar</li>
+              <li>Resultado na tela</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- FERRAMENTAS                                                  -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="ferramentas">
+  <div class="container--wide">
+    <div class="section-label reveal">O que você recebe</div>
+    <h2 class="section-title reveal reveal-delay-1">Dentro do sistema você tem acesso a:</h2>
+
+    <div class="tools-grid">
+      <div class="tool-card reveal reveal-delay-1">
+        <div class="tool-icon">📊</div>
+        <div class="tool-name">Simulador de Resultados</div>
+        <div class="tool-desc">Veja o lucro estimado antes de fechar qualquer negócio</div>
+      </div>
+      <div class="tool-card reveal reveal-delay-2">
+        <div class="tool-icon">💰</div>
+        <div class="tool-name">Diluição de Ágio</div>
+        <div class="tool-desc">Saiba exatamente quanto o ágio impacta no seu resultado final</div>
+      </div>
+      <div class="tool-card reveal reveal-delay-3">
+        <div class="tool-icon">🥩</div>
+        <div class="tool-name">Cálculo de Suplementação</div>
+        <div class="tool-desc">Descubra se o que você gasta em suplemento está se pagando</div>
+      </div>
+      <div class="tool-card reveal reveal-delay-4">
+        <div class="tool-icon">🌱</div>
+        <div class="tool-name">Taxa de Lotação</div>
+        <div class="tool-desc">Calcule a capacidade ideal do seu pasto e evite superlotação</div>
+      </div>
+      <div class="tool-card reveal reveal-delay-5">
+        <div class="tool-icon">📉</div>
+        <div class="tool-name">Cálculo da Diária</div>
+        <div class="tool-desc">Saiba quanto cada animal está custando por dia na sua operação</div>
+      </div>
+      <div class="tool-card reveal reveal-delay-6">
+        <div class="tool-icon">📈</div>
+        <div class="tool-name">Apuração de Resultados Anuais</div>
+        <div class="tool-desc">Visão completa do que entrou, saiu e sobrou no ano</div>
+      </div>
+      <div class="tool-card reveal reveal-delay-1">
+        <div class="tool-icon">⚖️</div>
+        <div class="tool-name">Ponto de Equilíbrio</div>
+        <div class="tool-desc">Nunca mais venda sem saber o mínimo que precisa receber</div>
+      </div>
+      <div class="tool-card reveal reveal-delay-2">
+        <div class="tool-icon">📊</div>
+        <div class="tool-name">Custo de Produção PRO</div>
+        <div class="tool-desc">Mapeie todos os custos e encontre onde reduzir sem perder resultado</div>
+      </div>
+      <div class="tool-card reveal reveal-delay-3">
+        <div class="tool-icon">🛒</div>
+        <div class="tool-name">Simulação de Compra</div>
+        <div class="tool-desc">Simule a compra antes de fechar e veja se o negócio fecha</div>
+      </div>
+      <div class="tool-card reveal reveal-delay-4">
+        <div class="tool-icon">🐂</div>
+        <div class="tool-name">Fechamento de Lote</div>
+        <div class="tool-desc">Apure o resultado real de cada lote vendido</div>
+      </div>
+    </div>
+
+    <div class="tools-benefit reveal">
+      <h3>Você para de trabalhar no escuro.</h3>
+      <p style="color:var(--text-2);margin-bottom:20px">E começa a saber:</p>
+      <div class="benefit-arrow">👉 <span>quanto custa cada decisão</span></div>
+      <div class="benefit-arrow">👉 <span>quanto cada animal está deixando</span></div>
+      <div class="benefit-arrow">👉 <span>onde ajustar pra aumentar lucro</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- OBJEÇÕES                                                    -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="objecoes">
+  <div class="container">
+    <div class="section-label reveal">Entendemos você</div>
+    <h2 class="section-title reveal reveal-delay-1">
+      Por que até hoje você não conseguiu ter clareza dos seus números?
+    </h2>
+
+    <div class="objection-list">
+      <div class="objection-card reveal reveal-delay-1">
+        <div class="objection-num objection-num--1">1</div>
+        <div class="objection-body">
+          <h4>🔴 Você acreditou que era coisa só pra fazenda grande</h4>
+          <p>Muita gente acha que gestão financeira é pra quem tem escala. Mas o mais importante é saber cada centavo que entra e sai — independente do tamanho. No sistema, você tem ferramentas que funcionam pra qualquer operação — do iniciante ao produtor experiente.</p>
+        </div>
+      </div>
+
+      <div class="objection-card reveal reveal-delay-2">
+        <div class="objection-num objection-num--2">2</div>
+        <div class="objection-body">
+          <h4>🟠 Você tentou planilha e desistiu</h4>
+          <p>Planilhas exigem disciplina, conhecimento e tempo. Um erro numa fórmula e tudo desanda. O sistema faz os cálculos automaticamente. Você só insere os dados e lê o resultado. Sem fórmula. Sem erro. Sem abandono.</p>
+        </div>
+      </div>
+
+      <div class="objection-card reveal reveal-delay-3">
+        <div class="objection-num objection-num--3">3</div>
+        <div class="objection-body">
+          <h4>🟡 Você achou que não tinha tempo pra aprender mais uma coisa</h4>
+          <p>Por isso o sistema foi feito pra ser simples, direto e rápido. Você não precisa estudar gestão financeira. Você só precisa inserir seus números e tomar a decisão certa. E ainda tem o bônus de aulas curtas que mostram como usar cada ferramenta em minutos.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- IDENTIFICAÇÃO                                               -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="identificacao">
+  <div class="container--wide">
+    <div class="section-label reveal">Isso é pra você?</div>
+    <h2 class="section-title reveal reveal-delay-1">
+      Se você já passou por alguma dessas situações,<br>precisa ler até o fim:
+    </h2>
+
+    <div class="id-grid">
+      <div class="id-card reveal reveal-delay-1"><p>Fechei um lote e não soube dizer se lucrei ou só recuperei o investimento.</p></div>
+      <div class="id-card reveal reveal-delay-2"><p>Compro gado no feeling e fico torcendo pra dar certo.</p></div>
+      <div class="id-card reveal reveal-delay-3"><p>Já ouvi que preciso controlar os números, mas nunca soube como começar.</p></div>
+      <div class="id-card reveal reveal-delay-4"><p>Tenho uma planilha no celular que não atualizo há meses.</p></div>
+      <div class="id-card reveal reveal-delay-5"><p>Não sei calcular o custo real por arroba produzida.</p></div>
+      <div class="id-card reveal reveal-delay-6"><p>Fico inseguro na hora de negociar porque não tenho o número na cabeça.</p></div>
+      <div class="id-card reveal reveal-delay-1"><p>Já perdi dinheiro em compra que parecia boa mas não fechou bem.</p></div>
+      <div class="id-card reveal reveal-delay-2"><p>Quero profissionalizar minha operação, mas não sei por onde começar.</p></div>
+      <div class="id-card reveal reveal-delay-3"><p>Sei que estou deixando dinheiro na mesa, mas não consigo enxergar onde.</p></div>
+    </div>
+
+    <div class="id-transition reveal">
+      <p>Se você se identificou com pelo menos 3 dessas situações, esse sistema foi criado</p>
+      <div class="highlight" style="margin:12px 0">EXATAMENTE pra você.</div>
+      <p>Porque a diferença entre quem lucra na pecuária e quem só trabalha…<br>não está no tamanho da fazenda.</p>
+      <div class="highlight green-text" style="margin-top:12px">Está na clareza dos números.</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- STACK DE VALOR                                              -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="stack">
+  <div class="container">
+    <div class="section-label reveal">Tudo que você recebe</div>
+    <h2 class="section-title reveal reveal-delay-1">O que você vai receber ao adquirir o sistema:</h2>
+
+    <div class="stack-list reveal reveal-delay-2">
+      <div class="stack-item">
+        <div class="stack-item-left"><span>📊</span><span>Simulador de Resultados</span></div>
+        <span class="stack-price">R$ 47</span>
+      </div>
+      <div class="stack-item">
+        <div class="stack-item-left"><span>💰</span><span>Diluição de Ágio</span></div>
+        <span class="stack-price">R$ 47</span>
+      </div>
+      <div class="stack-item">
+        <div class="stack-item-left"><span>🥩</span><span>Cálculo de Suplementação</span></div>
+        <span class="stack-price">R$ 47</span>
+      </div>
+      <div class="stack-item">
+        <div class="stack-item-left"><span>🌱</span><span>Taxa de Lotação</span></div>
+        <span class="stack-price">R$ 37</span>
+      </div>
+      <div class="stack-item">
+        <div class="stack-item-left"><span>⚖️</span><span>Ponto de Equilíbrio</span></div>
+        <span class="stack-price">R$ 47</span>
+      </div>
+      <div class="stack-item">
+        <div class="stack-item-left"><span>📊</span><span>Custo de Produção PRO</span></div>
+        <span class="stack-price">R$ 57</span>
+      </div>
+      <div class="stack-item">
+        <div class="stack-item-left"><span>🛒</span><span>Simulação de Compra</span></div>
+        <span class="stack-price">R$ 37</span>
+      </div>
+      <div class="stack-item">
+        <div class="stack-item-left"><span>🐂</span><span>Fechamento de Lote</span></div>
+        <span class="stack-price">R$ 47</span>
+      </div>
+    </div>
+
+    <div class="bonus-card reveal reveal-delay-3">
+      <div class="bonus-label">🎁 Bônus incluído</div>
+      <div class="bonus-title">Pacote de Aulas Curtas e Diretas</div>
+      <ul class="bonus-items">
+        <li>Como usar cada ferramenta</li>
+        <li>Como interpretar os números</li>
+        <li>Como transformar isso em decisão na fazenda</li>
+      </ul>
+      <div class="bonus-price">Valor: R$ 97</div>
+    </div>
+
+    <div class="total-value reveal reveal-delay-4">
+      <div class="total-value-label">Valor total do pacote</div>
+      <div class="total-value-num">R$ 549</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- OFERTA                                                       -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="oferta">
+  <div class="container">
+    <div class="section-label reveal">Oferta especial</div>
+    <h2 class="section-title reveal reveal-delay-1">Receba tudo isso agora por apenas:</h2>
+
+    <div class="price-tag reveal reveal-delay-2">
+      <div class="price-from">De R$ 147</div>
+      <div class="price-main">R$ 67</div>
+      <div class="price-period">Acesso por 12 meses completos</div>
+    </div>
+
+    <div class="offer-triggers reveal reveal-delay-3">
+      <span class="offer-trigger">🔥 Condição especial por tempo limitado</span>
+      <span class="offer-trigger">📅 12 meses de acesso completo</span>
+      <span class="offer-trigger">📱 100% Digital — Acesso imediato</span>
+      <span class="offer-trigger">🎁 Bônus de aulas inclusos</span>
+    </div>
+
+    <div style="display:flex;justify-content:center" class="reveal reveal-delay-4">
+      <a href="#" class="btn-cta btn-cta--lg">
+        👉 QUERO TER CONTROLE TOTAL DA MINHA FAZENDA
+      </a>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card reveal reveal-delay-1">
+        <div class="step-num">1️⃣</div>
+        <h4>Você realiza a compra</h4>
+        <p>Pagamento 100% seguro via cartão, Pix ou boleto</p>
+      </div>
+      <div class="step-card reveal reveal-delay-2">
+        <div class="step-num">2️⃣</div>
+        <h4>Recebe o acesso por email</h4>
+        <p>Em menos de 2 minutos os dados de login chegam na sua caixa de entrada</p>
+      </div>
+      <div class="step-card reveal reveal-delay-3">
+        <div class="step-num">3️⃣</div>
+        <h4>Começa a decidir com segurança</h4>
+        <p>Acesse do celular ou computador e tome a primeira decisão com números na mão</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- GARANTIA                                                     -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="garantia">
+  <div class="container">
+    <div class="guarantee-box reveal">
+      <div class="guarantee-icon">🔒</div>
+      <div class="guarantee-title">7 DIAS DE RISCO ZERO</div>
+      <p class="guarantee-text">
+        Acesse o sistema, use as ferramentas, assista as aulas.<br>
+        Se por qualquer motivo você achar que não é pra você, basta enviar um email
+        e devolvemos <strong>100% do seu dinheiro.</strong>
+      </p>
+      <p class="guarantee-text">Sem perguntas. Sem burocracia.</p>
+      <p class="guarantee-strong">Você não tem absolutamente NADA a perder.</p>
+    </div>
+
+    <div style="display:flex;justify-content:center" class="reveal reveal-delay-2">
+      <a href="#" class="btn-cta btn-cta--lg">
+        👉 CLIQUE AQUI PARA TESTAR POR 7 DIAS SEM RISCO
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- FAQ                                                          -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="faq">
+  <div class="container">
+    <div class="section-label reveal">Dúvidas frequentes</div>
+    <h2 class="section-title reveal reveal-delay-1">Possíveis dúvidas</h2>
+
+    <div class="faq-list reveal reveal-delay-2">
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Preciso ter gado agora para usar o sistema?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Não necessariamente. Você pode usar o simulador para avaliar negócios antes mesmo de comprar seu primeiro lote.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>É difícil de usar?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Não. O sistema foi feito para produtores — não para contadores. Você insere os dados e ele faz os cálculos automaticamente.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Funciona para qualquer tamanho de operação?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Sim. Desde quem está começando com poucos animais até operações maiores. As ferramentas se adaptam a qualquer escala.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Como funciona o acesso?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Após a compra, você recebe login e senha por email em até 2 minutos. Acesso pelo celular ou computador, de qualquer lugar.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>O acesso tem prazo?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Sim, 12 meses a partir da data da compra. Tempo mais que suficiente para transformar a gestão da sua fazenda.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>E se eu não souber usar as ferramentas?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Por isso incluímos o bônus de aulas curtas e diretas que mostram na prática como usar cada calculadora e interpretar os resultados.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>E se eu não gostar?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Você tem 7 dias de garantia incondicional. Pediu reembolso, devolvemos 100% — sem perguntas.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Quais as formas de pagamento?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-answer">
+          <p>Cartão de crédito, Pix e boleto bancário.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- FINAL CTA                                                    -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="final-cta">
+  <div class="container">
+    <h2 class="display reveal">
+      A clareza dos números começa hoje.
+    </h2>
+    <p class="reveal reveal-delay-1">
+      Junte-se a mais de 1.000 pecuaristas que já tomam decisões com segurança.
+    </p>
+    <div style="display:flex;justify-content:center" class="reveal reveal-delay-2">
+      <a href="#" class="btn-cta btn-cta--lg">
+        👉 QUERO TER CONTROLE TOTAL DA MINHA FAZENDA
+      </a>
+    </div>
+    <p style="margin-top:24px;font-size:.85rem;color:var(--text-3)" class="reveal reveal-delay-3">
+      🔒 Pagamento seguro · 7 dias de garantia · Acesso imediato
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p>© 2025 · Gestão da Fazenda · Produto 100% digital · Todos os direitos reservados</p>
+  </div>
+</footer>
+
+<!-- ─── STICKY BAR ──────────────────────────────────────────── -->
+<div class="sticky-bar" id="stickyBar">
+  <div class="sticky-bar-text">
+    Por apenas <strong>R$ 67</strong> — Acesso completo por 12 meses
+  </div>
+  <a href="#oferta" class="btn-sticky">GARANTIR AGORA →</a>
+</div>
+
+<!-- ─── SCRIPTS ────────────────────────────────────────────── -->
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Trigger first visible elements immediately
+  document.querySelectorAll('#hero .reveal').forEach(el => {
+    el.classList.add('visible');
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Sticky bar
+  const stickyBar = document.getElementById('stickyBar');
+  const hero = document.getElementById('hero');
+  const heroObs = new IntersectionObserver(([e]) => {
+    stickyBar.classList.toggle('visible', !e.isIntersecting);
+  }, { threshold: 0 });
+  heroObs.observe(hero);
+</script>
 </body>
 </html>
