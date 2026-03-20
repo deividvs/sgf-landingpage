@@ -218,12 +218,14 @@
     .cab-botoes { display: flex; align-items: center; gap: 1.2rem; }
 
     /* ══════════════════════════════════════════════════════════ */
-    /* HERO — verde escuro                                        */
+    /* HERO — verde escuro, duas colunas                          */
     /* ══════════════════════════════════════════════════════════ */
     #hero {
-      background: var(--ver-900);
-      padding: 9.6rem 0 8rem;
-      text-align: center;
+      background: #0F3D2E;
+      background-image:
+        radial-gradient(ellipse 55% 70% at 85% 50%, rgba(22,163,74,.18) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 50% at 10% 80%, rgba(241,187,2,.07) 0%, transparent 55%);
+      padding: 8rem 0;
       position: relative;
       overflow: hidden;
     }
@@ -231,24 +233,91 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(241,187,2,.12) 0%, transparent 65%);
+      background: radial-gradient(ellipse 35% 45% at 15% 20%, rgba(241,187,2,.06) 0%, transparent 60%);
       pointer-events: none;
     }
-    .hero-headline { color: var(--white); max-width: 84rem; margin: 0 auto 2.4rem; }
+
+    /* layout duas colunas */
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6.4rem;
+      align-items: center;
+    }
+
+    /* badge */
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .6rem 1.4rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .12rem;
+      border-radius: var(--radius-full);
+      color: #4ADE80;
+      background: rgba(22,163,74,.14);
+      border: .1rem solid rgba(22,163,74,.3);
+      margin-bottom: 2.4rem;
+    }
+
+    .hero-headline {
+      font-family: var(--font-titulo);
+      font-size: 4.4rem;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -.025em;
+      color: var(--white);
+      margin-bottom: 2.4rem;
+    }
     .hero-headline em { font-style: normal; color: var(--ama-500); }
-    .hero-sub { color: rgba(255,255,255,.75); max-width: 56rem; margin: 0 auto 4rem; }
+
+    .hero-sub {
+      font-size: 1.7rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,.7);
+      margin-bottom: 4rem;
+    }
+
     .hero-cta-wrap {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 2.4rem;
+      align-items: flex-start;
+      gap: 2rem;
     }
+
+    /* botão CTA verde */
+    .botao-hero {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .8rem;
+      font-family: var(--font-corpo);
+      font-weight: 700;
+      font-size: 1.7rem;
+      padding: 1.8rem 3.2rem;
+      border-radius: 1rem;
+      border: none;
+      cursor: pointer;
+      background: #16A34A;
+      color: #fff;
+      text-decoration: none;
+      box-shadow: 0 4px 24px rgba(22,163,74,.4);
+      transition: transform .2s ease, box-shadow .2s ease;
+      min-height: 5.6rem;
+    }
+    .botao-hero:hover {
+      transform: translateY(-.2rem) scale(1.02);
+      box-shadow: 0 8px 36px rgba(22,163,74,.55);
+    }
+
     .hero-trust { font-size: 1.4rem; color: rgba(255,255,255,.6); }
     .hero-trust strong { color: rgba(255,255,255,.9); }
+
     .hero-pills {
       display: flex;
       flex-wrap: wrap;
-      justify-content: center;
       gap: .8rem;
     }
     .hero-pill {
@@ -258,6 +327,157 @@
       border: .1rem solid rgba(255,255,255,.15);
       border-radius: var(--radius-full);
       padding: .5rem 1.4rem;
+    }
+
+    /* ── dashboard mockup ─────────────────────────────────────── */
+    .hero-mockup {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+    }
+    .dash-card {
+      background: rgba(255,255,255,.05);
+      border: .1rem solid rgba(255,255,255,.1);
+      border-radius: 1.6rem;
+      padding: 2.4rem;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 24px 64px rgba(0,0,0,.35), 0 0 0 .1rem rgba(255,255,255,.06);
+    }
+    .dash-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+    }
+    .dash-logo {
+      font-family: var(--font-titulo);
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #fff;
+    }
+    .dash-logo span { color: var(--ama-500); }
+    .dash-date { font-size: 1.2rem; color: rgba(255,255,255,.45); }
+    .dash-kpis {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .dash-kpi {
+      background: rgba(255,255,255,.06);
+      border-radius: 1rem;
+      padding: 1.2rem;
+      border: .1rem solid rgba(255,255,255,.08);
+    }
+    .dash-kpi-label {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,.5);
+      margin-bottom: .4rem;
+      text-transform: uppercase;
+      letter-spacing: .06rem;
+    }
+    .dash-kpi-value {
+      font-family: var(--font-titulo);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    .dash-kpi-value.pos { color: #4ADE80; }
+    .dash-kpi-value.neg { color: #F87171; }
+    .dash-kpi-delta {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,.4);
+      margin-top: .2rem;
+    }
+
+    /* gráfico de barras CSS */
+    .dash-chart-title {
+      font-size: 1.2rem;
+      color: rgba(255,255,255,.5);
+      text-transform: uppercase;
+      letter-spacing: .06rem;
+      margin-bottom: 1.2rem;
+    }
+    .dash-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: .8rem;
+      height: 7rem;
+    }
+    .dash-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .4rem;
+      height: 100%;
+      justify-content: flex-end;
+    }
+    .dash-bar {
+      width: 100%;
+      border-radius: .4rem .4rem 0 0;
+      background: rgba(22,163,74,.5);
+      transition: background .2s;
+    }
+    .dash-bar.hl { background: #16A34A; box-shadow: 0 0 12px rgba(22,163,74,.5); }
+    .dash-bar-lbl {
+      font-size: 1rem;
+      color: rgba(255,255,255,.4);
+    }
+
+    /* card inferior: celular */
+    .dash-bottom {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1.6rem;
+      align-items: center;
+    }
+    .phone-frame {
+      width: 7rem;
+      height: 12rem;
+      background: #0a2a1e;
+      border-radius: 1.4rem;
+      border: .2rem solid rgba(255,255,255,.15);
+      padding: .8rem .5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.4);
+      flex-shrink: 0;
+    }
+    .phone-notch {
+      width: 2.4rem;
+      height: .5rem;
+      background: rgba(255,255,255,.2);
+      border-radius: 99px;
+      margin: 0 auto .4rem;
+    }
+    .phone-row {
+      height: .8rem;
+      border-radius: 99px;
+      background: rgba(255,255,255,.1);
+    }
+    .phone-row.accent { background: rgba(22,163,74,.5); }
+    .phone-row.sm { width: 60%; }
+    .dash-bottom-text { }
+    .dash-bottom-text p {
+      font-size: 1.3rem;
+      color: rgba(255,255,255,.65);
+      line-height: 1.6;
+    }
+    .dash-bottom-text strong { color: #4ADE80; }
+
+    /* responsivo hero */
+    @media (max-width: 900px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+      }
+      .hero-headline { font-size: 3.4rem; }
+      .hero-cta-wrap { align-items: center; text-align: center; }
+      .hero-badge { display: inline-flex; }
+      .hero-sub { text-align: center; }
     }
 
     /* ══════════════════════════════════════════════════════════ */
@@ -753,31 +973,120 @@
 <!-- ═══════════════════════════════════════════════════════════ -->
 <section id="hero">
   <div class="c">
-    <div class="tag reveal">🐂 Sistema de Gestão Pecuária</div>
+    <div class="hero-inner">
 
-    <h1 class="t-56 hero-headline reveal d1">
-      Se você não conhece os números da sua fazenda, você não está tomando decisão…
-      <em>está apostando</em>
-    </h1>
+      <!-- ESQUERDA: texto -->
+      <div class="hero-left">
+        <div class="hero-badge reveal">🐂 Feito para Pecuaristas</div>
 
-    <p class="c-18 hero-sub reveal d2">
-      Um sistema simples e prático que te mostra o lucro ou prejuízo, onde você está ganhando ou
-      perdendo dinheiro, direto do celular ou computador.<br><br>
-      Mesmo que você nunca tenha usado nenhuma ferramenta de gestão antes e não tenha afinidade com matemática.
-    </p>
+        <h1 class="hero-headline reveal d1">
+          Se você não conhece os números da sua fazenda, você não está tomando decisão…
+          <em>está apostando</em>
+        </h1>
 
-    <div class="hero-cta-wrap reveal d3">
-      <a href="#oferta" class="botao tam-gg">
-        👉 QUERO TER CONTROLE TOTAL DO GADO
-      </a>
-      <div class="hero-trust">
-        <strong>Mais de 1.000 pecuaristas</strong> já tomam decisões com segurança
+        <p class="hero-sub reveal d2">
+          Um sistema simples e prático que te mostra o lucro ou prejuízo, onde você está ganhando ou
+          perdendo dinheiro, direto do celular ou computador.<br><br>
+          Mesmo que você nunca tenha usado nenhuma ferramenta de gestão antes e não tenha afinidade com matemática.
+        </p>
+
+        <div class="hero-cta-wrap reveal d3">
+          <a href="#oferta" class="botao-hero">
+            👉 QUERO TER CONTROLE TOTAL DO GADO
+          </a>
+          <div class="hero-trust">
+            <strong>Mais de 1.000 pecuaristas</strong> já tomam decisões com segurança
+          </div>
+          <div class="hero-pills">
+            <span class="hero-pill">✅ Acesso imediato</span>
+            <span class="hero-pill">📱 Celular ou computador</span>
+            <span class="hero-pill">🔒 Garantia de 7 dias</span>
+          </div>
+        </div>
       </div>
-      <div class="hero-pills">
-        <span class="hero-pill">✅ Acesso imediato</span>
-        <span class="hero-pill">📱 Celular ou computador</span>
-        <span class="hero-pill">🔒 Garantia de 7 dias</span>
+
+      <!-- DIREITA: mockup dashboard -->
+      <div class="hero-right reveal d2">
+        <div class="hero-mockup">
+
+          <!-- card principal: dashboard -->
+          <div class="dash-card">
+            <div class="dash-header">
+              <div class="dash-logo">SGF<span>.</span></div>
+              <div class="dash-date">Mar 2025 · Fazenda Santa Cruz</div>
+            </div>
+
+            <div class="dash-kpis">
+              <div class="dash-kpi">
+                <div class="dash-kpi-label">Receita</div>
+                <div class="dash-kpi-value pos">R$84.200</div>
+                <div class="dash-kpi-delta">▲ 12% vs mês ant.</div>
+              </div>
+              <div class="dash-kpi">
+                <div class="dash-kpi-label">Custo Total</div>
+                <div class="dash-kpi-value neg">R$41.750</div>
+                <div class="dash-kpi-delta">▼ 3% vs mês ant.</div>
+              </div>
+              <div class="dash-kpi">
+                <div class="dash-kpi-label">Lucro Líquido</div>
+                <div class="dash-kpi-value pos">R$42.450</div>
+                <div class="dash-kpi-delta">Margem: 50,4%</div>
+              </div>
+            </div>
+
+            <div class="dash-chart-title">Lucro por Mês (R$)</div>
+            <div class="dash-bars">
+              <div class="dash-bar-wrap">
+                <div class="dash-bar" style="height:45%"></div>
+                <div class="dash-bar-lbl">Out</div>
+              </div>
+              <div class="dash-bar-wrap">
+                <div class="dash-bar" style="height:58%"></div>
+                <div class="dash-bar-lbl">Nov</div>
+              </div>
+              <div class="dash-bar-wrap">
+                <div class="dash-bar" style="height:40%"></div>
+                <div class="dash-bar-lbl">Dez</div>
+              </div>
+              <div class="dash-bar-wrap">
+                <div class="dash-bar" style="height:62%"></div>
+                <div class="dash-bar-lbl">Jan</div>
+              </div>
+              <div class="dash-bar-wrap">
+                <div class="dash-bar" style="height:72%"></div>
+                <div class="dash-bar-lbl">Fev</div>
+              </div>
+              <div class="dash-bar-wrap">
+                <div class="dash-bar hl" style="height:100%"></div>
+                <div class="dash-bar-lbl">Mar</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- card inferior: celular + texto -->
+          <div class="dash-card">
+            <div class="dash-bottom">
+              <div class="phone-frame">
+                <div class="phone-notch"></div>
+                <div class="phone-row accent"></div>
+                <div class="phone-row sm"></div>
+                <div class="phone-row"></div>
+                <div class="phone-row accent sm"></div>
+                <div class="phone-row"></div>
+                <div class="phone-row sm"></div>
+                <div class="phone-row accent"></div>
+                <div class="phone-row sm"></div>
+              </div>
+              <div class="dash-bottom-text">
+                <p>Acesse de qualquer lugar.<br>
+                <strong>Resultados em tempo real</strong> no celular ou computador, sem instalar nada.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
+
     </div>
   </div>
 </section>
