@@ -667,9 +667,9 @@
     }
     .ph-image {
       width: 100%;
-      max-width: 440px;
+      max-width: 500px;
       height: auto;
-      margin-top: 4.8rem;
+      margin: 0 auto;
       display: block;
       filter: drop-shadow(0 12px 32px rgba(11,93,76,.1));
       transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.4s ease;
@@ -711,10 +711,11 @@
       line-height: 1.65;
     }
     @media (max-width: 860px) {
-      .problem-highlight { grid-template-columns: 1fr; gap: 4rem; padding: 3.2rem; text-align: center; }
-      .ph-headline { font-size: 2.8rem; }
+      .problem-highlight { grid-template-columns: 1fr; gap: 4rem; padding: 3.2rem; text-align: left; }
+      .ph-headline { font-size: 2.8rem; text-align: center; }
       .ph-image { margin: 3.2rem auto 0; }
-      .ph-item { flex-direction: column; text-align: center; gap: 1.2rem; }
+      .ph-item { flex-direction: row; text-align: left; gap: 1.6rem; justify-content: flex-start; }
+      .ph-final { text-align: center; }
     }
 
     /* ══════════════════════════════════════════════════════════ */
@@ -1297,14 +1298,9 @@
 
     <div class="problem-highlight reveal">
 
-      <!-- Coluna esquerda: headline -->
+      <!-- Coluna esquerda: headline e itens -->
       <div class="ph-left">
-        <h3 class="ph-headline">Trabalhar sem conhecer seus números não é desorganização.</h3>
-        <img src="public/Group_27.png" alt="Gestão de Fazenda - Dashboards" class="ph-image">
-      </div>
-
-      <!-- Coluna direita: itens -->
-      <div class="ph-right">
+        <h3 class="ph-headline" style="margin-bottom: 3.2rem;">Trabalhar sem conhecer seus números não é desorganização.</h3>
 
         <div class="ph-item">
           <div class="ph-icon">
@@ -1341,7 +1337,11 @@
         </div>
 
         <p class="ph-final">E o pior: se esforçando e achando que está tudo certo.</p>
+      </div>
 
+      <!-- Coluna direita: imagem -->
+      <div class="ph-right">
+        <img src="public/Group_27.png" alt="Gestão de Fazenda - Dashboards" class="ph-image">
       </div>
     </div>
   </div>
