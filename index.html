@@ -483,40 +483,172 @@
     /* ══════════════════════════════════════════════════════════ */
     /* PROBLEMA — branco                                          */
     /* ══════════════════════════════════════════════════════════ */
-    #problema { background: var(--white); }
+    #problema { background: var(--neu-50); position: relative; overflow: hidden; }
     #problema .section-title { max-width: 68rem; margin-bottom: 4.8rem; }
-    .problem-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(26rem, 1fr));
-      gap: 2rem;
-      margin-bottom: 4.8rem;
-    }
-    .problem-card {
-      position: relative;
-      background: var(--white);
-      border: .1rem solid var(--neu-100);
-      border-radius: var(--radius-card);
-      padding: 2.4rem;
-      box-shadow: var(--shadow-card);
-      transition: box-shadow .2s ease;
-    }
-    .problem-card:hover { box-shadow: 0 1.4rem 3.2rem 0 rgba(37,37,49,.16); }
-    .problem-card::before {
-      content: '"';
-      font-family: var(--font-titulo);
-      font-size: 5rem;
-      line-height: 0;
-      color: var(--ama-500);
-      opacity: .35;
+
+    /* ── Floating emojis ────────────────────────────────────── */
+    .sp-emoji {
       position: absolute;
-      top: 2.8rem;
-      left: 1.8rem;
+      opacity: .09;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+      font-style: normal;
     }
-    .problem-card p {
-      font-size: 1.5rem;
+
+    /* ── Social Proof Container ─────────────────────────────── */
+    .social-proof-container {
+      display: grid;
+      grid-template-columns: 38rem .1rem 1fr;
+      background: var(--white);
+      border-radius: 2rem;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      margin-bottom: 4.8rem;
+      position: relative;
+      z-index: 1;
+      min-height: 40rem;
+    }
+
+    /* ── Left column ──────────────────────────────────────────── */
+    .sp-left {
+      padding: 5.6rem 4.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--white);
+    }
+    .sp-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: .6rem 1.6rem;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .1rem;
+      border-radius: 99rem;
+      color: #1D4ED8;
+      background: #EFF6FF;
+      border: .1rem solid #BFDBFE;
+      margin-bottom: 3.6rem;
+      width: fit-content;
+    }
+    .sp-stat {
+      font-family: var(--font-titulo);
+      font-size: 10.4rem;
+      font-weight: 800;
+      line-height: 1;
+      color: #0B5D4C;
+      letter-spacing: -.04em;
+      margin-bottom: 1.6rem;
+    }
+    .sp-stat-text {
+      font-size: 1.7rem;
       color: var(--neu-600);
+      line-height: 1.65;
+      max-width: 26rem;
+      margin-bottom: 3.2rem;
+    }
+    .sp-stars { display: flex; gap: .5rem; align-items: center; }
+    .sp-star  { width: 2.8rem; height: 2.8rem; }
+
+    /* ── Vertical divider ────────────────────────────────────── */
+    .sp-divider { background: var(--neu-100); margin: 4rem 0; }
+
+    /* ── Right column ────────────────────────────────────────── */
+    .sp-right {
+      padding: 5.6rem 4.8rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .sp-quote-icon {
+      font-family: Georgia, serif;
+      font-size: 8rem;
+      line-height: .7;
+      color: var(--ama-500);
+      margin-bottom: 2.4rem;
+    }
+    .sp-testimonials { flex: 1; min-height: 16rem; }
+    .sp-testimonial-item { display: none; }
+    .sp-testimonial-item.active {
+      display: block;
+      animation: spFadeIn .45s ease;
+    }
+    @keyframes spFadeIn {
+      from { opacity: 0; transform: translateY(1.4rem); }
+      to   { opacity: 1; transform: none; }
+    }
+    .sp-testimonial-text {
+      font-size: 1.75rem;
+      color: var(--neu-700);
+      line-height: 1.9;
+      margin-bottom: 3.2rem;
       font-style: italic;
-      padding-top: 2.2rem;
+    }
+    .sp-author { display: flex; align-items: center; gap: 1.6rem; }
+    .sp-avatar {
+      width: 5.2rem;
+      height: 5.2rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-titulo);
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--white);
+      flex-shrink: 0;
+      box-shadow: 0 .4rem 1.2rem rgba(0,0,0,.18);
+    }
+    .sp-author-name {
+      font-family: var(--font-titulo);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--neu-900);
+      margin-bottom: .3rem;
+    }
+    .sp-author-location { font-size: 1.3rem; color: var(--neu-400); }
+
+    /* ── Carousel navigation ─────────────────────────────────── */
+    .sp-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-top: 3.2rem;
+    }
+    .sp-counter {
+      font-size: 1.4rem;
+      color: var(--neu-400);
+      font-weight: 500;
+      margin-right: auto;
+    }
+    .sp-arrows { display: flex; gap: .8rem; }
+    .sp-arrow {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 50%;
+      border: .15rem solid var(--neu-200);
+      background: var(--white);
+      color: var(--neu-700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all .2s ease;
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+    .sp-arrow:hover {
+      border-color: var(--ver-800);
+      color: var(--ver-800);
+      background: var(--ver-50);
+    }
+
+    @media (max-width: 900px) {
+      .social-proof-container { grid-template-columns: 1fr; }
+      .sp-divider { width: calc(100% - 6.4rem); height: .1rem; margin: 0 3.2rem; }
+      .sp-left, .sp-right { padding: 3.2rem; }
+      .sp-stat { font-size: 7.6rem; }
     }
     .problem-connection {
       background: var(--ver-50);
@@ -1020,20 +1152,129 @@
 <!-- PROBLEMA — branco                                            -->
 <!-- ═══════════════════════════════════════════════════════════ -->
 <section id="problema">
-  <div class="c">
+  <div class="c" style="position:relative">
+
+    <!-- Floating emojis -->
+    <span class="sp-emoji" style="font-size:3.2rem;top:6%;left:1%">😊</span>
+    <span class="sp-emoji" style="font-size:2rem;top:18%;right:4%">😊</span>
+    <span class="sp-emoji" style="font-size:2.8rem;top:52%;left:6%">😊</span>
+    <span class="sp-emoji" style="font-size:1.8rem;bottom:28%;right:9%">😊</span>
+    <span class="sp-emoji" style="font-size:3.6rem;bottom:12%;left:38%">😊</span>
+    <span class="sp-emoji" style="font-size:2.4rem;top:38%;right:18%">😊</span>
+
     <div class="tag tag--light reveal">A realidade da pecuária</div>
     <h2 class="t-40 section-title reveal d1">
       Vamos falar a verdade…<br>
       Se você está na pecuária, provavelmente já passou por alguma dessas situações:
     </h2>
 
-    <div class="problem-grid">
-      <div class="problem-card reveal d1"><p>Comprei gado achando que ia dar lucro e no fechamento não sobrou nada.</p></div>
-      <div class="problem-card reveal d2"><p>Não sei se a suplementação que uso tá pagando o que custa.</p></div>
-      <div class="problem-card reveal d3"><p>Fico segurando lote sem saber se é a hora certa de vender.</p></div>
-      <div class="problem-card reveal d4"><p>Olho pro extrato do banco e não entendo onde o dinheiro foi parar.</p></div>
-      <div class="problem-card reveal d5"><p>Já tentei planilha, mas erro nos cálculos e acabo abandonando.</p></div>
-      <div class="problem-card reveal d6"><p>Tomo decisão por intuição e fico na dúvida se acertei.</p></div>
+    <div class="social-proof-container reveal d2">
+
+      <!-- ── Coluna esquerda: estatística ── -->
+      <div class="sp-left">
+        <div class="sp-badge">FAÇA PARTE VOCÊ TAMBÉM</div>
+        <div class="sp-stat">99%</div>
+        <p class="sp-stat-text">das pessoas que usaram o SGF ficaram satisfeitas</p>
+        <div class="sp-stars">
+          <!-- 4 estrelas cheias -->
+          <svg class="sp-star" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#F59E0B"/></svg>
+          <svg class="sp-star" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#F59E0B"/></svg>
+          <svg class="sp-star" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#F59E0B"/></svg>
+          <svg class="sp-star" viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="#F59E0B"/></svg>
+          <!-- 1 estrela parcial (metade) -->
+          <svg class="sp-star" viewBox="0 0 24 24">
+            <defs><linearGradient id="halfG"><stop offset="50%" stop-color="#F59E0B"/><stop offset="50%" stop-color="#E5E7EB"/></linearGradient></defs>
+            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="url(#halfG)"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- ── Divisória vertical ── -->
+      <div class="sp-divider"></div>
+
+      <!-- ── Coluna direita: carrossel ── -->
+      <div class="sp-right">
+        <div class="sp-quote-icon">"</div>
+
+        <div class="sp-testimonials">
+
+          <div class="sp-testimonial-item active">
+            <p class="sp-testimonial-text">Comprei gado achando que ia dar lucro e no fechamento não sobrou nada.</p>
+            <div class="sp-author">
+              <div class="sp-avatar" style="background:#0B5D4C">ES</div>
+              <div>
+                <div class="sp-author-name">Edson Sguizzatto</div>
+                <div class="sp-author-location">Belo Horizonte - MG</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sp-testimonial-item">
+            <p class="sp-testimonial-text">Não sei se a suplementação que uso tá pagando o que custa.</p>
+            <div class="sp-author">
+              <div class="sp-avatar" style="background:#1D4ED8">CR</div>
+              <div>
+                <div class="sp-author-name">Carlos Rodrigues</div>
+                <div class="sp-author-location">Goiânia - GO</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sp-testimonial-item">
+            <p class="sp-testimonial-text">Fico segurando lote sem saber se é a hora certa de vender.</p>
+            <div class="sp-author">
+              <div class="sp-avatar" style="background:#7C3AED">RA</div>
+              <div>
+                <div class="sp-author-name">Roberto Alves</div>
+                <div class="sp-author-location">Uberlândia - MG</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sp-testimonial-item">
+            <p class="sp-testimonial-text">Olho pro extrato do banco e não entendo onde o dinheiro foi parar.</p>
+            <div class="sp-author">
+              <div class="sp-avatar" style="background:#B45309">PF</div>
+              <div>
+                <div class="sp-author-name">Paulo Ferreira</div>
+                <div class="sp-author-location">Campo Grande - MS</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sp-testimonial-item">
+            <p class="sp-testimonial-text">Já tentei planilha, mas erro nos cálculos e acabo abandonando.</p>
+            <div class="sp-author">
+              <div class="sp-avatar" style="background:#DC2626">JS</div>
+              <div>
+                <div class="sp-author-name">José Santos</div>
+                <div class="sp-author-location">Cuiabá - MT</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sp-testimonial-item">
+            <p class="sp-testimonial-text">Tomo decisão por intuição e fico na dúvida se acertei.</p>
+            <div class="sp-author">
+              <div class="sp-avatar" style="background:#059669">AL</div>
+              <div>
+                <div class="sp-author-name">Antônio Lima</div>
+                <div class="sp-author-location">Ribeirão Preto - SP</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="sp-nav">
+          <span class="sp-counter" id="spCounter">1 / 6</span>
+          <div class="sp-arrows">
+            <button class="sp-arrow" id="spPrev" aria-label="Anterior">&#8592;</button>
+            <button class="sp-arrow" id="spNext" aria-label="Próximo">&#8594;</button>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div class="problem-connection reveal">
@@ -1446,6 +1687,27 @@
   const stickyBar = document.getElementById('stickyBar');
   new IntersectionObserver(([e]) => stickyBar.classList.toggle('visible', !e.isIntersecting), { threshold: 0 })
     .observe(document.getElementById('hero'));
+
+  /* ── Carrossel de depoimentos ──────────────────────────── */
+  const spItems   = document.querySelectorAll('.sp-testimonial-item');
+  const spCounter = document.getElementById('spCounter');
+  let spCurrent = 0;
+
+  function showTestimonial(idx) {
+    spItems.forEach(el => el.classList.remove('active'));
+    spItems[idx].classList.add('active');
+    spCounter.textContent = `${idx + 1} / ${spItems.length}`;
+  }
+
+  document.getElementById('spNext').addEventListener('click', () => {
+    spCurrent = (spCurrent + 1) % spItems.length;
+    showTestimonial(spCurrent);
+  });
+
+  document.getElementById('spPrev').addEventListener('click', () => {
+    spCurrent = (spCurrent - 1 + spItems.length) % spItems.length;
+    showTestimonial(spCurrent);
+  });
 </script>
 </body>
 </html>
