@@ -650,33 +650,60 @@
       .sp-left, .sp-right { padding: 3.2rem; }
       .sp-stat { font-size: 7.6rem; }
     }
-    .problem-connection {
-      background: var(--ver-50);
-      border-left: .4rem solid var(--ver-800);
-      border-radius: 0 var(--radius-card) var(--radius-card) 0;
-      padding: 3.2rem 4rem;
-      max-width: 64rem;
+    /* ── Problem Highlight (two-col layout) ─────────────────── */
+    .problem-highlight {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 8rem;
+      align-items: start;
+      background: var(--white);
+      border-radius: var(--radius-card);
+      padding: 6.4rem;
+      box-shadow: var(--shadow-card);
     }
-    .problem-connection > p {
-      font-size: 1.7rem;
-      font-weight: 600;
-      color: var(--neu-800);
-      margin-bottom: 1.6rem;
+    .ph-headline {
+      font-family: var(--font-titulo);
+      font-size: 3.8rem;
+      font-weight: 800;
+      color: var(--neu-900);
+      line-height: 1.2;
+      letter-spacing: -.025em;
     }
-    .problem-arrow {
+    .ph-item {
       display: flex;
-      align-items: flex-start;
-      gap: .8rem;
-      margin-bottom: .8rem;
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--ver-800);
+      align-items: center;
+      gap: 2rem;
+      padding: 2.8rem 0;
     }
-    .problem-final {
-      margin-top: 1.6rem;
-      font-size: 1.3rem;
-      color: var(--neu-500);
+    .ph-icon {
+      width: 5.6rem;
+      height: 5.6rem;
+      border-radius: 50%;
+      background: var(--ver-900);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .ph-item-title {
+      font-family: var(--font-titulo);
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--neu-900);
+      line-height: 1.3;
+    }
+    .ph-divider-line { height: .1rem; background: var(--neu-100); }
+    .ph-final {
+      padding-top: 2.8rem;
+      font-size: 1.6rem;
       font-style: italic;
+      font-weight: 600;
+      color: var(--neu-600);
+      line-height: 1.65;
+    }
+    @media (max-width: 860px) {
+      .problem-highlight { grid-template-columns: 1fr; gap: 4rem; padding: 3.2rem; }
+      .ph-headline { font-size: 2.8rem; }
     }
 
     /* ══════════════════════════════════════════════════════════ */
@@ -1265,12 +1292,53 @@
 
     </div>
 
-    <div class="problem-connection reveal">
-      <p>Trabalhar sem conhecer seus números não é desorganização.</p>
-      <div class="problem-arrow">👉 <span>É prejuízo escondido</span></div>
-      <div class="problem-arrow">👉 <span>É decisão errada todo dia</span></div>
-      <div class="problem-arrow">👉 <span>É dinheiro ficando na mesa sem você perceber</span></div>
-      <p class="problem-final">E o pior: se esforçando e achando que está tudo certo.</p>
+    <div class="problem-highlight reveal">
+
+      <!-- Coluna esquerda: headline -->
+      <div class="ph-left">
+        <h3 class="ph-headline">Trabalhar sem conhecer seus números não é desorganização.</h3>
+      </div>
+
+      <!-- Coluna direita: itens -->
+      <div class="ph-right">
+
+        <div class="ph-item">
+          <div class="ph-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div class="ph-item-title">É prejuízo escondido</div>
+        </div>
+
+        <div class="ph-divider-line"></div>
+
+        <div class="ph-item">
+          <div class="ph-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+          </div>
+          <div class="ph-item-title">É decisão errada todo dia</div>
+        </div>
+
+        <div class="ph-divider-line"></div>
+
+        <div class="ph-item">
+          <div class="ph-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <div class="ph-item-title">É dinheiro ficando na mesa sem você perceber</div>
+        </div>
+
+        <p class="ph-final">E o pior: se esforçando e achando que está tudo certo.</p>
+
+      </div>
     </div>
   </div>
 </section>
