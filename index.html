@@ -6,186 +6,347 @@
   <title>SGF — Sistema de Gestão da Fazenda</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Source+Sans+3:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
-    /* ─── DESIGN TOKENS (Contas Online inspired) ─────────────── */
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* DESIGN TOKENS — Precision Agriculture                          */
+    /* ═══════════════════════════════════════════════════════════════ */
     :root {
-      --ver-900: #014C3C;
-      --ver-800: #00654E;
-      --ver-700: #008060;
-      --ver-50:  #F2F8F5;
-      --ver-100: #DAF1E6;
-      --ama-500: #F1BB02;
-      --ama-400: #FFD40F;
-      --neu-900: #252531;
-      --neu-800: #393A53;
-      --neu-700: #424462;
-      --neu-600: #505279;
-      --neu-500: #656992;
-      --neu-400: #8488AC;
-      --neu-200: #D5D6E2;
-      --neu-100: #ECECF2;
-      --neu-50:  #F6F6F9;
-      --white:   #FFFFFF;
-      --ama-bg:  #FFFCE7;
+      /* ── Deep Greens (primary) ────────────── */
+      --forest-950: #021A0E;
+      --forest-900: #03261A;
+      --forest-800: #064C34;
+      --forest-700: #0A7B54;
+      --forest-600: #0E9F6E;
+      --forest-500: #16B87E;
+      --forest-400: #3DDBA0;
+      --forest-300: #7AEBC4;
+      --forest-100: #D1FAE5;
+      --forest-50:  #ECFDF5;
 
-      --font-titulo: 'Plus Jakarta Sans', sans-serif;
-      --font-corpo:  'Inter', sans-serif;
+      /* ── Warm Amber (accent) ──────────────── */
+      --amber-600: #B8860B;
+      --amber-500: #D4A017;
+      --amber-400: #E8B931;
+      --amber-300: #F5D062;
+      --amber-100: #FEF3C7;
+      --amber-50:  #FFFBEB;
 
-      --radius-btn:  1.2rem;
-      --radius-card: 1.2rem;
+      /* ── Warm Neutrals ────────────────────── */
+      --earth-900: #1C1917;
+      --earth-800: #292524;
+      --earth-700: #44403C;
+      --earth-600: #57534E;
+      --earth-500: #78716C;
+      --earth-400: #A8A29E;
+      --earth-300: #D6D3D1;
+      --earth-200: #E7E5E4;
+      --earth-100: #F5F5F4;
+      --earth-50:  #FAFAF9;
+
+      /* ── Warm Backgrounds ─────────────────── */
+      --cream:      #FAF8F3;
+      --cream-dark: #F3EFE7;
+      --parchment:  #EDE8DB;
+
+      /* ── Semantic ─────────────────────────── */
+      --danger:    #B91C1C;
+      --danger-bg: #FEF2F2;
+      --danger-border: #FECACA;
+      --white:     #FFFFFF;
+
+      /* ── Typography ───────────────────────── */
+      --font-display: 'Bricolage Grotesque', sans-serif;
+      --font-body:    'Source Sans 3', sans-serif;
+      --font-mono:    'DM Mono', monospace;
+
+      /* ── Radius ───────────────────────────── */
+      --radius-sm:   0.6rem;
+      --radius-md:   1.0rem;
+      --radius-lg:   1.6rem;
+      --radius-xl:   2.4rem;
       --radius-full: 99rem;
 
-      --shadow-card:  0 1rem 2rem 0 rgba(37,37,49,.12);
-      --shadow-green: 0 1rem 2rem 0 rgba(1,76,60,.1);
-      --trans: all .2s linear;
+      /* ── Shadows ──────────────────────────── */
+      --shadow-sm:    0 1px 3px rgba(28,25,23,.06);
+      --shadow-md:    0 4px 16px rgba(28,25,23,.08);
+      --shadow-lg:    0 12px 32px rgba(28,25,23,.12);
+      --shadow-xl:    0 24px 64px rgba(28,25,23,.16);
+      --shadow-glow:  0 0 48px rgba(14,159,110,.15);
+      --shadow-amber: 0 0 48px rgba(212,160,23,.12);
+
+      /* ── Easing ───────────────────────────── */
+      --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    /* ─── RESET ──────────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* RESET                                                          */
+    /* ═══════════════════════════════════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { font-size: 62.5%; scroll-behavior: smooth; }
     body {
-      font-family: var(--font-corpo);
+      font-family: var(--font-body);
       font-size: 1.6rem;
-      color: var(--neu-900);
-      background: var(--white);
-      line-height: 1.5;
+      color: var(--earth-800);
+      background: var(--cream);
+      line-height: 1.6;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
+    ::selection { background: var(--forest-300); color: var(--forest-950); }
     img { max-width: 100%; display: block; }
     a { color: inherit; text-decoration: none; }
     ul { list-style: none; }
 
-    /* ─── LAYOUT ─────────────────────────────────────────────── */
-    .c {
-      max-width: 120rem;
-      margin: 0 auto;
-      padding: 0 3.2rem;
-    }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* LAYOUT                                                         */
+    /* ═══════════════════════════════════════════════════════════════ */
+    .c { max-width: 120rem; margin: 0 auto; padding: 0 3.2rem; }
     section { padding: 9.6rem 0; }
 
-    /* ─── ANIMATIONS ─────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* ANIMATIONS                                                     */
+    /* ═══════════════════════════════════════════════════════════════ */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(3.2rem); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.94); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes spFadeIn {
+      from { opacity: 0; transform: translateY(1.4rem); }
+      to   { opacity: 1; transform: none; }
+    }
+
     .reveal {
       opacity: 0;
-      transform: translateY(2.4rem);
-      transition: opacity .55s ease, transform .55s ease;
+      transform: translateY(2.8rem);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
     }
     .reveal.visible { opacity: 1; transform: none; }
-    .d1 { transition-delay: .08s; }
-    .d2 { transition-delay: .16s; }
-    .d3 { transition-delay: .24s; }
-    .d4 { transition-delay: .32s; }
-    .d5 { transition-delay: .40s; }
-    .d6 { transition-delay: .48s; }
+    .d1 { transition-delay: .06s; }
+    .d2 { transition-delay: .12s; }
+    .d3 { transition-delay: .18s; }
+    .d4 { transition-delay: .24s; }
+    .d5 { transition-delay: .30s; }
+    .d6 { transition-delay: .36s; }
+    .d7 { transition-delay: .42s; }
 
-    /* ─── TAG / BADGE ────────────────────────────────────────── */
+    /* Hero CSS-only entry animations */
+    #hero .hero-badge    { animation: fadeSlideUp 0.8s var(--ease-out) 0.1s both; }
+    #hero .hero-headline { animation: fadeSlideUp 0.8s var(--ease-out) 0.2s both; }
+    #hero .hero-sub      { animation: fadeSlideUp 0.8s var(--ease-out) 0.35s both; }
+    #hero .hero-cta-wrap { animation: fadeSlideUp 0.8s var(--ease-out) 0.5s both; }
+    #hero .hero-right    { animation: scaleIn 1s var(--ease-out) 0.4s both; }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* INLINE SVG ICON BASE                                           */
+    /* ═══════════════════════════════════════════════════════════════ */
+    .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .icon svg {
+      width: 2rem;
+      height: 2rem;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .icon--sm svg { width: 1.4rem; height: 1.4rem; }
+    .icon--lg svg { width: 2.4rem; height: 2.4rem; }
+    .icon--xl svg { width: 3.2rem; height: 3.2rem; }
+    .icon-circle {
+      width: 4.8rem;
+      height: 4.8rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .icon-circle svg {
+      width: 2.2rem;
+      height: 2.2rem;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* TAGS / BADGES                                                  */
+    /* ═══════════════════════════════════════════════════════════════ */
     .tag {
       display: inline-flex;
       align-items: center;
-      gap: .8rem;
-      padding: .7rem 1.6rem;
-      font-family: var(--font-corpo);
-      font-size: 1.2rem;
-      font-weight: 400;
-      line-height: 1.5;
+      gap: 0.6rem;
+      padding: 0.6rem 1.6rem;
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: .1rem;
+      letter-spacing: 0.14em;
       border-radius: var(--radius-full);
-      color: var(--white);
-      background: var(--ver-900);
       margin-bottom: 2.4rem;
-    }
-    .tag--ama {
-      color: var(--neu-900);
-      background: var(--ama-500);
+      /* default: dark context */
+      color: var(--amber-400);
+      background: rgba(232,185,49,.1);
+      border: 1px solid rgba(232,185,49,.2);
     }
     .tag--light {
-      color: var(--ver-900);
-      background: var(--ver-100);
+      color: var(--forest-700);
+      background: var(--forest-50);
+      border: 1px solid var(--forest-100);
     }
 
-    /* ─── TÍTULOS ────────────────────────────────────────────── */
-    .t-56 { font-family: var(--font-titulo); font-size: 5.6rem; font-weight: 700; line-height: 1.2; letter-spacing: -.018em; }
-    .t-48 { font-family: var(--font-titulo); font-size: 4.8rem; font-weight: 700; line-height: 1.2; letter-spacing: -.018em; }
-    .t-40 { font-family: var(--font-titulo); font-size: 4rem;   font-weight: 700; line-height: 1.2; letter-spacing: -.018em; }
-    .t-32 { font-family: var(--font-titulo); font-size: 3.2rem; font-weight: 700; line-height: 1.2; letter-spacing: -.018em; }
-    .t-24 { font-family: var(--font-titulo); font-size: 2.4rem; font-weight: 600; line-height: 1.3; }
-    .c-18 { font-size: 1.8rem; line-height: 1.5; }
-    .c-16 { font-size: 1.6rem; line-height: 1.5; }
-    .c-14 { font-size: 1.4rem; line-height: 1.5; }
-    .c-12 { font-size: 1.2rem; line-height: 1.5; }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* TYPOGRAPHY UTILITY                                              */
+    /* ═══════════════════════════════════════════════════════════════ */
+    .t-72 { font-family: var(--font-display); font-size: 7.2rem; font-weight: 800; line-height: 1.08; letter-spacing: -.035em; }
+    .t-48 { font-family: var(--font-display); font-size: 4.8rem; font-weight: 700; line-height: 1.15; letter-spacing: -.025em; }
+    .t-44 { font-family: var(--font-display); font-size: 4.4rem; font-weight: 700; line-height: 1.15; letter-spacing: -.025em; }
+    .t-40 { font-family: var(--font-display); font-size: 4rem; font-weight: 700; line-height: 1.2; letter-spacing: -.02em; }
+    .t-32 { font-family: var(--font-display); font-size: 3.2rem; font-weight: 700; line-height: 1.2; letter-spacing: -.02em; }
+    .t-28 { font-family: var(--font-display); font-size: 2.8rem; font-weight: 600; line-height: 1.3; }
+    .t-24 { font-family: var(--font-display); font-size: 2.4rem; font-weight: 600; line-height: 1.3; }
 
-    /* ─── BUTTONS ────────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* BUTTONS                                                        */
+    /* ═══════════════════════════════════════════════════════════════ */
     .botao {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: .8rem;
-      font-family: var(--font-corpo);
-      font-weight: 600;
-      font-size: 1.4rem;
-      line-height: 1.5;
-      padding: 1.2rem 1.8rem;
-      border-radius: var(--radius-btn);
+      gap: 0.8rem;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 1.5rem;
+      letter-spacing: 0.02em;
+      padding: 1.4rem 2.4rem;
+      border-radius: var(--radius-md);
       border: none;
       cursor: pointer;
       text-align: center;
-      transition: var(--trans);
-      color: var(--ver-900);
-      background: var(--ama-500);
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--amber-400) 0%, var(--amber-500) 100%);
+      color: var(--forest-950);
+      box-shadow: 0 2px 12px rgba(212,160,23,.25);
+      transition: transform 0.15s var(--ease-spring), box-shadow 0.3s ease;
     }
-    .botao:hover { background: var(--ama-400); }
-    .botao.tam-g {
-      font-size: 1.6rem;
-      padding: 1.6rem 2.4rem;
+    .botao:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(212,160,23,.35);
     }
+    .botao:active { transform: translateY(0); }
+
+    .botao.tam-g { font-size: 1.6rem; padding: 1.6rem 2.8rem; }
     .botao.tam-gg {
-      font-size: 1.8rem;
+      font-size: 1.7rem;
       padding: 1.8rem 3.2rem;
       width: 100%;
       max-width: 52rem;
     }
     .botao.sec {
+      background: linear-gradient(135deg, var(--forest-600) 0%, var(--forest-800) 100%);
       color: var(--white);
-      background: var(--ver-800);
+      box-shadow: 0 2px 12px rgba(14,159,110,.25);
     }
-    .botao.sec:hover { background: var(--ver-700); }
+    .botao.sec:hover { box-shadow: 0 8px 28px rgba(14,159,110,.35); }
     .botao.fantasma {
       color: var(--white);
       background: transparent;
-      box-shadow: inset 0 0 0 .15rem rgba(255,255,255,.4);
+      box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.25);
     }
     .botao.fantasma:hover {
-      background: rgba(255,255,255,.08);
-      box-shadow: inset 0 0 0 .15rem rgba(255,255,255,.7);
+      background: rgba(255,255,255,.06);
+      box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.5);
     }
 
-    /* ─── CARD ───────────────────────────────────────────────── */
+    .botao-hero {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 1.8rem;
+      padding: 2rem 3.6rem;
+      border-radius: var(--radius-md);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--forest-600) 0%, var(--forest-800) 100%);
+      color: #fff;
+      box-shadow:
+        0 0 0 1px rgba(14,159,110,.3),
+        0 8px 32px rgba(14,159,110,.4),
+        inset 0 1px 0 rgba(255,255,255,.1);
+      transition: transform 0.15s var(--ease-spring), box-shadow 0.3s ease;
+      min-height: 5.6rem;
+    }
+    .botao-hero:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow:
+        0 0 0 1px rgba(14,159,110,.5),
+        0 16px 48px rgba(14,159,110,.55),
+        inset 0 1px 0 rgba(255,255,255,.15);
+    }
+    .botao-hero:active { transform: translateY(0) scale(1); }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* CARDS                                                          */
+    /* ═══════════════════════════════════════════════════════════════ */
     .cartao {
       background: var(--white);
-      border-radius: var(--radius-card);
-      box-shadow: var(--shadow-card);
+      border: 1px solid var(--earth-200);
+      border-radius: var(--radius-lg);
       padding: 3.2rem;
-      transition: box-shadow .2s ease, transform .2s ease;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.3s ease, transform 0.2s var(--ease-out);
     }
     .cartao:hover {
-      box-shadow: 0 1.4rem 3.2rem 0 rgba(37,37,49,.18);
-      transform: translateY(-.2rem);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+    }
+    .cartao-dark {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius-lg);
+      padding: 2.8rem;
+      backdrop-filter: blur(12px);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .cartao-dark:hover {
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.14);
     }
 
-    /* ─── DIVIDER ────────────────────────────────────────────── */
-    .divider { height: .1rem; background: var(--neu-100); }
-    .divider--dark { background: rgba(255,255,255,.08); }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* DIVIDER                                                        */
+    /* ═══════════════════════════════════════════════════════════════ */
+    .divider { height: 1px; background: var(--earth-200); }
+    .divider--dark { background: rgba(255,255,255,.06); }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* NAVBAR                                                      */
-    /* ══════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* NAVBAR                                                         */
+    /* ═══════════════════════════════════════════════════════════════ */
     .cabecalho {
       position: sticky;
       top: 0;
       z-index: 999;
-      background: var(--ver-900);
-      padding: 2rem 0;
+      background: rgba(2,26,14,.92);
+      backdrop-filter: blur(2rem);
+      -webkit-backdrop-filter: blur(2rem);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      padding: 1.8rem 0;
     }
     .cabecalho .c {
       display: flex;
@@ -194,38 +355,39 @@
       gap: 3.2rem;
     }
     .logo {
-      font-family: var(--font-titulo);
+      font-family: var(--font-display);
       font-size: 2.2rem;
       font-weight: 800;
       color: var(--white);
       letter-spacing: -.02em;
     }
-    .logo span { color: var(--ama-500); }
+    .logo span { color: var(--amber-400); }
     .cabecalho nav {
       display: flex;
       align-items: center;
-      gap: .4rem;
+      gap: 0.4rem;
     }
     .cabecalho nav a {
       font-size: 1.4rem;
-      font-weight: 400;
-      color: rgba(255,255,255,.85);
-      padding: .8rem 1.2rem;
-      border-radius: .8rem;
-      transition: var(--trans);
+      font-weight: 500;
+      color: rgba(255,255,255,.75);
+      padding: 0.8rem 1.2rem;
+      border-radius: var(--radius-sm);
+      transition: color 0.2s, background 0.2s;
     }
     .cabecalho nav a:hover { color: var(--white); background: rgba(255,255,255,.08); }
     .cab-botoes { display: flex; align-items: center; gap: 1.2rem; }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* HERO — verde escuro, duas colunas                          */
-    /* ══════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* HERO                                                           */
+    /* ═══════════════════════════════════════════════════════════════ */
     #hero {
-      background: #0F3D2E;
+      background: var(--forest-950);
       background-image:
-        radial-gradient(ellipse 55% 70% at 85% 50%, rgba(22,163,74,.18) 0%, transparent 60%),
-        radial-gradient(ellipse 40% 50% at 10% 80%, rgba(241,187,2,.07) 0%, transparent 55%);
-      padding: 8rem 0;
+        radial-gradient(ellipse 50% 60% at 80% 40%, rgba(14,159,110,.2) 0%, transparent 60%),
+        radial-gradient(ellipse 35% 50% at 15% 75%, rgba(212,160,23,.06) 0%, transparent 55%),
+        radial-gradient(ellipse 80% 30% at 50% -10%, rgba(10,123,84,.15) 0%, transparent 50%);
+      padding: 10rem 0 12.8rem;
       position: relative;
       overflow: hidden;
     }
@@ -233,11 +395,11 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 35% 45% at 15% 20%, rgba(241,187,2,.06) 0%, transparent 60%);
+      background-image: radial-gradient(rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 32px 32px;
       pointer-events: none;
     }
 
-    /* layout duas colunas */
     .hero-inner {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -245,38 +407,43 @@
       align-items: center;
     }
 
-    /* badge */
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: .6rem;
-      padding: .6rem 1.4rem;
+      gap: 0.8rem;
+      padding: 0.6rem 1.6rem;
       font-size: 1.1rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: .12rem;
+      letter-spacing: 0.12em;
       border-radius: var(--radius-full);
-      color: #4ADE80;
-      background: rgba(22,163,74,.14);
-      border: .1rem solid rgba(22,163,74,.3);
+      color: var(--forest-400);
+      background: rgba(14,159,110,.1);
+      border: 1px solid rgba(14,159,110,.25);
       margin-bottom: 2.4rem;
     }
 
     .hero-headline {
-      font-family: var(--font-titulo);
-      font-size: 4.4rem;
+      font-family: var(--font-display);
+      font-size: 4.6rem;
       font-weight: 800;
-      line-height: 1.15;
-      letter-spacing: -.025em;
+      line-height: 1.1;
+      letter-spacing: -.03em;
       color: var(--white);
       margin-bottom: 2.4rem;
     }
-    .hero-headline em { font-style: normal; color: var(--ama-500); }
+    .hero-headline em {
+      font-style: normal;
+      background: linear-gradient(90deg, var(--amber-300) 0%, var(--forest-400) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
 
     .hero-sub {
       font-size: 1.7rem;
       line-height: 1.75;
-      color: rgba(255,255,255,.7);
+      color: rgba(255,255,255,.65);
       margin-bottom: 4rem;
     }
 
@@ -287,230 +454,61 @@
       gap: 2rem;
     }
 
-    /* botão CTA verde */
-    .botao-hero {
+    .hero-trust { font-size: 1.4rem; color: rgba(255,255,255,.5); }
+    .hero-trust strong { color: rgba(255,255,255,.85); }
+
+    .hero-pills { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+    .hero-pill {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: .8rem;
-      font-family: var(--font-corpo);
-      font-weight: 700;
-      font-size: 1.7rem;
-      padding: 1.8rem 3.2rem;
-      border-radius: 1rem;
-      border: none;
-      cursor: pointer;
-      background: #16A34A;
-      color: #fff;
-      text-decoration: none;
-      box-shadow: 0 4px 24px rgba(22,163,74,.4);
-      transition: transform .2s ease, box-shadow .2s ease;
-      min-height: 5.6rem;
-    }
-    .botao-hero:hover {
-      transform: translateY(-.2rem) scale(1.02);
-      box-shadow: 0 8px 36px rgba(22,163,74,.55);
-    }
-
-    .hero-trust { font-size: 1.4rem; color: rgba(255,255,255,.6); }
-    .hero-trust strong { color: rgba(255,255,255,.9); }
-
-    .hero-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .8rem;
-    }
-    .hero-pill {
+      gap: 0.6rem;
       font-size: 1.3rem;
-      color: rgba(255,255,255,.75);
-      background: rgba(255,255,255,.07);
-      border: .1rem solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.7);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
       border-radius: var(--radius-full);
-      padding: .5rem 1.4rem;
+      padding: 0.5rem 1.4rem;
     }
+    .hero-pill .icon svg { width: 1.2rem; height: 1.2rem; }
 
-    /* ── dashboard mockup ─────────────────────────────────────── */
     .hero-mockup {
       position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 1.6rem;
     }
-    .dash-card {
-      background: rgba(255,255,255,.05);
-      border: .1rem solid rgba(255,255,255,.1);
-      border-radius: 1.6rem;
-      padding: 2.4rem;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 24px 64px rgba(0,0,0,.35), 0 0 0 .1rem rgba(255,255,255,.06);
-    }
-    .dash-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 2rem;
-    }
-    .dash-logo {
-      font-family: var(--font-titulo);
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #fff;
-    }
-    .dash-logo span { color: var(--ama-500); }
-    .dash-date { font-size: 1.2rem; color: rgba(255,255,255,.45); }
-    .dash-kpis {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 1.2rem;
-      margin-bottom: 2rem;
-    }
-    .dash-kpi {
-      background: rgba(255,255,255,.06);
-      border-radius: 1rem;
-      padding: 1.2rem;
-      border: .1rem solid rgba(255,255,255,.08);
-    }
-    .dash-kpi-label {
-      font-size: 1.1rem;
-      color: rgba(255,255,255,.5);
-      margin-bottom: .4rem;
-      text-transform: uppercase;
-      letter-spacing: .06rem;
-    }
-    .dash-kpi-value {
-      font-family: var(--font-titulo);
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #fff;
-    }
-    .dash-kpi-value.pos { color: #4ADE80; }
-    .dash-kpi-value.neg { color: #F87171; }
-    .dash-kpi-delta {
-      font-size: 1.1rem;
-      color: rgba(255,255,255,.4);
-      margin-top: .2rem;
-    }
-
-    /* gráfico de barras CSS */
-    .dash-chart-title {
-      font-size: 1.2rem;
-      color: rgba(255,255,255,.5);
-      text-transform: uppercase;
-      letter-spacing: .06rem;
-      margin-bottom: 1.2rem;
-    }
-    .dash-bars {
-      display: flex;
-      align-items: flex-end;
-      gap: .8rem;
-      height: 7rem;
-    }
-    .dash-bar-wrap {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: .4rem;
-      height: 100%;
-      justify-content: flex-end;
-    }
-    .dash-bar {
+    .hero-mockup img {
       width: 100%;
-      border-radius: .4rem .4rem 0 0;
-      background: rgba(22,163,74,.5);
-      transition: background .2s;
-    }
-    .dash-bar.hl { background: #16A34A; box-shadow: 0 0 12px rgba(22,163,74,.5); }
-    .dash-bar-lbl {
-      font-size: 1rem;
-      color: rgba(255,255,255,.4);
+      height: auto;
+      border-radius: var(--radius-lg);
+      filter: drop-shadow(0 0 60px rgba(14,159,110,.15));
     }
 
-    /* card inferior: celular */
-    .dash-bottom {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 1.6rem;
-      align-items: center;
-    }
-    .phone-frame {
-      width: 7rem;
-      height: 12rem;
-      background: #0a2a1e;
-      border-radius: 1.4rem;
-      border: .2rem solid rgba(255,255,255,.15);
-      padding: .8rem .5rem;
-      display: flex;
-      flex-direction: column;
-      gap: .4rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,.4);
-      flex-shrink: 0;
-    }
-    .phone-notch {
-      width: 2.4rem;
-      height: .5rem;
-      background: rgba(255,255,255,.2);
-      border-radius: 99px;
-      margin: 0 auto .4rem;
-    }
-    .phone-row {
-      height: .8rem;
-      border-radius: 99px;
-      background: rgba(255,255,255,.1);
-    }
-    .phone-row.accent { background: rgba(22,163,74,.5); }
-    .phone-row.sm { width: 60%; }
-    .dash-bottom-text { }
-    .dash-bottom-text p {
-      font-size: 1.3rem;
-      color: rgba(255,255,255,.65);
-      line-height: 1.6;
-    }
-    .dash-bottom-text strong { color: #4ADE80; }
-
-    /* responsivo hero */
     @media (max-width: 900px) {
-      .hero-inner {
-        grid-template-columns: 1fr;
-        gap: 4rem;
-      }
-      .hero-headline { font-size: 3.4rem; }
+      .hero-inner { grid-template-columns: 1fr; gap: 4rem; }
+      .hero-headline { font-size: 3.6rem; }
       .hero-cta-wrap { align-items: center; text-align: center; }
       .hero-badge { display: inline-flex; }
       .hero-sub { text-align: center; }
+      .hero-pills { justify-content: center; }
     }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* PROBLEMA — branco                                          */
-    /* ══════════════════════════════════════════════════════════ */
-    #problema { background: var(--neu-50); position: relative; overflow: hidden; }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* PROBLEMA                                                       */
+    /* ═══════════════════════════════════════════════════════════════ */
+    #problema { background: var(--cream); position: relative; overflow: hidden; }
     #problema .section-title { max-width: 68rem; margin-bottom: 4.8rem; }
 
-    /* ── Floating emojis ────────────────────────────────────── */
-    .sp-emoji {
-      position: absolute;
-      opacity: .09;
-      pointer-events: none;
-      user-select: none;
-      z-index: 0;
-      font-style: normal;
-    }
-
-    /* ── Social Proof Container ─────────────────────────────── */
     .social-proof-container {
       display: grid;
-      grid-template-columns: 38rem .1rem 1fr;
+      grid-template-columns: 36rem 1px 1fr;
       background: var(--white);
-      border-radius: 2rem;
-      box-shadow: var(--shadow-card);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--earth-200);
+      box-shadow: var(--shadow-lg);
       overflow: hidden;
       margin-bottom: 4.8rem;
       position: relative;
       z-index: 1;
       min-height: 40rem;
     }
-
-    /* ── Left column ──────────────────────────────────────────── */
     .sp-left {
       padding: 5.6rem 4.8rem;
       display: flex;
@@ -521,67 +519,61 @@
     .sp-badge {
       display: inline-flex;
       align-items: center;
-      padding: .6rem 1.6rem;
+      padding: 0.6rem 1.6rem;
       font-size: 1.05rem;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: .1rem;
-      border-radius: 99rem;
-      color: #1D4ED8;
-      background: #EFF6FF;
-      border: .1rem solid #BFDBFE;
+      letter-spacing: 0.12em;
+      border-radius: var(--radius-full);
+      color: var(--forest-700);
+      background: var(--forest-50);
+      border: 1px solid var(--forest-100);
       margin-bottom: 3.6rem;
       width: fit-content;
     }
     .sp-stat {
-      font-family: var(--font-titulo);
+      font-family: var(--font-mono);
       font-size: 10.4rem;
-      font-weight: 800;
+      font-weight: 500;
       line-height: 1;
-      color: #0B5D4C;
+      color: var(--forest-800);
       letter-spacing: -.04em;
       margin-bottom: 1.6rem;
     }
     .sp-stat-text {
       font-size: 1.7rem;
-      color: var(--neu-600);
+      color: var(--earth-600);
       line-height: 1.65;
       max-width: 26rem;
       margin-bottom: 3.2rem;
     }
-    .sp-stars { display: flex; gap: .5rem; align-items: center; }
-    .sp-star  { width: 2.8rem; height: 2.8rem; }
+    .sp-stars { display: flex; gap: 0.3rem; align-items: center; color: var(--amber-500); font-size: 2.4rem; }
 
-    /* ── Vertical divider ────────────────────────────────────── */
-    .sp-divider { background: var(--neu-100); margin: 4rem 0; }
+    .sp-divider { background: var(--earth-200); margin: 4rem 0; }
 
-    /* ── Right column ────────────────────────────────────────── */
     .sp-right {
       padding: 5.6rem 4.8rem;
       display: flex;
       flex-direction: column;
     }
     .sp-quote-icon {
-      font-family: Georgia, serif;
-      font-size: 8rem;
+      font-family: var(--font-display);
+      font-size: 7rem;
       line-height: .7;
-      color: var(--ama-500);
+      color: var(--amber-400);
       margin-bottom: 2.4rem;
+      opacity: .6;
     }
     .sp-testimonials { flex: 1; min-height: 16rem; }
     .sp-testimonial-item { display: none; }
     .sp-testimonial-item.active {
       display: block;
-      animation: spFadeIn .45s ease;
-    }
-    @keyframes spFadeIn {
-      from { opacity: 0; transform: translateY(1.4rem); }
-      to   { opacity: 1; transform: none; }
+      animation: spFadeIn .45s var(--ease-out);
     }
     .sp-testimonial-text {
       font-size: 1.75rem;
-      color: var(--neu-700);
-      line-height: 1.9;
+      color: var(--earth-700);
+      line-height: 1.85;
       margin-bottom: 3.2rem;
       font-style: italic;
     }
@@ -593,64 +585,52 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: var(--font-titulo);
-      font-size: 1.7rem;
+      font-family: var(--font-display);
+      font-size: 1.6rem;
       font-weight: 700;
       color: var(--white);
       flex-shrink: 0;
-      box-shadow: 0 .4rem 1.2rem rgba(0,0,0,.18);
     }
     .sp-author-name {
-      font-family: var(--font-titulo);
+      font-family: var(--font-display);
       font-size: 1.5rem;
       font-weight: 700;
-      color: var(--neu-900);
-      margin-bottom: .3rem;
+      color: var(--earth-900);
+      margin-bottom: 0.2rem;
     }
-    .sp-author-location { font-size: 1.3rem; color: var(--neu-400); }
+    .sp-author-location { font-size: 1.3rem; color: var(--earth-400); }
 
-    /* ── Carousel navigation ─────────────────────────────────── */
-    .sp-nav {
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-      margin-top: 3.2rem;
-    }
-    .sp-counter {
-      font-size: 1.4rem;
-      color: var(--neu-400);
-      font-weight: 500;
-      margin-right: auto;
-    }
-    .sp-arrows { display: flex; gap: .8rem; }
+    .sp-nav { display: flex; align-items: center; gap: 1.2rem; margin-top: 3.2rem; }
+    .sp-counter { font-size: 1.4rem; color: var(--earth-400); font-weight: 500; margin-right: auto; font-family: var(--font-mono); }
+    .sp-arrows { display: flex; gap: 0.8rem; }
     .sp-arrow {
       width: 4rem;
       height: 4rem;
       border-radius: 50%;
-      border: .15rem solid var(--neu-200);
+      border: 1.5px solid var(--earth-300);
       background: var(--white);
-      color: var(--neu-700);
+      color: var(--earth-700);
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all .2s ease;
+      transition: all 0.2s ease;
       font-size: 1.6rem;
       line-height: 1;
     }
     .sp-arrow:hover {
-      border-color: var(--ver-800);
-      color: var(--ver-800);
-      background: var(--ver-50);
+      border-color: var(--forest-600);
+      color: var(--forest-600);
+      background: var(--forest-50);
     }
 
     @media (max-width: 900px) {
       .social-proof-container { grid-template-columns: 1fr; }
-      .sp-divider { width: calc(100% - 6.4rem); height: .1rem; margin: 0 3.2rem; }
+      .sp-divider { width: calc(100% - 6.4rem); height: 1px; margin: 0 3.2rem; }
       .sp-left, .sp-right { padding: 3.2rem; }
       .sp-stat { font-size: 7.6rem; }
     }
-    /* ── Problem Highlight (two-col layout) ─────────────────── */
+
     .problem-highlight {
       display: grid;
       grid-template-columns: 1fr 1.3fr;
@@ -658,10 +638,10 @@
       align-items: center;
     }
     .ph-headline {
-      font-family: var(--font-titulo);
+      font-family: var(--font-display);
       font-size: 3.8rem;
       font-weight: 800;
-      color: var(--neu-900);
+      color: var(--earth-900);
       line-height: 1.2;
       letter-spacing: -.025em;
     }
@@ -671,12 +651,12 @@
       height: auto;
       margin: 0 auto;
       display: block;
-      filter: drop-shadow(0 12px 32px rgba(11,93,76,.1));
-      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.4s ease;
+      filter: drop-shadow(0 12px 32px rgba(6,76,52,.1));
+      transition: transform 0.4s var(--ease-out), filter 0.4s ease;
     }
     .ph-image:hover {
       transform: translateY(-8px) scale(1.02);
-      filter: drop-shadow(0 20px 40px rgba(11,93,76,.15));
+      filter: drop-shadow(0 20px 40px rgba(6,76,52,.15));
     }
     .ph-item {
       display: flex;
@@ -688,44 +668,44 @@
       width: 5.6rem;
       height: 5.6rem;
       border-radius: 50%;
-      background: var(--ver-900);
+      background: var(--forest-800);
+      color: var(--forest-300);
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
     }
+    .ph-icon svg { width: 2.4rem; height: 2.4rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .ph-item-title {
-      font-family: var(--font-titulo);
+      font-family: var(--font-display);
       font-size: 1.7rem;
       font-weight: 700;
-      color: var(--neu-900);
+      color: var(--earth-900);
       line-height: 1.3;
     }
-    .ph-divider-line { height: .1rem; background: var(--neu-100); }
+    .ph-divider-line { height: 1px; background: var(--earth-200); }
     .ph-final {
       padding-top: 2.8rem;
       font-size: 1.6rem;
       font-style: italic;
       font-weight: 600;
-      color: var(--neu-600);
+      color: var(--earth-600);
       line-height: 1.65;
     }
     @media (max-width: 860px) {
-      .problem-highlight { grid-template-columns: 1fr; gap: 4rem; padding: 3.2rem; text-align: left; }
+      .problem-highlight { grid-template-columns: 1fr; gap: 4rem; padding: 3.2rem; }
       .ph-headline { font-size: 2.8rem; text-align: center; }
       .ph-image { margin: 3.2rem auto 0; }
-      .ph-item { flex-direction: row; text-align: left; gap: 1.6rem; justify-content: flex-start; }
-      .ph-final { text-align: center; }
     }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* AGRAVAMENTO — ver-50                                       */
-    /* ══════════════════════════════════════════════════════════ */
-    #agravamento { background: var(--ver-50); }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* AGRAVAMENTO                                                    */
+    /* ═══════════════════════════════════════════════════════════════ */
+    #agravamento { background: var(--cream-dark); }
     .consequence-list {
       display: flex;
       flex-direction: column;
-      gap: .8rem;
+      gap: 0.8rem;
       margin: 3.2rem 0 4.8rem;
     }
     .consequence-item {
@@ -733,13 +713,14 @@
       align-items: flex-start;
       gap: 1.4rem;
       padding: 1.4rem 2rem;
-      border-radius: .8rem;
+      border-radius: var(--radius-md);
       font-size: 1.5rem;
     }
-    .consequence-item--bad { background: #FFF0F0; border: .1rem solid #FECACA; }
-    .consequence-item--good { background: var(--ver-50); border: .1rem solid var(--ver-100); }
-    .consequence-item span:first-child { flex-shrink: 0; margin-top: .1rem; }
-    .consequence-item span:last-child { color: var(--neu-700); }
+    .consequence-item--bad { background: var(--danger-bg); border: 1px solid var(--danger-border); }
+    .consequence-item--good { background: var(--forest-50); border: 1px solid var(--forest-100); }
+    .consequence-item .icon { flex-shrink: 0; margin-top: 0.1rem; }
+    .consequence-item span:last-child { color: var(--earth-700); }
+
     .contrast-block {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -749,104 +730,142 @@
     @media (max-width: 600px) { .contrast-block { grid-template-columns: 1fr; } }
     .contrast-card {
       background: var(--white);
-      border-radius: var(--radius-card);
+      border-radius: var(--radius-lg);
       padding: 2.8rem;
-      box-shadow: var(--shadow-card);
+      box-shadow: var(--shadow-md);
+      border-left: 3px solid transparent;
     }
     .contrast-card h4 {
-      font-family: var(--font-corpo);
-      font-size: 1.2rem;
-      font-weight: 600;
-      letter-spacing: .07em;
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       margin-bottom: 1.6rem;
     }
-    .contrast-card--bad h4  { color: #DC2626; }
-    .contrast-card--good h4 { color: var(--ver-800); }
-    .contrast-card li { font-size: 1.4rem; color: var(--neu-600); margin-bottom: .8rem; }
+    .contrast-card--bad  { border-left-color: var(--danger); }
+    .contrast-card--bad h4 { color: var(--danger); }
+    .contrast-card--good { border-left-color: var(--forest-600); }
+    .contrast-card--good h4 { color: var(--forest-700); }
+    .contrast-card li {
+      font-size: 1.4rem;
+      color: var(--earth-600);
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+    .contrast-card li .icon { flex-shrink: 0; }
+
     .diferenca-box {
-      background: var(--ver-900);
-      border-radius: var(--radius-card);
+      background: var(--forest-950);
+      background-image: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(14,159,110,.18) 0%, transparent 60%);
+      border: 1px solid rgba(14,159,110,.15);
+      border-radius: var(--radius-xl);
       padding: 6.4rem 4rem;
       text-align: center;
+      box-shadow: var(--shadow-glow);
     }
-    .diferenca-box h3 { font-size: 1.4rem; font-weight: 500; color: rgba(255,255,255,.6); margin-bottom: 1.6rem; }
-    .diferenca-box p  { font-size: 1.6rem; color: rgba(255,255,255,.75); margin-bottom: .6rem; }
+    .diferenca-box h3 { font-family: var(--font-body); font-size: 1.4rem; font-weight: 500; color: rgba(255,255,255,.5); margin-bottom: 1.6rem; }
+    .diferenca-box p  { font-size: 1.6rem; color: rgba(255,255,255,.65); margin-bottom: 0.6rem; }
     .diferenca-box .highlight {
-      font-family: var(--font-titulo);
+      font-family: var(--font-display);
       font-size: 3.2rem;
-      font-weight: 700;
-      color: var(--ama-500);
+      font-weight: 800;
+      color: var(--amber-400);
       margin-top: 1.6rem;
     }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* ANTI-PLANILHA — ver-800 escuro                            */
-    /* ══════════════════════════════════════════════════════════ */
-    #antiplanilha { background: var(--ver-800); padding: 9.6rem 0; }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* ANTI-PLANILHA                                                  */
+    /* ═══════════════════════════════════════════════════════════════ */
+    #antiplanilha {
+      background: var(--forest-950);
+      background-image: radial-gradient(ellipse 60% 50% at 100% 50%, rgba(14,159,110,.12) 0%, transparent 60%);
+      padding: 9.6rem 0;
+      position: relative;
+    }
+    #antiplanilha::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
     .antiplanilha-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8rem;
       align-items: center;
+      position: relative;
+      z-index: 1;
     }
     @media (max-width: 720px) { .antiplanilha-grid { grid-template-columns: 1fr; } }
     .strike-list { margin: 3.2rem 0; }
     .strike-item {
+      font-family: var(--font-display);
       font-size: 1.8rem;
-      color: rgba(255,255,255,.35);
+      font-weight: 500;
+      color: rgba(255,255,255,.3);
       text-decoration: line-through;
-      text-decoration-color: rgba(220,38,38,.6);
+      text-decoration-color: rgba(185,28,28,.6);
       margin-bottom: 1rem;
     }
     .sistema-label {
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       font-weight: 600;
-      letter-spacing: .12em;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--ama-500);
-      margin-bottom: .8rem;
+      color: var(--amber-400);
+      margin-bottom: 0.8rem;
     }
-    .sistema-desc { font-size: 1.6rem; color: rgba(255,255,255,.7); margin-bottom: 2.4rem; }
+    .sistema-desc { font-size: 1.6rem; color: rgba(255,255,255,.65); margin-bottom: 2.4rem; }
     .decision-pills { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 3.2rem; }
     .decision-pill {
-      background: rgba(241,187,2,.1);
-      border: .1rem solid rgba(241,187,2,.25);
-      border-radius: .8rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(232,185,49,.08);
+      border: 1px solid rgba(232,185,49,.2);
+      border-radius: var(--radius-md);
       padding: 1rem 1.8rem;
       font-weight: 600;
       font-size: 1.5rem;
-      color: var(--ama-500);
+      color: var(--amber-400);
     }
-    .device-row { display: flex; gap: 3.2rem; margin-top: .8rem; }
-    .device-item { display: flex; align-items: center; gap: .8rem; font-size: 1.5rem; color: rgba(255,255,255,.65); }
-    .device-item span:first-child { font-size: 1.8rem; }
-    .auto-note { margin-top: 1.6rem; font-size: 1.3rem; color: rgba(255,255,255,.4); }
+    .decision-pill .icon svg { width: 1.6rem; height: 1.6rem; }
+    .device-row { display: flex; gap: 3.2rem; margin-top: 0.8rem; }
+    .device-item { display: flex; align-items: center; gap: 0.8rem; font-size: 1.5rem; color: rgba(255,255,255,.6); }
+    .device-item .icon svg { width: 1.8rem; height: 1.8rem; }
+    .auto-note { margin-top: 1.6rem; font-size: 1.3rem; color: rgba(255,255,255,.35); }
+
     .vs-visual {
-      background: rgba(255,255,255,.07);
-      border: .1rem solid rgba(255,255,255,.1);
-      border-radius: 1.6rem;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius-lg);
       padding: 2.8rem;
     }
     .vs-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
-    .vs-col { border-radius: var(--radius-card); padding: 2rem; }
-    .vs-col--bad  { background: rgba(220,38,38,.1); border: .1rem solid rgba(220,38,38,.2); }
-    .vs-col--good { background: rgba(241,187,2,.07); border: .1rem solid rgba(241,187,2,.2); }
+    .vs-col { border-radius: var(--radius-lg); padding: 2rem; }
+    .vs-col--bad  { background: rgba(185,28,28,.08); border: 1px solid rgba(185,28,28,.15); }
+    .vs-col--good { background: rgba(232,185,49,.06); border: 1px solid rgba(232,185,49,.15); }
     .vs-col h5 {
+      font-family: var(--font-display);
       font-size: 1.1rem;
-      font-weight: 600;
-      letter-spacing: .1em;
+      font-weight: 700;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       margin-bottom: 1.4rem;
     }
     .vs-col--bad h5  { color: #F87171; }
-    .vs-col--good h5 { color: var(--ama-500); }
-    .vs-col li { font-size: 1.3rem; color: rgba(255,255,255,.6); margin-bottom: .6rem; }
+    .vs-col--good h5 { color: var(--amber-400); }
+    .vs-col li { font-size: 1.3rem; color: rgba(255,255,255,.55); margin-bottom: 0.6rem; }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* FERRAMENTAS — ver-50                                       */
-    /* ══════════════════════════════════════════════════════════ */
-    #ferramentas { background: var(--ver-50); }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* FERRAMENTAS                                                    */
+    /* ═══════════════════════════════════════════════════════════════ */
+    #ferramentas { background: var(--cream); }
     .tools-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(24rem, 1fr));
@@ -855,32 +874,57 @@
     }
     .tool-card {
       background: var(--white);
-      border: .1rem solid var(--neu-100);
-      border-radius: var(--radius-card);
-      padding: 2.4rem;
-      box-shadow: var(--shadow-green);
-      transition: box-shadow .2s ease, transform .2s ease;
+      border: 1px solid var(--earth-200);
+      border-radius: var(--radius-lg);
+      padding: 2.8rem;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.3s ease, transform 0.2s var(--ease-out), border-color 0.3s;
     }
     .tool-card:hover {
-      box-shadow: var(--shadow-card);
-      transform: translateY(-.2rem);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-4px);
+      border-color: var(--forest-100);
     }
-    .tool-icon { font-size: 2.4rem; margin-bottom: 1.2rem; }
-    .tool-name { font-family: var(--font-titulo); font-size: 1.5rem; font-weight: 600; color: var(--neu-900); margin-bottom: .6rem; }
-    .tool-desc { font-size: 1.3rem; color: var(--neu-500); line-height: 1.5; }
+    .tool-icon {
+      width: 4.8rem;
+      height: 4.8rem;
+      border-radius: 50%;
+      background: var(--forest-50);
+      color: var(--forest-700);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.6rem;
+    }
+    .tool-icon svg { width: 2.2rem; height: 2.2rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .tool-name { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--earth-900); margin-bottom: 0.6rem; }
+    .tool-desc { font-size: 1.35rem; color: var(--earth-500); line-height: 1.55; }
+
     .tools-benefit {
-      background: var(--ver-900);
-      border-radius: var(--radius-card);
+      background: var(--forest-950);
+      background-image: radial-gradient(ellipse 60% 80% at 50% 100%, rgba(14,159,110,.18) 0%, transparent 60%);
+      border: 1px solid rgba(14,159,110,.12);
+      border-radius: var(--radius-xl);
       padding: 6.4rem 4rem;
       text-align: center;
     }
-    .tools-benefit h3 { font-family: var(--font-titulo); font-size: 2.8rem; font-weight: 700; color: var(--white); margin-bottom: 1.6rem; }
-    .tools-benefit .sub { color: rgba(255,255,255,.7); margin-bottom: 2.4rem; }
-    .benefit-arrow { display: flex; align-items: center; justify-content: center; gap: .8rem; font-size: 1.5rem; font-weight: 600; color: var(--ama-500); margin-bottom: .8rem; }
+    .tools-benefit h3 { font-family: var(--font-display); font-size: 2.8rem; font-weight: 800; color: var(--white); margin-bottom: 1.6rem; }
+    .tools-benefit .sub { color: rgba(255,255,255,.6); margin-bottom: 2.4rem; font-size: 1.8rem; }
+    .benefit-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--amber-400);
+      margin-bottom: 0.8rem;
+    }
+    .benefit-arrow .icon svg { width: 1.6rem; height: 1.6rem; }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* OBJEÇÕES — branco                                          */
-    /* ══════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* OBJEÇÕES                                                       */
+    /* ═══════════════════════════════════════════════════════════════ */
     #objecoes { background: var(--white); }
     .objection-list { display: flex; flex-direction: column; gap: 2rem; margin-top: 4.8rem; }
     .objection-card {
@@ -888,182 +932,281 @@
       grid-template-columns: 6.4rem 1fr;
       gap: 2.4rem;
       background: var(--white);
-      border: .1rem solid var(--neu-100);
-      border-radius: var(--radius-card);
+      border: 1px solid var(--earth-200);
+      border-radius: var(--radius-lg);
       padding: 3.2rem;
-      box-shadow: var(--shadow-card);
+      box-shadow: var(--shadow-md);
+      border-left: 3px solid transparent;
     }
     @media (max-width: 500px) { .objection-card { grid-template-columns: 1fr; } }
     .objection-num {
-      font-family: var(--font-titulo);
+      font-family: var(--font-display);
       font-size: 4rem;
       font-weight: 800;
       line-height: 1;
-      opacity: .12;
+      opacity: .15;
     }
-    .objection-num--1 { color: #DC2626; }
-    .objection-num--2 { color: #EA580C; }
-    .objection-num--3 { color: #CA8A04; }
-    .objection-body h4 { font-family: var(--font-titulo); font-size: 1.6rem; font-weight: 700; color: var(--neu-900); margin-bottom: .8rem; }
-    .objection-body p { font-size: 1.5rem; color: var(--neu-600); line-height: 1.65; }
+    .objection-num--1 { color: var(--danger); }
+    .objection-num--2 { color: #C2410C; }
+    .objection-num--3 { color: var(--amber-500); }
+    .objection-card:nth-child(1) { border-left-color: var(--danger); }
+    .objection-card:nth-child(2) { border-left-color: #C2410C; }
+    .objection-card:nth-child(3) { border-left-color: var(--amber-500); }
+    .objection-body h4 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; color: var(--earth-900); margin-bottom: 0.8rem; }
+    .objection-body p { font-size: 1.5rem; color: var(--earth-600); line-height: 1.65; }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* IDENTIFICAÇÃO — ver-900                                    */
-    /* ══════════════════════════════════════════════════════════ */
-    #identificacao { background: var(--ver-900); }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* IDENTIFICAÇÃO                                                  */
+    /* ═══════════════════════════════════════════════════════════════ */
+    #identificacao {
+      background: var(--forest-950);
+      background-image: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(14,159,110,.14) 0%, transparent 60%);
+      position: relative;
+    }
+    #identificacao::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
     .id-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(23rem, 1fr));
       gap: 1.6rem;
       margin: 4.8rem 0;
+      position: relative;
+      z-index: 1;
     }
     .id-card {
-      background: rgba(255,255,255,.06);
-      border: .1rem solid rgba(255,255,255,.1);
-      border-radius: var(--radius-card);
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius-lg);
       padding: 2.4rem;
       font-size: 1.4rem;
-      color: rgba(255,255,255,.7);
+      color: rgba(255,255,255,.65);
       font-style: italic;
       position: relative;
-      transition: background .2s;
+      backdrop-filter: blur(8px);
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
-    .id-card:hover { background: rgba(255,255,255,.1); }
+    .id-card:hover {
+      background: rgba(255,255,255,.08);
+      border-color: rgba(255,255,255,.14);
+    }
     .id-card::before {
-      content: '"';
-      font-family: var(--font-titulo);
-      font-size: 4rem;
-      line-height: 0;
+      content: '\201C';
       position: absolute;
-      top: 2.4rem;
-      left: 1.4rem;
-      color: var(--ama-500);
-      opacity: .2;
+      top: 1.2rem;
+      left: 1.6rem;
+      font-family: var(--font-display);
+      font-size: 4rem;
+      color: var(--amber-400);
+      opacity: .25;
+      line-height: 1;
     }
-    .id-card p { padding-top: 1.6rem; }
-    .id-transition {
-      background: rgba(241,187,2,.07);
-      border: .1rem solid rgba(241,187,2,.2);
-      border-radius: var(--radius-card);
-      padding: 5.6rem 4rem;
-      text-align: center;
-    }
-    .id-transition p { font-size: 1.6rem; color: rgba(255,255,255,.7); margin-bottom: 1.2rem; }
-    .id-transition .highlight { font-family: var(--font-titulo); font-size: 2.4rem; font-weight: 700; color: var(--white); }
-    .id-transition .green-text { color: var(--ama-500); font-weight: 600; }
+    .id-card p { position: relative; z-index: 1; padding-top: 1.2rem; }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* STACK DE VALOR — branco                                    */
-    /* ══════════════════════════════════════════════════════════ */
-    #stack { background: var(--white); }
+    .id-transition {
+      background: rgba(232,185,49,.06);
+      border: 1px solid rgba(232,185,49,.18);
+      border-radius: var(--radius-xl);
+      padding: 6.4rem 4rem;
+      text-align: center;
+      margin-top: 4.8rem;
+      position: relative;
+      z-index: 1;
+    }
+    .id-transition p { font-size: 1.6rem; color: rgba(255,255,255,.65); margin-bottom: 1.2rem; }
+    .id-transition .highlight { font-family: var(--font-display); font-size: 2.4rem; font-weight: 800; color: var(--white); }
+    .id-transition .green-text { color: var(--amber-400); font-weight: 700; }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* STACK DE VALOR                                                 */
+    /* ═══════════════════════════════════════════════════════════════ */
+    #stack { background: var(--cream); }
     .stack-list {
-      border: .1rem solid var(--neu-100);
-      border-radius: var(--radius-card);
+      border: 1px solid var(--earth-200);
+      border-radius: var(--radius-lg);
       overflow: hidden;
       margin: 4.8rem 0 2.4rem;
-      box-shadow: var(--shadow-card);
+      box-shadow: var(--shadow-md);
     }
     .stack-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 1.6rem 2.8rem;
-      border-bottom: .1rem solid var(--neu-100);
+      border-bottom: 1px solid var(--earth-200);
       gap: 1.6rem;
     }
     .stack-item:last-child { border-bottom: none; }
-    .stack-item:nth-child(odd) { background: var(--ver-50); }
-    .stack-item-left { display: flex; align-items: center; gap: 1.2rem; font-size: 1.5rem; color: var(--neu-800); }
-    .stack-item-left span:first-child { font-size: 1.8rem; }
-    .stack-price { font-size: 1.3rem; font-weight: 600; color: var(--neu-500); flex-shrink: 0; }
+    .stack-item:nth-child(odd) { background: var(--cream-dark); }
+    .stack-item:nth-child(even) { background: var(--white); }
+    .stack-item-left { display: flex; align-items: center; gap: 1.2rem; font-size: 1.5rem; color: var(--earth-800); }
+    .stack-item-left .icon { color: var(--forest-700); }
+    .stack-item-left .icon svg { width: 1.8rem; height: 1.8rem; }
+    .stack-price { font-family: var(--font-mono); font-size: 1.3rem; font-weight: 500; color: var(--earth-500); flex-shrink: 0; }
+
     .bonus-card {
-      background: var(--ama-bg);
-      border: .1rem solid #FDE68A;
-      border-radius: var(--radius-card);
+      background: var(--amber-50);
+      border: 1px solid var(--amber-300);
+      border-radius: var(--radius-lg);
       padding: 3.2rem;
       margin-bottom: 3.2rem;
     }
-    .bonus-label { font-size: 1.2rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #92400E; margin-bottom: .8rem; }
-    .bonus-title { font-family: var(--font-titulo); font-size: 1.8rem; font-weight: 700; color: var(--neu-900); margin-bottom: 1.6rem; }
-    .bonus-items li { font-size: 1.4rem; color: var(--neu-600); margin-bottom: .6rem; padding-left: 1.8rem; position: relative; }
-    .bonus-items li::before { content: '→'; position: absolute; left: 0; color: #CA8A04; }
-    .bonus-price { margin-top: 1.2rem; font-size: 1.3rem; color: var(--neu-500); text-decoration: line-through; }
-    .total-value { text-align: center; margin-top: 2.4rem; }
-    .total-value-label { font-size: 1.4rem; color: var(--neu-500); margin-bottom: .4rem; }
-    .total-value-num { font-family: var(--font-titulo); font-size: 3rem; font-weight: 800; color: var(--neu-400); text-decoration: line-through; }
+    .bonus-label {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber-600);
+      margin-bottom: 0.8rem;
+    }
+    .bonus-label .icon svg { width: 1.6rem; height: 1.6rem; }
+    .bonus-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--earth-900); margin-bottom: 1.6rem; }
+    .bonus-items li { font-size: 1.4rem; color: var(--earth-600); margin-bottom: 0.6rem; padding-left: 2rem; position: relative; }
+    .bonus-items li::before { content: '\2192'; position: absolute; left: 0; color: var(--amber-500); }
+    .bonus-price { margin-top: 1.2rem; font-family: var(--font-mono); font-size: 1.3rem; color: var(--earth-400); text-decoration: line-through; }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* OFERTA — ver-900                                           */
-    /* ══════════════════════════════════════════════════════════ */
-    #oferta { background: var(--ver-900); text-align: center; }
+    .total-value { text-align: center; margin-top: 2.4rem; }
+    .total-value-label { font-size: 1.4rem; color: var(--earth-500); margin-bottom: 0.4rem; }
+    .total-value-num { font-family: var(--font-mono); font-size: 3rem; font-weight: 500; color: var(--earth-400); text-decoration: line-through; }
+
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* OFERTA                                                         */
+    /* ═══════════════════════════════════════════════════════════════ */
+    #oferta {
+      background: var(--forest-950);
+      background-image:
+        radial-gradient(ellipse 50% 60% at 50% 100%, rgba(212,160,23,.1) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 50% -10%, rgba(14,159,110,.12) 0%, transparent 55%);
+      text-align: center;
+      padding: 12.8rem 0;
+      position: relative;
+    }
+    #oferta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
     #oferta .section-title { color: var(--white); }
-    .price-tag { display: inline-block; margin: 3.2rem 0 2.4rem; }
-    .price-from { font-size: 1.6rem; color: rgba(255,255,255,.5); text-decoration: line-through; margin-bottom: .4rem; }
-    .price-main { font-family: var(--font-titulo); font-size: 10rem; font-weight: 800; line-height: 1; color: var(--ama-500); }
-    .price-period { font-size: 1.4rem; color: rgba(255,255,255,.6); margin-top: .4rem; }
+    .price-tag { display: inline-block; margin: 3.2rem 0 2.4rem; position: relative; z-index: 1; }
+    .price-from { font-family: var(--font-mono); font-size: 1.6rem; color: rgba(255,255,255,.45); text-decoration: line-through; margin-bottom: 0.4rem; }
+    .price-main {
+      font-family: var(--font-mono);
+      font-size: 12rem;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--amber-400);
+      text-shadow: 0 0 80px rgba(232,185,49,.25);
+    }
+    .price-period { font-size: 1.4rem; color: rgba(255,255,255,.5); margin-top: 0.8rem; }
     .offer-triggers {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: .8rem;
+      gap: 0.8rem;
       margin: 3.2rem 0 4.8rem;
+      position: relative;
+      z-index: 1;
     }
     .offer-trigger {
-      background: rgba(255,255,255,.08);
-      border: .1rem solid rgba(255,255,255,.15);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
       border-radius: var(--radius-full);
-      padding: .7rem 1.6rem;
+      padding: 0.7rem 1.6rem;
       font-size: 1.3rem;
-      color: rgba(255,255,255,.8);
+      color: rgba(255,255,255,.75);
     }
-    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.4rem; margin-top: 8rem; text-align: left; }
+    .offer-trigger .icon svg { width: 1.4rem; height: 1.4rem; }
+
+    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.4rem; margin-top: 8rem; text-align: left; position: relative; z-index: 1; }
     @media (max-width: 600px) { .steps-grid { grid-template-columns: 1fr; } }
     .step-card {
-      background: rgba(255,255,255,.07);
-      border: .1rem solid rgba(255,255,255,.1);
-      border-radius: var(--radius-card);
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--radius-lg);
       padding: 2.8rem;
+      backdrop-filter: blur(8px);
     }
-    .step-num { font-size: 2.4rem; margin-bottom: 1.2rem; }
-    .step-card h4 { font-family: var(--font-titulo); font-size: 1.5rem; font-weight: 600; color: var(--white); margin-bottom: .6rem; }
-    .step-card p { font-size: 1.3rem; color: rgba(255,255,255,.6); }
+    .step-num {
+      font-family: var(--font-display);
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: var(--amber-400);
+      opacity: .5;
+      margin-bottom: 1.2rem;
+    }
+    .step-card h4 { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--white); margin-bottom: 0.6rem; }
+    .step-card p { font-size: 1.3rem; color: rgba(255,255,255,.55); }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* GARANTIA — ver-100                                         */
-    /* ══════════════════════════════════════════════════════════ */
-    #garantia { background: var(--ver-100); text-align: center; }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* GARANTIA                                                       */
+    /* ═══════════════════════════════════════════════════════════════ */
+    #garantia { background: var(--cream-dark); text-align: center; }
     .guarantee-box {
       background: var(--white);
-      border: .2rem solid var(--ama-500);
-      border-radius: 1.6rem;
+      border: 2px solid var(--amber-500);
+      border-radius: var(--radius-xl);
       padding: 6.4rem 4rem;
       max-width: 60rem;
       margin: 0 auto 4.8rem;
-      box-shadow: var(--shadow-green);
+      box-shadow: var(--shadow-amber);
     }
-    .guarantee-icon { font-size: 5rem; margin-bottom: 1.6rem; }
-    .guarantee-title { font-family: var(--font-titulo); font-size: 3.2rem; font-weight: 700; color: var(--ver-900); margin-bottom: 2.4rem; }
-    .guarantee-text { font-size: 1.6rem; color: var(--neu-600); line-height: 1.7; margin-bottom: .8rem; }
-    .guarantee-strong { font-size: 1.6rem; font-weight: 600; color: var(--neu-900); }
+    .guarantee-icon {
+      width: 6.4rem;
+      height: 6.4rem;
+      border-radius: 50%;
+      background: var(--forest-50);
+      color: var(--forest-600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2rem;
+    }
+    .guarantee-icon svg { width: 3rem; height: 3rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .guarantee-title {
+      font-family: var(--font-display);
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: var(--forest-800);
+      margin-bottom: 2.4rem;
+      letter-spacing: -.02em;
+    }
+    .guarantee-text { font-size: 1.6rem; color: var(--earth-600); line-height: 1.7; margin-bottom: 0.8rem; }
+    .guarantee-strong { font-size: 1.6rem; font-weight: 700; color: var(--earth-900); margin-top: 0.8rem; }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* FAQ — branco                                               */
-    /* ══════════════════════════════════════════════════════════ */
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* FAQ                                                            */
+    /* ═══════════════════════════════════════════════════════════════ */
     #faq { background: var(--white); }
     .faq-list { margin-top: 4.8rem; display: flex; flex-direction: column; gap: 1.2rem; }
     .faq-item {
       background: var(--white);
-      border: .1rem solid var(--neu-100);
-      border-radius: var(--radius-card);
+      border: 1px solid var(--earth-200);
+      border-radius: var(--radius-lg);
       overflow: hidden;
-      box-shadow: 0 .2rem .8rem 0 rgba(37,37,49,.06);
+      box-shadow: var(--shadow-sm);
+      transition: border-color 0.3s ease;
     }
+    .faq-item.open { border-color: var(--forest-600); }
     .faq-question {
       width: 100%;
       background: none;
       border: none;
-      color: var(--neu-900);
-      font-family: var(--font-corpo);
+      color: var(--earth-900);
+      font-family: var(--font-body);
       font-size: 1.5rem;
       font-weight: 600;
       text-align: left;
@@ -1073,34 +1216,59 @@
       justify-content: space-between;
       align-items: center;
       gap: 1.6rem;
-      transition: color .2s;
+      transition: color 0.2s;
     }
-    .faq-question:hover { color: var(--ver-800); }
-    .faq-icon { font-size: 1.8rem; color: var(--ver-800); flex-shrink: 0; transition: transform .3s ease; }
-    .faq-item.open .faq-icon { transform: rotate(45deg); }
-    .faq-answer { max-height: 0; overflow: hidden; transition: max-height .35s ease; }
+    .faq-question:hover { color: var(--forest-700); }
+    .faq-icon {
+      flex-shrink: 0;
+      color: var(--forest-600);
+      transition: transform 0.3s var(--ease-out);
+    }
+    .faq-icon svg { width: 2rem; height: 2rem; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .faq-item.open .faq-icon { transform: rotate(180deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s var(--ease-out); }
     .faq-item.open .faq-answer { max-height: 20rem; }
-    .faq-answer p { padding: 0 2.4rem 2rem; font-size: 1.4rem; color: var(--neu-600); line-height: 1.65; }
+    .faq-answer p { padding: 0 2.4rem 2rem; font-size: 1.4rem; color: var(--earth-600); line-height: 1.7; }
 
-    /* ══════════════════════════════════════════════════════════ */
-    /* FINAL CTA — ver-900                                        */
-    /* ══════════════════════════════════════════════════════════ */
-    #final-cta { background: var(--ver-900); text-align: center; }
-    #final-cta h2 { color: var(--white); margin-bottom: 1.6rem; }
-    #final-cta .sub { color: rgba(255,255,255,.7); font-size: 1.8rem; margin-bottom: 4.8rem; }
-    .final-note { margin-top: 2.4rem; font-size: 1.3rem; color: rgba(255,255,255,.5); }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* FINAL CTA                                                      */
+    /* ═══════════════════════════════════════════════════════════════ */
+    #final-cta {
+      background: var(--forest-950);
+      background-image: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(14,159,110,.18) 0%, transparent 65%);
+      text-align: center;
+      padding: 12.8rem 0;
+      position: relative;
+    }
+    #final-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+    #final-cta h2 { color: var(--white); margin-bottom: 1.6rem; position: relative; z-index: 1; }
+    #final-cta .sub { color: rgba(255,255,255,.6); font-size: 1.8rem; margin-bottom: 4.8rem; position: relative; z-index: 1; }
+    .final-note { margin-top: 2.4rem; font-size: 1.3rem; color: rgba(255,255,255,.4); display: flex; align-items: center; justify-content: center; gap: 0.6rem; position: relative; z-index: 1; }
+    .final-note .icon svg { width: 1.4rem; height: 1.4rem; }
 
-    /* ─── FOOTER ─────────────────────────────────────────────── */
-    footer { background: var(--ver-900); border-top: .1rem solid rgba(255,255,255,.08); padding: 3.2rem 0; text-align: center; }
-    footer p { font-size: 1.3rem; color: rgba(255,255,255,.5); }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* FOOTER                                                         */
+    /* ═══════════════════════════════════════════════════════════════ */
+    footer { background: var(--forest-950); border-top: 1px solid rgba(255,255,255,.06); padding: 3.2rem 0; text-align: center; }
+    footer p { font-size: 1.3rem; color: rgba(255,255,255,.35); }
 
-    /* ─── STICKY BAR ─────────────────────────────────────────── */
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* STICKY BAR                                                     */
+    /* ═══════════════════════════════════════════════════════════════ */
     .sticky-bar {
       position: fixed;
       bottom: 0; left: 0; right: 0;
-      background: rgba(1,76,60,.97);
-      backdrop-filter: blur(1.2rem);
-      border-top: .1rem solid rgba(255,255,255,.1);
+      background: rgba(2,26,14,.95);
+      backdrop-filter: blur(2rem);
+      -webkit-backdrop-filter: blur(2rem);
+      border-top: 1px solid rgba(255,255,255,.08);
       padding: 1.2rem 2.4rem;
       display: flex;
       align-items: center;
@@ -1108,62 +1276,98 @@
       gap: 1.6rem;
       z-index: 100;
       transform: translateY(100%);
-      transition: transform .4s ease;
+      transition: transform 0.5s var(--ease-out);
     }
     .sticky-bar.visible { transform: none; }
-    .sticky-bar-text { font-size: 1.4rem; color: rgba(255,255,255,.8); }
-    .sticky-bar-text strong { color: var(--ama-500); font-weight: 600; }
+    .sticky-bar-text { font-size: 1.4rem; color: rgba(255,255,255,.7); }
+    .sticky-bar-text strong { font-family: var(--font-mono); color: var(--amber-400); font-weight: 500; }
     @media (max-width: 480px) { .sticky-bar { flex-direction: column; text-align: center; } }
 
-    /* ─── SECTION TITLES ON DARK ──────────────────────────────── */
-    .bg-dark .section-title,
-    .bg-dark .tag { --tag-color: var(--ama-500); }
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* RESPONSIVE                                                     */
+    /* ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .hero-headline { font-size: 2.6rem; }
+      .t-48 { font-size: 2.8rem; }
+      .t-44 { font-size: 2.4rem; }
+      .t-40 { font-size: 2.2rem; }
+      .t-32 { font-size: 2rem; }
+      .price-main { font-size: 8rem; }
+      .sp-stat { font-size: 7rem; }
+      .cabecalho nav { display: none; }
+      section { padding: 7.2rem 0; }
+      #hero { padding: 6.4rem 0 8rem; }
+      #oferta, #final-cta { padding: 8rem 0; }
+    }
+    @media (max-width: 480px) {
+      .hero-headline { font-size: 2.8rem; }
+      .c { padding: 0 2rem; }
+      .price-main { font-size: 6rem; }
+    }
   </style>
 </head>
 <body>
 
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- NAVBAR                                                         -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<header class="cabecalho">
+  <div class="c">
+    <a href="#" class="logo">SGF<span>.</span></a>
+    <nav>
+      <a href="#ferramentas">Ferramentas</a>
+      <a href="#oferta">Oferta</a>
+      <a href="#faq">Dúvidas</a>
+    </nav>
+    <div class="cab-botoes">
+      <a href="#oferta" class="botao tam-g">Começar agora</a>
+    </div>
+  </div>
+</header>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- HERO                                                         -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- HERO                                                           -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <section id="hero">
   <div class="c">
     <div class="hero-inner">
 
-      <!-- ESQUERDA: texto -->
       <div class="hero-left">
-        <div class="hero-badge reveal">🐂 Feito para Pecuaristas</div>
+        <div class="hero-badge">
+          <span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><circle cx="9" cy="10" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1" fill="currentColor" stroke="none"/></svg></span>
+          Feito para Pecuaristas
+        </div>
 
-        <h1 class="hero-headline reveal d1">
+        <h1 class="hero-headline">
           Se você não conhece os números da sua fazenda, você não está tomando decisão…
           <em>está apostando</em>
         </h1>
 
-        <p class="hero-sub reveal d2">
+        <p class="hero-sub">
           Um sistema simples e prático que te mostra o lucro ou prejuízo, onde você está ganhando ou
           perdendo dinheiro, direto do celular ou computador.<br><br>
           Mesmo que você nunca tenha usado nenhuma ferramenta de gestão antes e não tenha afinidade com matemática.
         </p>
 
-        <div class="hero-cta-wrap reveal d3">
+        <div class="hero-cta-wrap">
           <a href="#oferta" class="botao-hero">
-            👉 QUERO TER CONTROLE TOTAL DO GADO
+            QUERO TER CONTROLE TOTAL DO GADO
+            <span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
           </a>
           <div class="hero-trust">
             <strong>Mais de 1.000 pecuaristas</strong> já tomam decisões com segurança
           </div>
           <div class="hero-pills">
-            <span class="hero-pill">✅ Acesso imediato</span>
-            <span class="hero-pill">📱 Celular ou computador</span>
-            <span class="hero-pill">🔒 Garantia de 7 dias</span>
+            <span class="hero-pill"><span class="icon icon--sm" style="color:var(--forest-400)"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Acesso imediato</span>
+            <span class="hero-pill"><span class="icon icon--sm"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span> Celular ou computador</span>
+            <span class="hero-pill"><span class="icon icon--sm"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span> Garantia de 7 dias</span>
           </div>
         </div>
       </div>
 
-      <!-- DIREITA: mockup dashboard -->
-      <div class="hero-right reveal d2">
+      <div class="hero-right">
         <div class="hero-mockup">
-          <img src="https://customer-assets.emergentagent.com/job_me-traga-preview/artifacts/x1pxxmt5_img_header.png" alt="Sistema de Gestão da Fazenda - Dashboard e App Mobile" style="width: 100%; height: auto; border-radius: 1.6rem;">
+          <img src="https://customer-assets.emergentagent.com/job_me-traga-preview/artifacts/x1pxxmt5_img_header.png" alt="Sistema de Gestão da Fazenda - Dashboard e App Mobile">
         </div>
       </div>
 
@@ -1171,11 +1375,11 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- PROBLEMA — branco                                            -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- PROBLEMA                                                       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <section id="problema">
-  <div class="c" style="position:relative">
+  <div class="c">
 
     <div class="tag tag--light reveal">A realidade da pecuária</div>
     <h2 class="t-40 section-title reveal d1">
@@ -1185,26 +1389,24 @@
 
     <div class="social-proof-container reveal d2">
 
-      <!-- ── Coluna esquerda: estatística ── -->
       <div class="sp-left">
         <div class="sp-badge">VOCÊ JÁ PASSOU POR ISSO?</div>
         <div class="sp-stat">99%</div>
         <p class="sp-stat-text">de quem trabalha com gado, precisa fazer esses cálculos</p>
+        <div class="sp-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
       </div>
 
-      <!-- ── Divisória vertical ── -->
       <div class="sp-divider"></div>
 
-      <!-- ── Coluna direita: carrossel ── -->
       <div class="sp-right">
-        <div class="sp-quote-icon">"</div>
+        <div class="sp-quote-icon">&ldquo;</div>
 
         <div class="sp-testimonials">
 
           <div class="sp-testimonial-item active">
             <p class="sp-testimonial-text">Comprei gado achando que ia dar lucro e no fechamento não sobrou nada.</p>
             <div class="sp-author">
-              <div class="sp-avatar" style="background:#0B5D4C">ES</div>
+              <div class="sp-avatar" style="background:var(--forest-800)">ES</div>
               <div>
                 <div class="sp-author-name">Edson Sguizzatto</div>
                 <div class="sp-author-location">Belo Horizonte - MG</div>
@@ -1237,7 +1439,7 @@
           <div class="sp-testimonial-item">
             <p class="sp-testimonial-text">Olho pro extrato do banco e não entendo onde o dinheiro foi parar.</p>
             <div class="sp-author">
-              <div class="sp-avatar" style="background:#B45309">PF</div>
+              <div class="sp-avatar" style="background:var(--amber-600)">PF</div>
               <div>
                 <div class="sp-author-name">Paulo Ferreira</div>
                 <div class="sp-author-location">Campo Grande - MS</div>
@@ -1248,7 +1450,7 @@
           <div class="sp-testimonial-item">
             <p class="sp-testimonial-text">Já tentei planilha, mas erro nos cálculos e acabo abandonando.</p>
             <div class="sp-author">
-              <div class="sp-avatar" style="background:#DC2626">JS</div>
+              <div class="sp-avatar" style="background:var(--danger)">JS</div>
               <div>
                 <div class="sp-author-name">José Santos</div>
                 <div class="sp-author-location">Cuiabá - MT</div>
@@ -1257,12 +1459,12 @@
           </div>
 
           <div class="sp-testimonial-item">
-            <p class="sp-testimonial-text">Tomo decisão por intuição e fico na dúvida se acertei.</p>
+            <p class="sp-testimonial-text">Meu vizinho usa sistema e ganha mais que eu com menos gado.</p>
             <div class="sp-author">
-              <div class="sp-avatar" style="background:#059669">AL</div>
+              <div class="sp-avatar" style="background:var(--forest-700)">ML</div>
               <div>
-                <div class="sp-author-name">Antônio Lima</div>
-                <div class="sp-author-location">Ribeirão Preto - SP</div>
+                <div class="sp-author-name">Marcos Lima</div>
+                <div class="sp-author-location">Uberaba - MG</div>
               </div>
             </div>
           </div>
@@ -1280,92 +1482,55 @@
 
     </div>
 
-    <div class="problem-highlight reveal">
-
-      <!-- Coluna esquerda: headline e itens -->
-      <div class="ph-left">
-        <h3 class="ph-headline" style="margin-bottom: 3.2rem;">Trabalhar sem conhecer seus números não é desorganização.</h3>
-
-        <div class="ph-item">
-          <div class="ph-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-              <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-            </svg>
-          </div>
-          <div class="ph-item-title">É prejuízo escondido</div>
-        </div>
-
-        <div class="ph-divider-line"></div>
-
-        <div class="ph-item">
-          <div class="ph-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
-            </svg>
-          </div>
-          <div class="ph-item-title">É decisão errada todo dia</div>
-        </div>
-
-        <div class="ph-divider-line"></div>
-
-        <div class="ph-item">
-          <div class="ph-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="12" y1="1" x2="12" y2="23"/>
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-            </svg>
-          </div>
-          <div class="ph-item-title">É dinheiro ficando na mesa sem você perceber</div>
-        </div>
-
-        <p class="ph-final">E o pior: se esforçando e achando que está tudo certo.</p>
+    <div class="problem-highlight reveal d3">
+      <div>
+        <h3 class="ph-headline">
+          E o pior: se esforçando e achando que está tudo certo.
+        </h3>
       </div>
-
-      <!-- Coluna direita: imagem -->
-      <div class="ph-right">
-        <img src="public/Group_27.png" alt="Gestão de Fazenda - Dashboards" class="ph-image">
+      <div>
+        <img class="ph-image" src="https://customer-assets.emergentagent.com/job_me-traga-preview/artifacts/x1pxxmt5_img_header.png" alt="Dashboard SGF">
       </div>
     </div>
+
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- AGRAVAMENTO — ver-50                                         -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- AGRAVAMENTO                                                    -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <section id="agravamento">
   <div class="c">
     <div class="tag tag--light reveal">As consequências</div>
     <h2 class="t-40 reveal d1">O problema é que continuar no escuro<br>só aumenta o prejuízo</h2>
 
     <div class="consequence-list">
-      <div class="consequence-item consequence-item--bad reveal d1"><span>❌</span><span>Você compra errado sem saber se no fim do trabalho vai ganhar dinheiro</span></div>
-      <div class="consequence-item consequence-item--bad reveal d2"><span>❌</span><span>Você suplementa errado sem saber se o investimento vai se pagar</span></div>
-      <div class="consequence-item consequence-item--bad reveal d3"><span>❌</span><span>Você erra o momento certo de vender o gado e perde rentabilidade</span></div>
-      <div class="consequence-item consequence-item--bad reveal d4"><span>❌</span><span>Você recebe várias ofertas pra comprar, mas escolhe a errada</span></div>
-      <div class="consequence-item consequence-item--bad reveal d5"><span>❌</span><span>Você vive num ciclo de prejuízos por não ter números pra comparar</span></div>
+      <div class="consequence-item consequence-item--bad reveal d1"><span class="icon icon--sm" style="color:var(--danger)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span><span>Você compra errado sem saber se no fim do trabalho vai ganhar dinheiro</span></div>
+      <div class="consequence-item consequence-item--bad reveal d2"><span class="icon icon--sm" style="color:var(--danger)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span><span>Você suplementa errado sem saber se o investimento vai se pagar</span></div>
+      <div class="consequence-item consequence-item--bad reveal d3"><span class="icon icon--sm" style="color:var(--danger)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span><span>Você erra o momento certo de vender o gado e perde rentabilidade</span></div>
+      <div class="consequence-item consequence-item--bad reveal d4"><span class="icon icon--sm" style="color:var(--danger)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span><span>Você recebe várias ofertas pra comprar, mas escolhe a errada</span></div>
+      <div class="consequence-item consequence-item--bad reveal d5"><span class="icon icon--sm" style="color:var(--danger)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></span><span>Você vive num ciclo de prejuízos por não ter números pra comparar</span></div>
     </div>
 
     <div class="contrast-block">
       <div class="contrast-card contrast-card--bad reveal d1">
         <h4>Sem controle</h4>
         <ul>
-          <li>❌ Decisão no achismo</li>
-          <li>❌ Prejuízo invisível</li>
-          <li>❌ Erros repetidos</li>
-          <li>❌ Resultado incerto</li>
+          <li><span class="icon icon--sm" style="color:var(--danger)"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span> Decisão no achismo</li>
+          <li><span class="icon icon--sm" style="color:var(--danger)"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span> Prejuízo invisível</li>
+          <li><span class="icon icon--sm" style="color:var(--danger)"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span> Erros repetidos</li>
+          <li><span class="icon icon--sm" style="color:var(--danger)"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span> Resultado incerto</li>
         </ul>
       </div>
       <div class="contrast-card contrast-card--good reveal d2">
         <h4>Com os números na mão</h4>
         <ul>
-          <li>✅ Sabem exatamente quanto custa cada decisão</li>
-          <li>✅ Identificam onde estão perdendo antes que vire prejuízo</li>
-          <li>✅ Compram, suplementam e vendem na hora certa</li>
-          <li>✅ Fecham lote sabendo o lucro real — não o estimado</li>
+          <li><span class="icon icon--sm" style="color:var(--forest-600)"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Sabem exatamente quanto custa cada decisão</li>
+          <li><span class="icon icon--sm" style="color:var(--forest-600)"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Identificam onde estão perdendo antes que vire prejuízo</li>
+          <li><span class="icon icon--sm" style="color:var(--forest-600)"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Compram, suplementam e vendem na hora certa</li>
+          <li><span class="icon icon--sm" style="color:var(--forest-600)"><svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg></span> Fecham lote sabendo o lucro real — não o estimado</li>
         </ul>
       </div>
     </div>
@@ -1380,14 +1545,14 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- ANTI-PLANILHA — ver-800                                     -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- ANTI-PLANILHA                                                  -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <section id="antiplanilha">
   <div class="c">
     <div class="antiplanilha-grid">
       <div>
-        <div class="tag reveal" style="background:rgba(241,187,2,.15);color:var(--ama-500)">Posicionamento</div>
+        <div class="tag reveal">Posicionamento</div>
         <h2 class="t-48 reveal d1" style="color:#fff">Isso aqui não é planilha!</h2>
 
         <div class="strike-list reveal d2">
@@ -1400,14 +1565,14 @@
         <p class="sistema-desc reveal d3">Ele faz as contas pra você e te mostra o que realmente importa:</p>
 
         <div class="decision-pills reveal d4">
-          <div class="decision-pill">👉 Lucro</div>
-          <div class="decision-pill">👉 Investimento</div>
-          <div class="decision-pill">👉 Resultado</div>
+          <div class="decision-pill"><span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span> Lucro</div>
+          <div class="decision-pill"><span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span> Investimento</div>
+          <div class="decision-pill"><span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span> Resultado</div>
         </div>
 
         <div class="device-row reveal d5">
-          <div class="device-item"><span>📱</span><span>Celular no campo</span></div>
-          <div class="device-item"><span>💻</span><span>Computador na sede</span></div>
+          <div class="device-item"><span class="icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span><span>Celular no campo</span></div>
+          <div class="device-item"><span class="icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span><span>Computador na sede</span></div>
         </div>
         <p class="auto-note reveal d6">Tudo automático. Sem conta manual. Sem erro.</p>
       </div>
@@ -1442,42 +1607,42 @@
 
 <div class="divider divider--dark"></div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- FERRAMENTAS — ver-50                                         -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- FERRAMENTAS                                                    -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <section id="ferramentas">
   <div class="c">
     <div class="tag tag--light reveal">O que você recebe</div>
     <h2 class="t-40 reveal d1">Dentro do sistema você tem acesso a:</h2>
 
     <div class="tools-grid">
-      <div class="tool-card reveal d1"><div class="tool-icon">📊</div><div class="tool-name">Simulador de Resultados</div><div class="tool-desc">Veja o lucro estimado antes de fechar qualquer negócio</div></div>
-      <div class="tool-card reveal d2"><div class="tool-icon">💰</div><div class="tool-name">Diluição de Ágio</div><div class="tool-desc">Saiba exatamente quanto o ágio impacta no seu resultado final</div></div>
-      <div class="tool-card reveal d3"><div class="tool-icon">🥩</div><div class="tool-name">Cálculo de Suplementação</div><div class="tool-desc">Descubra se o que você gasta em suplemento está se pagando e tenha um comparativo entre todas as possibilidades</div></div>
-      <div class="tool-card reveal d4"><div class="tool-icon">🌱</div><div class="tool-name">Taxa de Lotação</div><div class="tool-desc">Otimize o uso da sua pastagem com o número certo de animais</div></div>
-      <div class="tool-card reveal d5"><div class="tool-icon">📉</div><div class="tool-name">Cálculo da Diária</div><div class="tool-desc">Saiba quanto cada animal está custando por dia na sua operação</div></div>
-      <div class="tool-card reveal d6"><div class="tool-icon">📈</div><div class="tool-name">Apuração de Resultados Anuais</div><div class="tool-desc">Visão completa do que entrou, saiu e sobrou no ano</div></div>
-      <div class="tool-card reveal d1"><div class="tool-icon">⚖️</div><div class="tool-name">Ponto de Equilíbrio</div><div class="tool-desc">Nunca mais venda sem saber o mínimo que precisa receber</div></div>
-      <div class="tool-card reveal d2"><div class="tool-icon">📊</div><div class="tool-name">Custo de Produção PRO</div><div class="tool-desc">Mapeie todos os custos e encontre onde reduzir sem perder resultado, além de ter todos os parâmetros de referência pra comparar</div></div>
-      <div class="tool-card reveal d3"><div class="tool-icon">🛒</div><div class="tool-name">Simulação de Compra</div><div class="tool-desc">Simule a compra antes de fechar entre quantas ofertas tiver e veja se o negócio fecha</div></div>
-      <div class="tool-card reveal d4"><div class="tool-icon">🐂</div><div class="tool-name">Fechamento de Lote</div><div class="tool-desc">Apure o resultado real de cada lote vendido</div></div>
+      <div class="tool-card reveal d1"><div class="tool-icon"><svg viewBox="0 0 24 24"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg></div><div class="tool-name">Simulador de Resultados</div><div class="tool-desc">Veja o lucro estimado antes de fechar qualquer negócio</div></div>
+      <div class="tool-card reveal d2"><div class="tool-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="tool-name">Diluição de Ágio</div><div class="tool-desc">Saiba exatamente quanto o ágio impacta no seu resultado final</div></div>
+      <div class="tool-card reveal d3"><div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M9 3h6v5a3 3 0 01-6 0V3z"/><path d="M12 8v8"/><path d="M8 16h8"/><path d="M7 21h10"/></svg></div><div class="tool-name">Cálculo de Suplementação</div><div class="tool-desc">Descubra se o que você gasta em suplemento está se pagando e tenha um comparativo entre todas as possibilidades</div></div>
+      <div class="tool-card reveal d4"><div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M12 22c-4.97 0-9-2.69-9-6v-4c0-3.31 4.03-6 9-6s9 2.69 9 6v4c0 3.31-4.03 6-9 6z"/><path d="M12 10V2"/><path d="M9 4l3-2 3 2"/></svg></div><div class="tool-name">Taxa de Lotação</div><div class="tool-desc">Otimize o uso da sua pastagem com o número certo de animais</div></div>
+      <div class="tool-card reveal d5"><div class="tool-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/></svg></div><div class="tool-name">Cálculo da Diária</div><div class="tool-desc">Saiba quanto cada animal está custando por dia na sua operação</div></div>
+      <div class="tool-card reveal d6"><div class="tool-icon"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><div class="tool-name">Apuração de Resultados Anuais</div><div class="tool-desc">Visão completa do que entrou, saiu e sobrou no ano</div></div>
+      <div class="tool-card reveal d1"><div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div><div class="tool-name">Ponto de Equilíbrio</div><div class="tool-desc">Nunca mais venda sem saber o mínimo que precisa receber</div></div>
+      <div class="tool-card reveal d2"><div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 118 2.83"/><path d="M22 12A10 10 0 0012 2v10z"/></svg></div><div class="tool-name">Custo de Produção PRO</div><div class="tool-desc">Mapeie todos os custos e encontre onde reduzir sem perder resultado, além de ter todos os parâmetros de referência pra comparar</div></div>
+      <div class="tool-card reveal d3"><div class="tool-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div><div class="tool-name">Simulação de Compra</div><div class="tool-desc">Simule a compra antes de fechar entre quantas ofertas tiver e veja se o negócio fecha</div></div>
+      <div class="tool-card reveal d4"><div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div class="tool-name">Fechamento de Lote</div><div class="tool-desc">Apure o resultado real de cada lote vendido</div></div>
     </div>
 
     <div class="tools-benefit reveal">
       <h3>Você para de trabalhar no escuro.</h3>
-      <p class="sub c-18">E começa a saber:</p>
-      <div class="benefit-arrow">👉 <span>quanto custa cada decisão</span></div>
-      <div class="benefit-arrow">👉 <span>quanto cada animal está deixando</span></div>
-      <div class="benefit-arrow">👉 <span>onde ajustar pra aumentar lucro</span></div>
+      <p class="sub">E começa a saber:</p>
+      <div class="benefit-arrow"><span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span> <span>quanto custa cada decisão</span></div>
+      <div class="benefit-arrow"><span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span> <span>quanto cada animal está deixando</span></div>
+      <div class="benefit-arrow"><span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span> <span>onde ajustar pra aumentar lucro</span></div>
     </div>
   </div>
 </section>
 
 <div class="divider"></div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- OBJEÇÕES — branco                                            -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- OBJEÇÕES                                                       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <section id="objecoes">
   <div class="c">
     <div class="tag tag--light reveal">Entendemos você</div>
@@ -1487,21 +1652,21 @@
       <div class="objection-card reveal d1">
         <div class="objection-num objection-num--1">1</div>
         <div class="objection-body">
-          <h4>🔴 Você acreditou que era coisa só pra fazenda grande</h4>
+          <h4>Você acreditou que era coisa só pra fazenda grande</h4>
           <p>Muita gente acha que gestão financeira é pra quem tem escala, contador na folha e equipe de apoio. A verdade: independente do tamanho da operação, é preciso tomar decisão baseada em números.<br><br><strong>Quem não faz conta, paga a conta!</strong><br><br>No sistema, você tem ferramentas que funcionam pra qualquer tamanho de fazenda e negócio, do iniciante ao produtor experiente.</p>
         </div>
       </div>
       <div class="objection-card reveal d2">
         <div class="objection-num objection-num--2">2</div>
         <div class="objection-body">
-          <h4>🟠 Você tentou planilha e desistiu</h4>
+          <h4>Você tentou planilha e desistiu</h4>
           <p>Planilhas exigem disciplina, conhecimento e tempo. Um erro numa fórmula e tudo desanda. O sistema faz os cálculos automaticamente. Você só insere os dados e lê o resultado. Sem fórmula. Sem erro. Sem abandono.</p>
         </div>
       </div>
       <div class="objection-card reveal d3">
         <div class="objection-num objection-num--3">3</div>
         <div class="objection-body">
-          <h4>🟡 Você achou que não tinha tempo pra aprender mais uma coisa</h4>
+          <h4>Você achou que não tinha tempo pra aprender mais uma coisa</h4>
           <p>Por isso o sistema foi feito pra ser simples, direto e rápido. Você não precisa estudar gestão financeira. Você só precisa inserir seus números e tomar a decisão certa. E ainda conta com vídeos explicativos que mostram passo a passo como usar cada ferramenta em minutos.</p>
         </div>
       </div>
@@ -1509,9 +1674,9 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- IDENTIFICAÇÃO — ver-900                                     -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- IDENTIFICAÇÃO                                                  -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <section id="identificacao">
   <div class="c">
     <div class="tag reveal">Isso é pra você?</div>
@@ -1540,29 +1705,29 @@
 
 <div class="divider divider--dark"></div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- STACK DE VALOR — branco                                     -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- STACK DE VALOR                                                 -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <section id="stack">
   <div class="c">
     <div class="tag tag--light reveal">Tudo que você recebe</div>
     <h2 class="t-40 reveal d1">O que você vai receber ao adquirir o sistema:</h2>
 
     <div class="stack-list reveal d2">
-      <div class="stack-item"><div class="stack-item-left"><span>📊</span><span>Simulador de Resultados</span></div><span class="stack-price">R$ 47</span></div>
-      <div class="stack-item"><div class="stack-item-left"><span>💰</span><span>Diluição de Ágio</span></div><span class="stack-price">R$ 47</span></div>
-      <div class="stack-item"><div class="stack-item-left"><span>🥩</span><span>Cálculo de Suplementação</span></div><span class="stack-price">R$ 47</span></div>
-      <div class="stack-item"><div class="stack-item-left"><span>🌱</span><span>Taxa de Lotação</span></div><span class="stack-price">R$ 37</span></div>
-      <div class="stack-item"><div class="stack-item-left"><span>📉</span><span>Cálculo da Diária</span></div><span class="stack-price">R$ 37</span></div>
-      <div class="stack-item"><div class="stack-item-left"><span>📈</span><span>Apuração de Resultados Anuais</span></div><span class="stack-price">R$ 47</span></div>
-      <div class="stack-item"><div class="stack-item-left"><span>⚖️</span><span>Ponto de Equilíbrio</span></div><span class="stack-price">R$ 47</span></div>
-      <div class="stack-item"><div class="stack-item-left"><span>📊</span><span>Custo de Produção PRO</span></div><span class="stack-price">R$ 57</span></div>
-      <div class="stack-item"><div class="stack-item-left"><span>🛒</span><span>Simulação de Compra</span></div><span class="stack-price">R$ 37</span></div>
-      <div class="stack-item"><div class="stack-item-left"><span>🐂</span><span>Fechamento de Lote</span></div><span class="stack-price">R$ 47</span></div>
+      <div class="stack-item"><div class="stack-item-left"><span class="icon" style="color:var(--forest-700)"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg></span><span>Simulador de Resultados</span></div><span class="stack-price">R$ 47</span></div>
+      <div class="stack-item"><div class="stack-item-left"><span class="icon" style="color:var(--forest-700)"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><span>Diluição de Ágio</span></div><span class="stack-price">R$ 47</span></div>
+      <div class="stack-item"><div class="stack-item-left"><span class="icon" style="color:var(--forest-700)"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v5a3 3 0 01-6 0V3z"/><path d="M12 8v8"/><path d="M8 16h8"/></svg></span><span>Cálculo de Suplementação</span></div><span class="stack-price">R$ 47</span></div>
+      <div class="stack-item"><div class="stack-item-left"><span class="icon" style="color:var(--forest-700)"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c-4.97 0-9-2.69-9-6v-4c0-3.31 4.03-6 9-6s9 2.69 9 6v4c0 3.31-4.03 6-9 6z"/></svg></span><span>Taxa de Lotação</span></div><span class="stack-price">R$ 37</span></div>
+      <div class="stack-item"><div class="stack-item-left"><span class="icon" style="color:var(--forest-700)"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span><span>Cálculo da Diária</span></div><span class="stack-price">R$ 37</span></div>
+      <div class="stack-item"><div class="stack-item-left"><span class="icon" style="color:var(--forest-700)"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span><span>Apuração de Resultados Anuais</span></div><span class="stack-price">R$ 47</span></div>
+      <div class="stack-item"><div class="stack-item-left"><span class="icon" style="color:var(--forest-700)"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></span><span>Ponto de Equilíbrio</span></div><span class="stack-price">R$ 47</span></div>
+      <div class="stack-item"><div class="stack-item-left"><span class="icon" style="color:var(--forest-700)"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 118 2.83"/><path d="M22 12A10 10 0 0012 2v10z"/></svg></span><span>Custo de Produção PRO</span></div><span class="stack-price">R$ 57</span></div>
+      <div class="stack-item"><div class="stack-item-left"><span class="icon" style="color:var(--forest-700)"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></span><span>Simulação de Compra</span></div><span class="stack-price">R$ 37</span></div>
+      <div class="stack-item"><div class="stack-item-left"><span class="icon" style="color:var(--forest-700)"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></span><span>Fechamento de Lote</span></div><span class="stack-price">R$ 47</span></div>
     </div>
 
     <div class="bonus-card reveal d3">
-      <div class="bonus-label">🎁 Bônus incluído</div>
+      <div class="bonus-label"><span class="icon icon--sm" style="color:var(--amber-600)"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg></span> Bônus incluído</div>
       <div class="bonus-title">Pacote de Aulas Curtas e Diretas</div>
       <ul class="bonus-items">
         <li>Como usar cada ferramenta</li>
@@ -1579,9 +1744,9 @@
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- OFERTA — ver-900                                             -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- OFERTA                                                         -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <section id="oferta">
   <div class="c">
     <div class="tag reveal">Oferta especial</div>
@@ -1594,35 +1759,38 @@
     </div>
 
     <div class="offer-triggers reveal d3">
-      <span class="offer-trigger">🔥 Condição especial por tempo limitado</span>
-      <span class="offer-trigger">📅 12 meses de acesso completo</span>
-      <span class="offer-trigger">📱 PRODUTO 100% DIGITAL — Acesso imediato</span>
-      <span class="offer-trigger">🎁 Bônus de aulas inclusos sem custo adicional</span>
+      <span class="offer-trigger"><span class="icon icon--sm" style="color:var(--amber-400)"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 6v6l4 2"/></svg></span> Condição especial por tempo limitado</span>
+      <span class="offer-trigger"><span class="icon icon--sm"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span> 12 meses de acesso completo</span>
+      <span class="offer-trigger"><span class="icon icon--sm"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span> PRODUTO 100% DIGITAL — Acesso imediato</span>
+      <span class="offer-trigger"><span class="icon icon--sm" style="color:var(--amber-400)"><svg viewBox="0 0 24 24"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/></svg></span> Bônus de aulas inclusos sem custo adicional</span>
     </div>
 
-    <div style="display:flex;justify-content:center" class="reveal d4">
+    <div style="display:flex;justify-content:center;position:relative;z-index:1" class="reveal d4">
       <a href="#" class="botao tam-gg">
-        👉 QUERO TER CONTROLE TOTAL DO MEU GADO
+        QUERO TER CONTROLE TOTAL DO MEU GADO
+        <span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
       </a>
     </div>
 
     <div class="steps-grid">
-      <div class="step-card reveal d1"><div class="step-num">1️⃣</div><h4>Você realiza a compra</h4><p>Pagamento 100% seguro via cartão, Pix ou boleto</p></div>
-      <div class="step-card reveal d2"><div class="step-num">2️⃣</div><h4>Recebe o acesso por email</h4><p>Em menos de 2 minutos os dados de login chegam na sua caixa de entrada</p></div>
-      <div class="step-card reveal d3"><div class="step-num">3️⃣</div><h4>Começa a decidir com segurança hoje mesmo</h4><p>Acesse do celular no campo ou do computador na sede durante os próximos 12 meses</p></div>
+      <div class="step-card reveal d1"><div class="step-num">01</div><h4>Você realiza a compra</h4><p>Pagamento 100% seguro via cartão, Pix ou boleto</p></div>
+      <div class="step-card reveal d2"><div class="step-num">02</div><h4>Recebe o acesso por email</h4><p>Em menos de 2 minutos os dados de login chegam na sua caixa de entrada</p></div>
+      <div class="step-card reveal d3"><div class="step-num">03</div><h4>Começa a decidir com segurança hoje mesmo</h4><p>Acesse do celular no campo ou do computador na sede durante os próximos 12 meses</p></div>
     </div>
   </div>
 </section>
 
 <div class="divider divider--dark"></div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- GARANTIA — ver-100                                           -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- GARANTIA                                                       -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <section id="garantia">
   <div class="c">
     <div class="guarantee-box reveal">
-      <div class="guarantee-icon">🔒</div>
+      <div class="guarantee-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
       <div class="guarantee-title">7 DIAS DE RISCO ZERO</div>
       <p class="guarantee-text">Acesse o sistema, use as ferramentas, assista as aulas.<br>Se por qualquer motivo você achar que não é pra você, basta enviar um email e devolvemos <strong>100% do seu dinheiro.</strong></p>
       <p class="guarantee-text">Sem perguntas. Sem burocracia.</p>
@@ -1630,7 +1798,8 @@
     </div>
     <div style="display:flex;justify-content:center" class="reveal d2">
       <a href="#oferta" class="botao tam-gg">
-        👉 CLIQUE AQUI PARA TESTAR POR 7 DIAS SEM RISCO
+        CLIQUE AQUI PARA TESTAR POR 7 DIAS SEM RISCO
+        <span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
       </a>
     </div>
   </div>
@@ -1638,9 +1807,9 @@
 
 <div class="divider"></div>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- FAQ — branco                                                 -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- FAQ                                                            -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <section id="faq">
   <div class="c">
     <div class="tag tag--light reveal">Dúvidas frequentes</div>
@@ -1648,54 +1817,58 @@
 
     <div class="faq-list reveal d2">
       <div class="faq-item">
-        <button class="faq-question"><span>Preciso ter gado agora para usar o sistema?</span><span class="faq-icon">+</span></button>
+        <button class="faq-question"><span>Preciso ter gado agora para usar o sistema?</span><span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
         <div class="faq-answer"><p>Não necessariamente. Você pode usar o simulador para avaliar negócios antes mesmo de comprar seu primeiro lote.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question"><span>É difícil de usar?</span><span class="faq-icon">+</span></button>
+        <button class="faq-question"><span>É difícil de usar?</span><span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
         <div class="faq-answer"><p>Não. O sistema foi feito para produtores — não para contadores. Você insere os dados e ele faz os cálculos automaticamente.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question"><span>Funciona para qualquer tamanho de operação?</span><span class="faq-icon">+</span></button>
+        <button class="faq-question"><span>Funciona para qualquer tamanho de operação?</span><span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
         <div class="faq-answer"><p>Sim. Desde quem está começando com poucos animais até operações maiores. As ferramentas se adaptam a qualquer escala.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question"><span>Como funciona o acesso?</span><span class="faq-icon">+</span></button>
+        <button class="faq-question"><span>Como funciona o acesso?</span><span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
         <div class="faq-answer"><p>Após a compra, você recebe login e senha por email em até 2 minutos. Acesso pelo celular ou computador, de qualquer lugar.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question"><span>O acesso tem prazo?</span><span class="faq-icon">+</span></button>
+        <button class="faq-question"><span>O acesso tem prazo?</span><span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
         <div class="faq-answer"><p>Sim. Você tem acesso completo ao sistema por 12 meses a partir da data da compra. Tempo mais que suficiente para transformar a gestão da sua fazenda.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question"><span>E se eu não souber usar as ferramentas?</span><span class="faq-icon">+</span></button>
+        <button class="faq-question"><span>E se eu não souber usar as ferramentas?</span><span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
         <div class="faq-answer"><p>Por isso incluímos o bônus de aulas curtas e diretas que mostram na prática como usar cada calculadora e interpretar os resultados.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question"><span>E se eu não gostar?</span><span class="faq-icon">+</span></button>
+        <button class="faq-question"><span>E se eu não gostar?</span><span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
         <div class="faq-answer"><p>Você tem 7 dias de garantia incondicional. Pediu reembolso, devolvemos 100% — sem perguntas.</p></div>
       </div>
       <div class="faq-item">
-        <button class="faq-question"><span>Quais as formas de pagamento?</span><span class="faq-icon">+</span></button>
+        <button class="faq-question"><span>Quais as formas de pagamento?</span><span class="faq-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span></button>
         <div class="faq-answer"><p>Cartão de crédito, Pix e boleto bancário.</p></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!-- FINAL CTA — ver-900                                          -->
-<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
+<!-- FINAL CTA                                                      -->
+<!-- ═══════════════════════════════════════════════════════════════ -->
 <section id="final-cta">
   <div class="c">
     <h2 class="t-48 reveal">A clareza dos números começa hoje.</h2>
     <p class="sub reveal d1">Junte-se a mais de 1.000 pecuaristas que já tomam decisões com segurança.</p>
-    <div style="display:flex;justify-content:center" class="reveal d2">
+    <div style="display:flex;justify-content:center;position:relative;z-index:1" class="reveal d2">
       <a href="#oferta" class="botao tam-gg">
-        👉 QUERO TER CONTROLE TOTAL DO GADO
+        QUERO TER CONTROLE TOTAL DO GADO
+        <span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
       </a>
     </div>
-    <p class="final-note reveal d3">🔒 Pagamento seguro · 7 dias de garantia · Acesso imediato</p>
+    <p class="final-note reveal d3">
+      <span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+      Pagamento seguro · 7 dias de garantia · Acesso imediato
+    </p>
   </div>
 </section>
 
@@ -1705,20 +1878,23 @@
   </div>
 </footer>
 
-<!-- ─── STICKY BAR ──────────────────────────────────────────── -->
+<!-- STICKY BAR -->
 <div class="sticky-bar" id="stickyBar">
   <div class="sticky-bar-text">Por apenas <strong>R$ 67</strong> — Acesso completo por 12 meses</div>
-  <a href="#oferta" class="botao tam-g">GARANTIR AGORA →</a>
+  <a href="#oferta" class="botao tam-g">GARANTIR AGORA <span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span></a>
 </div>
 
 <script>
+  /* ── Scroll reveals (skip hero — CSS keyframes handle it) ─── */
   const reveals = document.querySelectorAll('.reveal');
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
   }, { threshold: 0.1 });
-  reveals.forEach(el => obs.observe(el));
-  document.querySelectorAll('#hero .reveal').forEach(el => el.classList.add('visible'));
+  reveals.forEach(el => {
+    if (!el.closest('#hero')) obs.observe(el);
+  });
 
+  /* ── FAQ accordion ───────────────────────────────────────── */
   document.querySelectorAll('.faq-question').forEach(btn => {
     btn.addEventListener('click', () => {
       const item = btn.closest('.faq-item');
@@ -1728,11 +1904,12 @@
     });
   });
 
+  /* ── Sticky bar ──────────────────────────────────────────── */
   const stickyBar = document.getElementById('stickyBar');
   new IntersectionObserver(([e]) => stickyBar.classList.toggle('visible', !e.isIntersecting), { threshold: 0 })
     .observe(document.getElementById('hero'));
 
-  /* ── Carrossel de depoimentos ──────────────────────────── */
+  /* ── Testimonial carousel ────────────────────────────────── */
   const spItems   = document.querySelectorAll('.sp-testimonial-item');
   const spCounter = document.getElementById('spCounter');
   let spCurrent = 0;
@@ -1752,6 +1929,12 @@
     spCurrent = (spCurrent - 1 + spItems.length) % spItems.length;
     showTestimonial(spCurrent);
   });
+
+  /* ── Auto-advance testimonials every 6s ──────────────────── */
+  setInterval(() => {
+    spCurrent = (spCurrent + 1) % spItems.length;
+    showTestimonial(spCurrent);
+  }, 6000);
 </script>
 </body>
 </html>
