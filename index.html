@@ -1156,15 +1156,28 @@
     }
     @media (max-width: 500px) { .objection-card { grid-template-columns: 1fr; } }
     .objection-num {
-      font-family: var(--font-display);
-      font-size: 4rem;
-      font-weight: 800;
-      line-height: 1;
-      opacity: .15;
+      width: 4.8rem;
+      height: 4.8rem;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
-    .objection-num--1 { color: var(--danger); }
-    .objection-num--2 { color: #C2410C; }
-    .objection-num--3 { color: var(--amber-500); }
+    .objection-num svg {
+      width: 2.4rem;
+      height: 2.4rem;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+    .objection-num--1 { background: rgba(220,38,38,.1); color: var(--danger); }
+    .objection-num--1 svg { stroke: var(--danger); }
+    .objection-num--2 { background: rgba(194,65,12,.1); color: #C2410C; }
+    .objection-num--2 svg { stroke: #C2410C; }
+    .objection-num--3 { background: rgba(212,160,23,.1); color: var(--amber-500); }
+    .objection-num--3 svg { stroke: var(--amber-500); }
     .objection-card:nth-child(1) { border-left-color: var(--danger); }
     .objection-card:nth-child(2) { border-left-color: #C2410C; }
     .objection-card:nth-child(3) { border-left-color: var(--amber-500); }
@@ -1886,21 +1899,21 @@
 
     <div class="objection-list">
       <div class="objection-card reveal d1">
-        <div class="objection-num objection-num--1">1</div>
+        <div class="objection-num objection-num--1"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/></svg></div>
         <div class="objection-body">
           <h4>Você acreditou que era coisa só pra fazenda grande</h4>
           <p>Muita gente acha que gestão financeira é pra quem tem escala, contador na folha e equipe de apoio. A verdade: independente do tamanho da operação, é preciso tomar decisão baseada em números.<br><br><strong>Quem não faz conta, paga a conta!</strong><br><br>No sistema, você tem ferramentas que funcionam pra qualquer tamanho de fazenda e negócio, do iniciante ao produtor experiente.</p>
         </div>
       </div>
       <div class="objection-card reveal d2">
-        <div class="objection-num objection-num--2">2</div>
+        <div class="objection-num objection-num--2"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg></div>
         <div class="objection-body">
           <h4>Você tentou planilha e desistiu</h4>
           <p>Planilhas exigem disciplina, conhecimento e tempo. Um erro numa fórmula e tudo desanda. O sistema faz os cálculos automaticamente. Você só insere os dados e lê o resultado. Sem fórmula. Sem erro. Sem abandono.</p>
         </div>
       </div>
       <div class="objection-card reveal d3">
-        <div class="objection-num objection-num--3">3</div>
+        <div class="objection-num objection-num--3"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
         <div class="objection-body">
           <h4>Você achou que não tinha tempo pra aprender mais uma coisa</h4>
           <p>Por isso o sistema foi feito pra ser simples, direto e rápido. Você não precisa estudar gestão financeira. Você só precisa inserir seus números e tomar a decisão certa. E ainda conta com vídeos explicativos que mostram passo a passo como usar cada ferramenta em minutos.</p>
