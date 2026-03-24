@@ -942,6 +942,62 @@
     .ap-anim-closing { opacity: 0; }
     .ap-anim-closing.ap-in { animation: apFadeUp 0.6s var(--ease-out) 0.6s both; }
 
+    .ap-anim-decision { opacity: 0; }
+    .ap-anim-decision.ap-in { animation: apFadeUp 0.6s var(--ease-out) 0.85s both; }
+
+    /* ── Decision block ────────────────────────────────────────── */
+    .ap-decision-block {
+      margin-top: 48px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: left;
+    }
+
+    .ap-decision-label {
+      font-family: var(--font-body);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber-400);
+      margin-bottom: 12px;
+    }
+
+    .ap-decision-desc {
+      font-size: 16px;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 24px;
+      line-height: 1.65;
+    }
+
+    .ap-decision-pills {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .ap-decision-pill {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(232,185,49,.08);
+      border: 1px solid rgba(232,185,49,.20);
+      border-radius: var(--radius-md);
+      padding: 1.2rem 1.8rem;
+      font-weight: 600;
+      font-size: 1.5rem;
+      color: var(--amber-400);
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .ap-decision-pill:hover {
+      background: rgba(232,185,49,.14);
+      border-color: rgba(232,185,49,.4);
+    }
+
+    .ap-decision-pill .icon svg { width: 1.6rem; height: 1.6rem; }
+
     /* ── AP Responsive ─────────────────────────────────────────── */
     @media (max-width: 640px) {
       #antiplanilha { padding: 72px 0; }
@@ -1686,6 +1742,26 @@
       <span class="ap-closing-highlight">um sistema de decisão</span>
     </div>
 
+    <!-- Decision System block -->
+    <div class="ap-decision-block ap-anim-decision" data-testid="ap-decision-block">
+      <div class="ap-decision-label">Sistema de Decisão</div>
+      <p class="ap-decision-desc">Ele faz as contas pra você e te mostra o que realmente importa:</p>
+      <div class="ap-decision-pills">
+        <div class="ap-decision-pill">
+          <span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+          Lucro
+        </div>
+        <div class="ap-decision-pill">
+          <span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+          Investimento
+        </div>
+        <div class="ap-decision-pill">
+          <span class="icon icon--sm"><svg viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg></span>
+          Resultado
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -2028,6 +2104,13 @@
           el.classList.add('ap-in');
         });
       }, 600);
+
+      /* decision block */
+      setTimeout(function () {
+        apSection.querySelectorAll('.ap-anim-decision').forEach(function (el) {
+          el.classList.add('ap-in');
+        });
+      }, 850);
     }
 
     var apObs = new IntersectionObserver(function (entries) {
