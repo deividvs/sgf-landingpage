@@ -1018,6 +1018,23 @@
       gap: 2rem;
       margin: 4.8rem 0;
     }
+
+    .tool-img-wrap {
+      grid-column: span 2;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    .tool-img-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: var(--radius-lg);
+    }
+
+    @media (max-width: 560px) {
+      .tool-img-wrap { grid-column: span 1; }
+    }
     .tool-card {
       background: var(--white);
       border: 1px solid var(--earth-200);
@@ -1786,6 +1803,14 @@
       <div class="tool-card reveal d2"><div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M21.21 15.89A10 10 0 118 2.83"/><path d="M22 12A10 10 0 0012 2v10z"/></svg></div><div class="tool-name">Custo de Produção PRO</div><div class="tool-desc">Mapeie todos os custos e encontre onde reduzir sem perder resultado, além de ter todos os parâmetros de referência pra comparar</div></div>
       <div class="tool-card reveal d3"><div class="tool-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg></div><div class="tool-name">Simulação de Compra</div><div class="tool-desc">Simule a compra antes de fechar entre quantas ofertas tiver e veja se o negócio fecha</div></div>
       <div class="tool-card reveal d4"><div class="tool-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div><div class="tool-name">Fechamento de Lote</div><div class="tool-desc">Apure o resultado real de cada lote vendido</div></div>
+
+      <div class="tool-img-wrap reveal" data-testid="tools-ipad-image">
+        <img
+          src="https://customer-assets.emergentagent.com/job_planilha-vs-sistema/artifacts/nnhi800p_ipad_sombra.png"
+          alt="Sistema SGF — Ferramentas de Gestão no iPad"
+          loading="lazy"
+        />
+      </div>
     </div>
 
     <div class="tools-benefit reveal">
