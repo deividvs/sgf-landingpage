@@ -1071,7 +1071,15 @@
     }
 
     @media (max-width: 560px) {
-      .tool-img-inline { display: none; }
+      .tool-img-inline {
+        justify-content: center;
+      }
+      .tool-img-inline img {
+        width: 65%;
+        height: auto;
+        object-fit: contain;
+      }
+      .tools-grid { grid-auto-rows: auto; }
     }
     .tool-card {
       background: var(--white);
