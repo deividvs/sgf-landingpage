@@ -1023,13 +1023,20 @@
       grid-column: span 2;
       border-radius: var(--radius-lg);
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .tool-img-wrap img {
-      width: 100%;
+      width: 82%;
       height: auto;
       display: block;
       border-radius: var(--radius-lg);
+    }
+
+    @media (max-width: 900px) {
+      .tool-img-wrap img { width: 100%; }
     }
 
     @media (max-width: 560px) {
