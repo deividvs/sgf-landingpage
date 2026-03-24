@@ -457,6 +457,78 @@
     .hero-trust { font-size: 1.4rem; color: rgba(255,255,255,.5); }
     .hero-trust strong { color: rgba(255,255,255,.85); }
 
+    /* ── Hero video link ──────────────────────────────────────────── */
+    .hero-video-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-body);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--amber-300);
+      padding: 0;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s ease, opacity 0.2s ease;
+    }
+    .hero-video-link:hover { color: var(--amber-400); opacity: 0.85; }
+    .hero-video-icon {
+      width: 2.2rem;
+      height: 2.2rem;
+      flex-shrink: 0;
+    }
+    .hero-video-icon svg { width: 100%; height: 100%; }
+
+    /* ── Video modal ──────────────────────────────────────────────── */
+    .video-modal {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.82);
+      backdrop-filter: blur(6px);
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .video-modal.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .video-modal-inner {
+      position: relative;
+      width: 90%;
+      max-width: 420px;
+      transform: translateY(20px);
+      transition: transform 0.35s var(--ease-out);
+    }
+    .video-modal.open .video-modal-inner {
+      transform: translateY(0);
+    }
+    .video-modal-close {
+      position: absolute;
+      top: -4rem;
+      right: 0;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 50%;
+      width: 3.2rem;
+      height: 3.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #fff;
+      transition: background 0.2s ease;
+    }
+    .video-modal-close:hover { background: rgba(255,255,255,.2); }
+    .video-modal-close svg { width: 1.6rem; height: 1.6rem; }
+
     .hero-pills { display: flex; flex-wrap: wrap; gap: 0.8rem; }
     .hero-pill {
       display: inline-flex;
@@ -1547,6 +1619,17 @@
       .br-desktop { display: none; }
     }
   </style>
+
+  <!-- Video preload -->
+  <link rel="preload" href="https://scripts.converteai.net/fae52404-8fd3-4f9c-8167-946eb654f0d6/players/69c20ac2596c6131b744724f/v4/embed.html">
+  <script>!function(i,n){i._plt=i._plt||(n&&n.timeOrigin?n.timeOrigin+n.now():Date.now())}(window,performance);</script>
+  <link rel="preload" href="https://scripts.converteai.net/fae52404-8fd3-4f9c-8167-946eb654f0d6/players/69c20ac2596c6131b744724f/v4/player.js" as="script">
+  <link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script">
+  <link rel="preload" href="https://cdn.converteai.net/fae52404-8fd3-4f9c-8167-946eb654f0d6/69c20abc3d18cfb2430d933d/main.m3u8" as="fetch">
+  <link rel="dns-prefetch" href="https://cdn.converteai.net">
+  <link rel="dns-prefetch" href="https://scripts.converteai.net">
+  <link rel="dns-prefetch" href="https://images.converteai.net">
+  <link rel="dns-prefetch" href="https://api.vturb.com.br">
 </head>
 <body>
 
@@ -1602,6 +1685,10 @@
             <span class="hero-pill"><span class="icon icon--sm"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></span> Celular ou computador</span>
             <span class="hero-pill"><span class="icon icon--sm"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></span> Garantia de 7 dias</span>
           </div>
+          <button class="hero-video-link" id="heroVideoBtn" onclick="document.getElementById('videoModal').classList.add('open')">
+            <span class="hero-video-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor" stroke="none"/></svg></span>
+            clique aqui para ver como funciona a ferramenta
+          </button>
         </div>
       </div>
 
@@ -2257,6 +2344,31 @@
     spCurrent = (spCurrent + 1) % spItems.length;
     showTestimonial(spCurrent);
   }, 6000);
+</script>
+
+<!-- VIDEO MODAL -->
+<div id="videoModal" class="video-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="video-modal-inner">
+    <button class="video-modal-close" onclick="document.getElementById('videoModal').classList.remove('open')" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div id="ifr_69c20ac2596c6131b744724f_wrapper" style="margin:0 auto;width:100%;max-width:400px;">
+      <div style="position:relative;padding:176.667% 0 0 0;" id="ifr_69c20ac2596c6131b744724f_aspect">
+        <iframe frameborder="0" allowfullscreen src="about:blank" id="ifr_69c20ac2596c6131b744724f"
+          style="position:absolute;top:0;left:0;width:100%;height:100%;"
+          referrerpolicy="origin"
+          onload="this.onload=null,this.src='https://scripts.converteai.net/fae52404-8fd3-4f9c-8167-946eb654f0d6/players/69c20ac2596c6131b744724f/v4/embed.html'+(location.search||'?')+'&vl='+encodeURIComponent(location.href)">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var s=document.createElement("script");
+  s.src="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/sdk.js";
+  s.async=!0;
+  document.head.appendChild(s);
 </script>
 </body>
 </html>
