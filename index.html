@@ -1309,6 +1309,18 @@
     /* ═══════════════════════════════════════════════════════════════ */
     /* OFERTA                                                         */
     /* ═══════════════════════════════════════════════════════════════ */
+    .oferta-mockup {
+      margin: 4rem auto 0;
+      max-width: 72rem;
+    }
+    .oferta-mockup img {
+      width: 100%;
+      height: auto;
+    }
+    @media (max-width: 600px) {
+      .oferta-mockup { max-width: 100%; }
+    }
+
     #oferta {
       background: var(--forest-950);
       background-image:
@@ -2000,6 +2012,10 @@
   <div class="c">
     <div class="tag reveal">Oferta especial</div>
     <h2 class="t-40 section-title reveal d1">Receba tudo isso agora por apenas:</h2>
+
+    <div class="oferta-mockup reveal d1">
+      <img src="images/gadgets.png" alt="SGF em múltiplos dispositivos" loading="lazy">
+    </div>
 
     <div class="price-tag reveal d2">
       <div class="price-from">De R$ 549</div>
