@@ -203,6 +203,10 @@ export function Dashboard() {
         profit_margin_percentage: results.profit_margin_percentage,
         result_per_animal: results.result_per_animal,
         cost_per_arroba: results.cost_per_arroba,
+        carcass_yield_percentage: inputs.carcass_yield_percentage,
+        carcass_weight_kg: results.carcass_weight_kg,
+        arrobas_per_head: results.arrobas_per_head,
+        total_arrobas: results.total_arrobas,
       });
 
       if (!error) {
@@ -239,11 +243,15 @@ export function Dashboard() {
         .select('tool_id')
         .eq('user_id', user.id);
 
-      if (!error && data) {
+      if (error) {
+        console.error('Error loading favorites:', error);
+        setFavoritedTools(new Set());
+      } else if (data) {
         setFavoritedTools(new Set(data.map(item => item.tool_id)));
       }
     } catch (error) {
       console.error('Error loading favorites:', error);
+      setFavoritedTools(new Set());
     } finally {
       setLoadingFavorites(false);
     }
@@ -256,6 +264,16 @@ export function Dashboard() {
 
     const isFavorited = favoritedTools.has(toolId);
 
+    setFavoritedTools(prev => {
+      const newSet = new Set(prev);
+      if (isFavorited) {
+        newSet.delete(toolId);
+      } else {
+        newSet.add(toolId);
+      }
+      return newSet;
+    });
+
     try {
       if (isFavorited) {
         const { error } = await supabase
@@ -264,12 +282,9 @@ export function Dashboard() {
           .eq('user_id', user.id)
           .eq('tool_id', toolId);
 
-        if (!error) {
-          setFavoritedTools(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(toolId);
-            return newSet;
-          });
+        if (error) {
+          console.error('Error removing favorite:', error);
+          setFavoritedTools(prev => new Set(prev).add(toolId));
         }
       } else {
         const { error } = await supabase
@@ -279,12 +294,26 @@ export function Dashboard() {
             tool_id: toolId
           });
 
-        if (!error) {
-          setFavoritedTools(prev => new Set(prev).add(toolId));
+        if (error) {
+          console.error('Error adding favorite:', error);
+          setFavoritedTools(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(toolId);
+            return newSet;
+          });
         }
       }
     } catch (error) {
       console.error('Error toggling favorite:', error);
+      setFavoritedTools(prev => {
+        const newSet = new Set(prev);
+        if (isFavorited) {
+          newSet.add(toolId);
+        } else {
+          newSet.delete(toolId);
+        }
+        return newSet;
+      });
     }
   };
 

@@ -41,23 +41,6 @@ Deno.serve(async (req: Request) => {
 
     if (purchaseError) {
       console.error("Error fetching purchase:", purchaseError);
-      return new Response(
-        JSON.stringify({ error: "Failed to fetch purchase data" }),
-        {
-          status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
-    }
-
-    if (!purchase) {
-      return new Response(
-        JSON.stringify({ error: "No approved purchase found for this email" }),
-        {
-          status: 404,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
     }
 
     const { data: existingSubscription } = await supabase
@@ -80,15 +63,20 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+    const subscriptionData: any = {
+      user_id,
+      subscription_status: purchase ? "active" : "active",
+      started_at: new Date().toISOString(),
+      expires_at: null,
+    };
+
+    if (purchase) {
+      subscriptionData.hotmart_transaction_id = purchase.transaction_id;
+    }
+
     const { data: subscription, error: subscriptionError } = await supabase
       .from("user_subscriptions")
-      .insert({
-        user_id,
-        hotmart_transaction_id: purchase.transaction_id,
-        subscription_status: "active",
-        started_at: new Date().toISOString(),
-        expires_at: null,
-      })
+      .insert(subscriptionData)
       .select()
       .single();
 

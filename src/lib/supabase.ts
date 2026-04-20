@@ -50,4 +50,8 @@ export type Simulation = {
   profit_margin_percentage: number;
   result_per_animal: number;
   cost_per_arroba: number;
+  carcass_yield_percentage?: number;
+  carcass_weight_kg?: number;
+  arrobas_per_head?: number;
+  total_arrobas?: number;
 };

@@ -1,85 +1,144 @@
-import { useState } from 'react';
-import { ChevronRight, CheckCircle, AlertCircle, Beef } from 'lucide-react';
+import { Calculator, TrendingUp, DollarSign, BarChart3, CheckCircle2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
-type Props = {
+interface OnboardingScreenProps {
   onComplete: () => void;
-};
+}
 
-const steps = [
-  {
-    title: 'Bem-vindo ao Pecuária Simulador Pro',
-    description: 'A ferramenta completa para simular a viabilidade financeira de operações de engorda de gado.',
-    icon: Beef,
-  },
-  {
-    title: 'Como funciona',
-    description: 'Você irá preencher informações sobre seu rebanho, custos e receitas. O sistema calculará automaticamente a viabilidade da operação.',
-    icon: CheckCircle,
-  },
-  {
-    title: 'Importante saber',
-    description: 'Campos com fundo branco são editáveis. Campos com fundo amarelo mostram resultados calculados automaticamente e não podem ser editados.',
-    icon: AlertCircle,
-  },
-];
-
-export function OnboardingScreen({ onComplete }: Props) {
-  const [currentStep, setCurrentStep] = useState(0);
-
-  const handleNext = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      onComplete();
-    }
-  };
-
-  const step = steps[currentStep];
-  const Icon = step.icon;
-
+export function OnboardingScreen({ onComplete }: OnboardingScreenProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl">
-        <Card>
-          <CardContent className="p-8 md:p-12">
-            <div className="flex justify-center mb-8">
-              <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
-                <Icon className="w-10 h-10 text-primary" />
+    <div className="min-h-screen bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center p-4">
+      <Card className="max-w-4xl w-full p-8 md:p-12 space-y-8">
+        <div className="text-center space-y-4">
+          <div className="flex justify-center">
+            <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <Calculator className="w-10 h-10 text-white" />
+            </div>
+          </div>
+
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900">
+            Bem-vindo ao Sistema de Simulações Pecuárias
+          </h1>
+
+          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+            Otimize seus resultados na pecuária com ferramentas profissionais de cálculo e análise
+          </p>
+        </div>
+
+        <div className="flex justify-center pt-2">
+          <Button
+            onClick={onComplete}
+            size="lg"
+            className="bg-green-600 hover:bg-green-700 text-white px-12 py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all"
+          >
+            <CheckCircle2 className="w-5 h-5 mr-2" />
+            Começar Cadastro
+          </Button>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="flex gap-4 p-4 bg-green-50 rounded-lg border border-green-200">
+            <div className="flex-shrink-0">
+              <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                <TrendingUp className="w-6 h-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-1">Análise de Resultados</h3>
+              <p className="text-sm text-gray-600">Calcule resultados anuais e projeções financeiras detalhadas</p>
+            </div>
+          </div>
+
+          <div className="flex gap-4 p-4 bg-green-50 rounded-lg border border-green-200">
+            <div className="flex-shrink-0">
+              <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                <DollarSign className="w-6 h-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-1">Controle de Custos</h3>
+              <p className="text-sm text-gray-600">Monitore custos diários, de produção e ponto de equilíbrio</p>
+            </div>
+          </div>
+
+          <div className="flex gap-4 p-4 bg-green-50 rounded-lg border border-green-200">
+            <div className="flex-shrink-0">
+              <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                <BarChart3 className="w-6 h-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-1">Simulações Avançadas</h3>
+              <p className="text-sm text-gray-600">Taxa de lotação, suplementação e cálculo de prêmios</p>
+            </div>
+          </div>
+
+          <div className="flex gap-4 p-4 bg-green-50 rounded-lg border border-green-200">
+            <div className="flex-shrink-0">
+              <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                <Calculator className="w-6 h-6 text-white" />
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900 mb-1">Análise de Compra e Venda</h3>
+              <p className="text-sm text-gray-600">Simule compras de gado e rendimento de carcaça</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 rounded-xl p-6 space-y-4 border-2 border-gray-200">
+          <h2 className="text-2xl font-bold text-gray-900 text-center mb-6">
+            Como Começar
+          </h2>
+
+          <div className="space-y-4">
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+                  1
+                </div>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-1">Use o mesmo email da sua compra</h3>
+                <p className="text-sm text-gray-600">Certifique-se de usar o email cadastrado na sua compra para ativar sua assinatura automaticamente</p>
               </div>
             </div>
 
-            <h2 className="text-3xl font-bold text-center mb-4">
-              {step.title}
-            </h2>
-
-            <p className="text-lg text-muted-foreground text-center mb-8">
-              {step.description}
-            </p>
-
-            <div className="flex justify-center gap-2 mb-8">
-              {steps.map((_, index) => (
-                <div
-                  key={index}
-                  className={`h-2 rounded-full transition-all ${
-                    index === currentStep
-                      ? 'w-8 bg-primary'
-                      : index < currentStep
-                      ? 'w-2 bg-primary/60'
-                      : 'w-2 bg-muted'
-                  }`}
-                />
-              ))}
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+                  2
+                </div>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-1">Crie uma senha segura</h3>
+                <p className="text-sm text-gray-600">Escolha uma senha forte com pelo menos 8 caracteres</p>
+              </div>
             </div>
 
-            <Button onClick={handleNext} className="w-full">
-              {currentStep < steps.length - 1 ? 'Próximo' : 'Começar'}
-              <ChevronRight className="w-4 h-4 ml-2" />
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+            <div className="flex gap-4">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white font-bold">
+                  3
+                </div>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-1">Comece a usar suas ferramentas</h3>
+                <p className="text-sm text-gray-600">Acesse todas as calculadoras e simulações disponíveis</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Alert className="bg-amber-50 border-amber-300">
+          <AlertCircle className="h-5 w-5 text-amber-600" />
+          <AlertDescription className="text-amber-900 font-medium">
+            <span className="font-bold">IMPORTANTE:</span> Anote sua senha em um local seguro para não esquecer. Você precisará dela para acessar o sistema.
+          </AlertDescription>
+        </Alert>
+      </Card>
     </div>
   );
 }

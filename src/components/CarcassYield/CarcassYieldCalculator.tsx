@@ -1,15 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Calculator, FileDown, Save, ArrowLeft } from 'lucide-react';
+import { Calculator, FileDown, Save, ArrowLeft, List, Trash2, Eye, Plus } from 'lucide-react';
 import { calculateCarcassYield, type CarcassYieldInputs, type CarcassYieldResults } from '../../lib/carcass-yield-calculator';
 import { generateCarcassYieldPDF } from '../../lib/carcass-yield-pdf-generator';
 import { supabase } from '../../lib/supabase';
 import { Alert, AlertDescription } from '../ui/alert';
+import { useAuth } from '../../contexts/AuthContext';
+
+interface SavedCalculation {
+  id: string;
+  title: string;
+  quantity_animals: number;
+  total_arrobas: number;
+  total_revenue: number;
+  created_at: string;
+}
 
 export function CarcassYieldCalculator() {
+  const { user } = useAuth();
+  const [view, setView] = useState<'list' | 'form' | 'results'>('list');
+  const [savedCalculations, setSavedCalculations] = useState<SavedCalculation[]>([]);
+  const [loading, setLoading] = useState(false);
+
   const [inputs, setInputs] = useState<CarcassYieldInputs>({
     quantity_animals: 200,
     gmd_kg: 0.478,
@@ -23,6 +38,23 @@ export function CarcassYieldCalculator() {
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
+  useEffect(() => {
+    loadCalculations();
+  }, []);
+
+  const loadCalculations = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('carcass_yield_calculations')
+      .select('id, title, quantity_animals, total_arrobas, total_revenue, created_at')
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      setSavedCalculations(data);
+    }
+    setLoading(false);
+  };
+
   const handleInputChange = (field: keyof CarcassYieldInputs, value: string) => {
     const numValue = value === '' ? undefined : parseFloat(value);
     setInputs((prev) => ({
@@ -35,12 +67,35 @@ export function CarcassYieldCalculator() {
     const calculatedResults = calculateCarcassYield(inputs);
     setResults(calculatedResults);
     setSaveMessage(null);
+    setView('results');
   };
 
   const handleNewCalculation = () => {
     setResults(null);
     setTitle('');
     setSaveMessage(null);
+    setInputs({
+      quantity_animals: 200,
+      gmd_kg: 0.478,
+      carcass_yield_percentage: 52,
+      final_weight_kg: 600,
+      arroba_price: 320,
+    });
+    setView('form');
+  };
+
+  const handleDelete = async (id: string) => {
+    const confirmed = confirm('Tem certeza que deseja excluir este cálculo?');
+    if (!confirmed) return;
+
+    const { error } = await supabase
+      .from('carcass_yield_calculations')
+      .delete()
+      .eq('id', id);
+
+    if (!error) {
+      await loadCalculations();
+    }
   };
 
   const handleExportPDF = () => {
@@ -49,20 +104,12 @@ export function CarcassYieldCalculator() {
   };
 
   const handleSave = async () => {
-    if (!results) return;
+    if (!results || !user) return;
 
     setIsSaving(true);
     setSaveMessage(null);
 
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-
-      if (!user) {
-        setSaveMessage({ type: 'error', text: 'Você precisa estar autenticado para salvar.' });
-        setIsSaving(false);
-        return;
-      }
-
       const { error } = await supabase.from('carcass_yield_calculations').insert({
         user_id: user.id,
         title: title || 'Cálculo de Rendimento de Carcaça',
@@ -80,6 +127,7 @@ export function CarcassYieldCalculator() {
       if (error) throw error;
 
       setSaveMessage({ type: 'success', text: 'Cálculo salvo com sucesso!' });
+      await loadCalculations();
     } catch (error) {
       console.error('Error saving calculation:', error);
       setSaveMessage({ type: 'error', text: 'Erro ao salvar o cálculo. Tente novamente.' });
@@ -88,16 +136,112 @@ export function CarcassYieldCalculator() {
     }
   };
 
+  if (view === 'list') {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Fechamento de Lote</h1>
+            <p className="text-gray-600 mt-1">Cálculos salvos de rendimento de carcaça</p>
+          </div>
+          <Button onClick={() => setView('form')} className="bg-green-600 hover:bg-green-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Novo Cálculo
+          </Button>
+        </div>
+
+        {loading ? (
+          <Card>
+            <CardContent className="py-12">
+              <p className="text-center text-gray-500">Carregando cálculos...</p>
+            </CardContent>
+          </Card>
+        ) : savedCalculations.length === 0 ? (
+          <Card>
+            <CardContent className="py-12 text-center">
+              <Calculator className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Nenhum cálculo salvo</h3>
+              <p className="text-gray-600 mb-4">Comece criando seu primeiro cálculo de rendimento de carcaça</p>
+              <Button onClick={() => setView('form')} className="bg-green-600 hover:bg-green-700">
+                <Plus className="w-4 h-4 mr-2" />
+                Criar Primeiro Cálculo
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {savedCalculations.map((calc) => (
+              <Card key={calc.id} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="text-lg">{calc.title}</CardTitle>
+                  <CardDescription>
+                    {new Date(calc.created_at).toLocaleDateString('pt-BR', {
+                      day: '2-digit',
+                      month: 'long',
+                      year: 'numeric'
+                    })}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Animais:</span>
+                      <span className="font-semibold">{calc.quantity_animals} cabeças</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Total de Arrobas:</span>
+                      <span className="font-semibold">{calc.total_arrobas?.toFixed(2) || 0} @</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">Receita Total:</span>
+                      <span className="font-semibold text-green-600">
+                        R$ {calc.total_revenue?.toLocaleString('pt-BR', { minimumFractionDigits: 2 }) || '0,00'}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() => handleDelete(calc.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Fechamento de Lote</h1>
-          <p className="text-gray-600 mt-1">Calcule o rendimento de carcaça e receita estimada</p>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => view === 'results' ? handleNewCalculation() : setView('list')}
+            className="rounded-full"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Fechamento de Lote</h1>
+            <p className="text-gray-600 mt-1">Calcule o rendimento de carcaça e receita estimada</p>
+          </div>
         </div>
+        <Button onClick={() => setView('list')} variant="outline">
+          <List className="w-4 h-4 mr-2" />
+          Ver Salvos
+        </Button>
       </div>
 
-      {!results ? (
+      {view === 'form' && !results ? (
         <Card>
           <CardHeader>
             <CardTitle>Dados do Rebanho</CardTitle>
@@ -147,7 +291,7 @@ export function CarcassYieldCalculator() {
         </Card>
       ) : null}
 
-      {!results ? (
+      {view === 'form' && !results ? (
         <Card>
           <CardHeader>
             <CardTitle>Dados de Venda (Opcional)</CardTitle>
@@ -316,8 +460,12 @@ export function CarcassYieldCalculator() {
               )}
 
               <div className="flex flex-wrap gap-3">
+                <Button onClick={() => setView('list')} variant="outline">
+                  <List className="w-4 h-4 mr-2" />
+                  Ver Salvos
+                </Button>
                 <Button onClick={handleNewCalculation} variant="outline">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  <Plus className="w-4 h-4 mr-2" />
                   Novo Cálculo
                 </Button>
                 <Button onClick={handleExportPDF} variant="outline">

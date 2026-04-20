@@ -12,18 +12,22 @@ type Props = {
   onCalculate: (inputs: SupplementationInputs, results: SupplementationResults) => void;
   onSave: (inputs: SupplementationInputs, results: SupplementationResults) => Promise<void>;
   onExportPDF: (inputs: SupplementationInputs, results: SupplementationResults) => void;
+  initialInputs?: SupplementationInputs;
+  initialResults?: SupplementationResults;
 };
 
-export function SupplementationForm({ onCalculate, onSave, onExportPDF }: Props) {
-  const [formData, setFormData] = useState<SupplementationInputs>({
-    animal_quantity: 0,
-    average_weight_kg: 0,
-    supplementation_type: 'proteinado',
-    consumption_percentage: 0.1,
-    bag_weight_kg: 30,
-  });
+export function SupplementationForm({ onCalculate, onSave, onExportPDF, initialInputs, initialResults }: Props) {
+  const [formData, setFormData] = useState<SupplementationInputs>(
+    initialInputs || {
+      animal_quantity: 0,
+      average_weight_kg: 0,
+      supplementation_type: 'proteinado_01',
+      consumption_percentage: 0.1,
+      bag_weight_kg: 30,
+    }
+  );
 
-  const [results, setResults] = useState<SupplementationResults | null>(null);
+  const [results, setResults] = useState<SupplementationResults | null>(initialResults || null);
   const [saving, setSaving] = useState(false);
 
   const updateFormData = (field: keyof SupplementationInputs, value: number | SupplementationType) => {

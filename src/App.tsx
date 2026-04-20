@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { LoginForm } from './components/Auth/LoginForm';
 import { SignUpForm } from './components/Auth/SignUpForm';
@@ -6,10 +6,19 @@ import { ForgotPasswordForm } from './components/Auth/ForgotPasswordForm';
 import { Dashboard } from './components/Dashboard/Dashboard';
 import { Skeleton } from './components/ui/skeleton';
 import { SubscriptionGate } from './components/Subscription/SubscriptionGate';
+import { OnboardingScreen } from './components/Onboarding/OnboardingScreen';
 
 function AppContent() {
   const { user, loading } = useAuth();
-  const [authView, setAuthView] = useState<'login' | 'signup' | 'forgot'>('login');
+  const [authView, setAuthView] = useState<'login' | 'signup' | 'forgot'>('signup');
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem('hasSeenOnboarding');
+    if (!hasSeenOnboarding && !user) {
+      setShowOnboarding(true);
+    }
+  }, [user]);
 
   if (loading) {
     return (
@@ -48,6 +57,18 @@ function AppContent() {
   }
 
   if (!user) {
+    if (showOnboarding) {
+      return (
+        <OnboardingScreen
+          onComplete={() => {
+            localStorage.setItem('hasSeenOnboarding', 'true');
+            setShowOnboarding(false);
+            setAuthView('signup');
+          }}
+        />
+      );
+    }
+
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center p-4">
         {authView === 'login' && (
