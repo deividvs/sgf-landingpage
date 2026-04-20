@@ -26,8 +26,8 @@ export function ResultsView({ inputs, results, onNewSimulation, onSave, showSave
     }).format(value);
   };
 
-  const formatNumber = (value: number, decimals = 2) => {
-    return value.toFixed(decimals);
+  const formatNumber = (value: number | undefined | null, decimals = 2) => {
+    return (value ?? 0).toFixed(decimals);
   };
 
   const handleSave = async () => {

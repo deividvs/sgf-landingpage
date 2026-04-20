@@ -203,6 +203,10 @@ export function Dashboard() {
         profit_margin_percentage: results.profit_margin_percentage,
         result_per_animal: results.result_per_animal,
         cost_per_arroba: results.cost_per_arroba,
+        carcass_yield_percentage: inputs.carcass_yield_percentage,
+        carcass_weight_kg: results.carcass_weight_kg,
+        arrobas_per_head: results.arrobas_per_head,
+        total_arrobas: results.total_arrobas,
       });
 
       if (!error) {
