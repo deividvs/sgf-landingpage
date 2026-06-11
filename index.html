@@ -4,12 +4,43 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SGF — Sistema de Gestão da Fazenda</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="image" href="images/hero-header.png" fetchpriority="high" />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Source+Sans+3:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" href="fonts/bricolage-grotesque-var.woff2" crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href="fonts/source-sans-3-var.woff2" crossorigin />
   <script src="js/hotmart-utm-tracker.js" defer></script>
   <style>
+    /* ═══════════════════════════════════════════════════════════════ */
+    /* FONTES SELF-HOSTED (latin) — sem render-block do Google Fonts   */
+    /* ═══════════════════════════════════════════════════════════════ */
+    @font-face {
+      font-family: 'Bricolage Grotesque';
+      font-style: normal;
+      font-weight: 200 800;
+      font-display: swap;
+      src: url('fonts/bricolage-grotesque-var.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'Source Sans 3';
+      font-style: normal;
+      font-weight: 300 700;
+      font-display: swap;
+      src: url('fonts/source-sans-3-var.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'DM Mono';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('fonts/dm-mono-400.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'DM Mono';
+      font-style: normal;
+      font-weight: 500;
+      font-display: swap;
+      src: url('fonts/dm-mono-500.woff2') format('woff2');
+    }
+
     /* ═══════════════════════════════════════════════════════════════ */
     /* DESIGN TOKENS — Precision Agriculture                          */
     /* ═══════════════════════════════════════════════════════════════ */
