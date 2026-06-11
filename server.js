@@ -14,7 +14,9 @@ const MIME = {
 };
 
 const server = http.createServer((req, res) => {
-  let filePath = path.join(__dirname, req.url === '/' ? 'index.html' : req.url);
+  // Remove query string (?utm_source=...) e hash para resolver o arquivo
+  const pathname = decodeURIComponent(req.url.split(/[?#]/)[0]);
+  let filePath = path.join(__dirname, pathname === '/' ? 'index.html' : pathname);
   const ext = path.extname(filePath);
 
   fs.readFile(filePath, (err, data) => {
