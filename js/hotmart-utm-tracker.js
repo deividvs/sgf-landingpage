@@ -14,7 +14,9 @@
  *      carregamento dinâmico), eles também recebem os parâmetros
  *
  * AUTOR: Desenvolvido com Claude para Deivid Oliveira / Victor Darido
- * VERSÃO: 1.0
+ * VERSÃO: 1.1 — corrige perda de parâmetros: agora salva/repassa src, sck,
+ *               xcod e click IDs (fbclid/gclid/ttclid/msclkid) mesmo quando a
+ *               URL não traz utm_source.
  * ============================================================================
  */
 
@@ -116,18 +118,20 @@
 
   function captureUTMs() {
     const fromURL = getUTMsFromURL();
-    const stored = loadStoredUTMs();
 
-    if (Object.keys(fromURL).length === 0 && Object.keys(stored).length === 0) {
-      return {};
-    }
-
-    if (fromURL.utm_source || fromURL.fbclid || fromURL.gclid) {
+    // Se a URL trouxe QUALQUER parâmetro de rastreamento (utm_*, src, sck,
+    // xcod, fbclid, gclid, ttclid, msclkid), ela é a origem mais recente do
+    // clique: salva como nova atribuição e usa esses valores.
+    // (Antes só salvava quando havia utm_source/fbclid/gclid, então links
+    //  com src/sck diretos ou UTMs sem utm_source eram descartados.)
+    if (Object.keys(fromURL).length > 0) {
       saveUTMs(fromURL);
       return fromURL;
     }
 
-    return stored;
+    // Sem parâmetros na URL: recupera a atribuição salva (navegação interna,
+    // reload, retorno dentro da janela de atribuição).
+    return loadStoredUTMs();
   }
 
   // ==========================================================================
@@ -182,23 +186,37 @@
     }
   }
 
+  function buildTrackingParams(utms) {
+    const params = {};
+
+    // src / sck / xcod: se vieram explícitos na URL (ex.: link Hotmart de um
+    // anúncio), repassa o valor original; senão, constrói a partir dos UTMs.
+    params.src = utms.src || buildSRC(utms);
+    params.sck = utms.sck || buildSCK(utms);
+    if (utms.xcod) params.xcod = utms.xcod;
+
+    // UTMs originais
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'utm_id']
+      .forEach(function (k) {
+        if (utms[k]) params[k] = utms[k];
+      });
+
+    // Click IDs das plataformas (eram capturados/salvos mas nunca repassados)
+    ['fbclid', 'gclid', 'ttclid', 'msclkid'].forEach(function (k) {
+      if (utms[k]) params[k] = utms[k];
+    });
+
+    Object.keys(params).forEach(function (k) {
+      if (!params[k]) delete params[k];
+    });
+
+    return params;
+  }
+
   function enrichHotmartLinks(utms) {
     if (Object.keys(utms).length === 0) return;
 
-    const trackingParams = {
-      sck: buildSCK(utms),
-      src: buildSRC(utms),
-      utm_source: utms.utm_source,
-      utm_medium: utms.utm_medium,
-      utm_campaign: utms.utm_campaign,
-      utm_content: utms.utm_content,
-      utm_term: utms.utm_term,
-      utm_id: utms.utm_id
-    };
-
-    Object.keys(trackingParams).forEach(function (k) {
-      if (!trackingParams[k]) delete trackingParams[k];
-    });
+    const trackingParams = buildTrackingParams(utms);
 
     const links = document.querySelectorAll('a[href]');
 
