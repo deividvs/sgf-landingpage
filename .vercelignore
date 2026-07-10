@@ -1,0 +1,12 @@
+package.json
+package-lock.json
+server.js
+frontend/
+.netlify/
+.emergent/
+.bolt/
+test_reports/
+memory/
+design_handoff_sgf_landing/
+SGF.zip
+.DS_Store
