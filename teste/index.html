@@ -1523,15 +1523,25 @@
       .price-main { font-size: 6rem; }
     }
 
-    /* /teste: duas opções de acesso */
-    .offer-options { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.25rem; max-width:900px; margin:2.5rem auto 3rem; position:relative; z-index:1; }
-    .offer-option { display:flex; flex-direction:column; align-items:center; text-align:center; padding:2rem; border:1px solid rgba(255,255,255,.24); border-radius:16px; background:rgba(2,26,14,.48); }
-    .offer-option--full { border-color:var(--amber-400); }
-    .offer-option-title { margin:0 0:.65rem; font-size:1.4rem; color:#fff; }
-    .offer-option-price { margin-bottom:1rem; color:var(--amber-300); font-family:'Bricolage Grotesque',sans-serif; font-size:clamp(2.3rem,5vw,3.5rem); font-weight:800; line-height:1; }
-    .offer-option-detail { min-height:4.5rem; margin:0 0:1.5rem; color:rgba(255,255,255,.86); line-height:1.55; }
-    .offer-option .botao { margin-top:auto; }
-    @media (max-width: 640px) { .offer-options { grid-template-columns:1fr; } .offer-option { padding:1.5rem; } .offer-option-detail { min-height:0; } }
+    /* /teste: duas opções de acesso — anual é a escolha editorial principal */
+    .offer-options { display:grid; grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr); gap:2rem; max-width:102rem; margin:3.2rem auto 3rem; position:relative; z-index:1; align-items:stretch; }
+    .offer-option { display:flex; flex-direction:column; align-items:flex-start; text-align:left; padding:2.4rem; border:1px solid rgba(255,255,255,.24); border-radius:var(--radius-lg); background:rgba(2,26,14,.48); }
+    .offer-option--full { padding:3.2rem; border:2px solid var(--amber-400); background:var(--forest-900); box-shadow:0 1.6rem 4.8rem rgba(0,0,0,.2); }
+    .offer-option-kicker { margin:0 0:1.2rem; color:var(--amber-300); font-family:var(--font-mono); font-size:1.1rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; }
+    .offer-option-title { margin:0 0:.8rem; font-family:var(--font-display); font-size:2rem; font-weight:800; line-height:1.15; color:#fff; }
+    .offer-option--full .offer-option-title { font-size:clamp(2.8rem,4vw,3.8rem); }
+    .offer-option-price { margin-bottom:1.2rem; color:var(--amber-300); font-family:var(--font-mono); font-size:clamp(2.8rem,5vw,4.2rem); font-weight:500; line-height:1; }
+    .offer-option--full .offer-option-price { font-size:clamp(4.6rem,7vw,6.4rem); color:var(--amber-400); }
+    .offer-option-detail { margin:0 0:2rem; color:rgba(255,255,255,.82); line-height:1.55; }
+    .offer-includes { width:100%; margin:0 0:2.4rem; padding:1.8rem 0 0; border-top:1px solid rgba(255,255,255,.18); }
+    .offer-includes-title { margin:0 0:1.2rem; color:var(--white); font-family:var(--font-display); font-size:1.6rem; font-weight:700; }
+    .offer-tool-list { display:flex; flex-direction:column; gap:.8rem; }
+    .offer-tool-list li { display:flex; align-items:flex-start; gap:.8rem; color:rgba(255,255,255,.86); font-size:1.45rem; line-height:1.35; }
+    .offer-tool-list li::before { content:'✓'; color:var(--amber-400); font-family:var(--font-mono); font-weight:500; }
+    .offer-option .botao { width:100%; margin-top:auto; }
+    .offer-option--full .botao { background:var(--amber-400); box-shadow:0 .8rem 2.4rem rgba(232,185,49,.2); }
+    .offer-option--full .botao:hover { box-shadow:0 1.2rem 2.8rem rgba(232,185,49,.3); }
+    @media (max-width: 640px) { .offer-options { grid-template-columns:1fr; gap:1.6rem; margin-top:2.4rem; } .offer-option { padding:2.4rem; } .offer-option--full { padding:2.8rem 2.4rem; order:-1; } .offer-option-detail { min-height:0; } }
   </style>
 </head>
 <body>
@@ -2015,17 +2025,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="t-40 section-title reveal d1">Escolha o acesso que faz sentido para você:</h2>
 
     <div class="offer-options reveal d2">
-      <article class="offer-option">
-        <h3 class="offer-option-title">Simulador de Resultados</h3>
+      <article class="offer-option" aria-labelledby="offer-simulator-title">
+        <p class="offer-option-kicker">Acesso pontual</p>
+        <h3 class="offer-option-title" id="offer-simulator-title">Simulador de Resultados</h3>
         <div class="offer-option-price">R$ 10,00</div>
         <p class="offer-option-detail"><strong>Inclui somente o Simulador de Resultados.</strong><br>Não inclui as demais ferramentas do SGF.</p>
         <a href="https://pay.hotmart.com/S104906445L?off=tccgcbrz&checkoutMode=6" target="_blank" rel="noopener" class="botao tam-g">QUERO SOMENTE O SIMULADOR</a>
       </article>
 
-      <article class="offer-option offer-option--full">
-        <h3 class="offer-option-title">SGF completo</h3>
+      <article class="offer-option offer-option--full" aria-labelledby="offer-full-title">
+        <p class="offer-option-kicker">Acesso anual completo</p>
+        <h3 class="offer-option-title" id="offer-full-title">SGF completo</h3>
         <div class="offer-option-price">R$ 67,00</div>
-        <p class="offer-option-detail"><strong>Acesso anual completo ao SGF.</strong><br>Inclui todas as ferramentas do sistema por 12 meses.</p>
+        <p class="offer-option-detail"><strong>Todas as ferramentas do SGF por 12 meses.</strong><br>Para decidir com os números da sua operação, sem chute.</p>
+        <div class="offer-includes">
+          <h4 class="offer-includes-title">Ferramentas incluídas</h4>
+          <ul class="offer-tool-list">
+            <li>Simulador de Resultados</li>
+            <li>Diluição de Ágio</li>
+            <li>Cálculo de Suplementação</li>
+            <li>Taxa de Lotação</li>
+            <li>Cálculo da Diária</li>
+            <li>Apuração de Resultados Anuais</li>
+            <li>Ponto de Equilíbrio</li>
+            <li>Custo de Produção PRO</li>
+            <li>Simulação de Compra</li>
+            <li>Fechamento de Lote</li>
+          </ul>
+        </div>
         <a href="https://pay.hotmart.com/S104906445L" target="_blank" rel="noopener" class="botao tam-g">QUERO O ACESSO ANUAL COMPLETO</a>
       </article>
     </div>

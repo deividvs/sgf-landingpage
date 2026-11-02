@@ -28,6 +28,15 @@ for (const cta of checkoutAnchors) {
 assert.ok(checkoutAnchors.some(({ href, label }) => href === simulatorCheckout && /SOMENTE O SIMULADOR/.test(label)), 'O CTA do simulador deve apontar para o checkout de R$ 10.');
 assert.ok(checkoutAnchors.some(({ href, label }) => href === fullCheckout && /ACESSO ANUAL COMPLETO/.test(label)), 'O CTA anual deve apontar para o checkout de R$ 67.');
 
+const toolNames = [...teste.matchAll(/<div class="tool-name">([^<]+)<\/div>/g)].map(([, name]) => name.trim());
+const fullOffer = teste.match(/<article class="offer-option offer-option--full"[\s\S]*?<\/article>/)?.[0] ?? '';
+const offeredToolNames = [...fullOffer.matchAll(/<li>([^<]+)<\/li>/g)].map(([, name]) => name.trim());
+assert.equal(toolNames.length, 10, 'A seção de ferramentas deve manter as 10 ferramentas reais.');
+assert.deepEqual(offeredToolNames, toolNames, 'O pacote anual deve listar verticalmente todas e somente as ferramentas reais da seção de ferramentas.');
+assert.match(fullOffer, /<ul class="offer-tool-list">/, 'As ferramentas do pacote anual devem estar em uma lista vertical.');
+assert.match(fullOffer, /Acesso anual completo/, 'O pacote anual deve ser identificado como acesso completo.');
+assert.match(teste, /offer-option--full[\s\S]*?R\$\s*67,00/, 'A opção anual deve preservar o preço de R$ 67,00.');
+
 assert.match(teste, /GTM-P83M3DV/, 'A versão /teste deve preservar o GTM.');
 assert.match(teste, /\/js\/hotmart-utm-tracker\.js/, 'A versão /teste deve carregar o tracker por caminho absoluto.');
 
